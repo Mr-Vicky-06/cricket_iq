@@ -115,14 +115,24 @@ Report metrics by format, category, intent, and historical/current context. An a
 - Use access controls and encrypted transport for hosted services.
 - Back up the database and original source files; test restoration.
 
-### AI-specific controls
+### Retrieval subsystem security and quality controls (Implemented in Phase 3)
 
-- Retrieved text is evidence, not an instruction source.
-- Do not allow user prompt injection to override source hierarchy or system constraints.
-- Restrict model output to retrieved evidence for regulatory claims.
-- Validate source IDs, clause IDs, and links server-side.
-- Keep the applicability decision outside the LLM's free-form reasoning.
-- If evidence validation fails, do not display a confident unsupported answer.
+- **SQL Parameterization & FTS Sanitization:**
+  - Full-text queries are constructed using structured parameter binding (`:match_query`, `:doc_0`, ...).
+  - User query text is never interpolated into raw SQL.
+  - Punctuation, unclosed quotes, and hostile tokens (`***)))(((;;;'''''"""`, `NEAR`, `NOT`) are safely tokenized or stripped to prevent syntax injection or FTS parse exceptions.
+- **Atomic Vector Rebuild & Safe Serialization:**
+  - Embedding tables use `float32` byte arrays (`BLOB`) instead of untrusted pickle serialization.
+  - Rebuilding embeddings utilizes staging tables (`clause_embeddings_staging`) swapped in an atomic transaction; index corruption cannot occur on mid-build failure.
+  - Vectors are validated for expected dimension (384), finiteness (rejecting NaN and Inf), and non-zero magnitude before persistence.
+- **Pre-Search Applicability Gating & Regulatory Leakage Prevention:**
+  - No database search occurs if the query context is ambiguous or targets unsupported competitions (e.g., domestic leagues).
+  - Search candidates are strictly pre-filtered to the resolved `selected_bundle`.
+  - Zero regulatory leakage invariant (0.0% measured across all benchmark runs).
+- **Evidence Graph Traversal Bounds:**
+  - Parent section and cross-clause graph expansion is strictly depth-bounded ($\le 2$ hops).
+  - Visited clause tracking prevents infinite cyclic reference loops.
+  - Expanded clauses are strictly confined to the active candidate bundle.
 
 ## 6. Copyright and source-use review
 

@@ -1,0 +1,64 @@
+{
+  "benchmark_file": "evaluation\\retrieval\\benchmark_v1.jsonl",
+  "total_queries": 65,
+  "evaluated_at": "2026-11-15T07:55:40Z",
+  "configurations": [
+    {
+      "mode": "Sparse-Only (SQLite FTS5)",
+      "total_queries": 65,
+      "valid_eval_queries": 56,
+      "recall_at_5": 85.34,
+      "recall_at_10": 85.34,
+      "mrr": 0.7284,
+      "exact_clause_accuracy": 100.0,
+      "supporting_clause_recall": 100.0,
+      "leakage_rate": 0.0,
+      "latencies_ms": {
+        "avg_sparse": 1.43,
+        "avg_dense": 0.0,
+        "avg_fusion": 0.07,
+        "avg_expansion": 2.74,
+        "avg_total": 5.62,
+        "p95_total": 8.42
+      }
+    },
+    {
+      "mode": "Dense-Only (NumPy Cosine)",
+      "total_queries": 65,
+      "valid_eval_queries": 58,
+      "recall_at_5": 87.07,
+      "recall_at_10": 87.07,
+      "mrr": 0.7511,
+      "exact_clause_accuracy": 100.0,
+      "supporting_clause_recall": 100.0,
+      "leakage_rate": 0.0,
+      "latencies_ms": {
+        "avg_sparse": 0.0,
+        "avg_dense": 1.63,
+        "avg_fusion": 0.08,
+        "avg_expansion": 2.89,
+        "avg_total": 5.96,
+        "p95_total": 8.89
+      }
+    },
+    {
+      "mode": "Hybrid (Sparse + Dense + RRF + Expansion)",
+      "total_queries": 65,
+      "valid_eval_queries": 58,
+      "recall_at_5": 89.66,
+      "recall_at_10": 89.66,
+      "mrr": 0.7477,
+      "exact_clause_accuracy": 100.0,
+      "supporting_clause_recall": 100.0,
+      "leakage_rate": 0.0,
+      "latencies_ms": {
+        "avg_sparse": 1.39,
+        "avg_dense": 1.66,
+        "avg_fusion": 0.09,
+        "avg_expansion": 2.78,
+        "avg_total": 7.26,
+        "p95_total": 12.28
+      }
+    }
+  ]
+}

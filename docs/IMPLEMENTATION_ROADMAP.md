@@ -55,20 +55,29 @@ Exit gate:
 - [x] Given a test scenario, the resolver returns expected candidate documents, precedence order, and explains why.
 - [x] Ambiguous or unsupported scenarios (e.g. domestic IPL, missing series start date on transition boundaries) are surfaced safely with clarification requests.
 
-## Phase 3 — Retrieval baseline [STATUS: READY TO IMPLEMENT]
+## Phase 3 — Retrieval baseline [STATUS: COMPLETED]
 
-**Goal:** retrieve exact and semantically relevant clauses.
+**Goal:** retrieve exact and semantically relevant clauses within the applicable regulatory bundle with provenance.
 
 Tasks:
-- Add PostgreSQL full-text search.
-- Evaluate an embedding model and store versioned embeddings.
-- Add pgvector search with metadata filters.
-- Fuse keyword and vector candidates; add a reranker only if benchmark results justify it.
-- Retrieve parent clauses, exceptions, and cross-references.
-- Add retrieval traces for debugging.
+- [x] Complete Pre-Implementation Audit and ADR 0002 (`docs/reviews/PHASE_3_PRE_IMPLEMENTATION_AUDIT.md`, `docs/adr/0002-hybrid-retrieval.md`).
+- [x] Implement typed retrieval contracts (`RetrievalRequest`, `RetrievalHit`, `RetrievalOutcome`, `EvidenceRole`, `RetrievalStatus`).
+- [x] Implement Exact Clause Lookup Engine (`ExactClauseLookupEngine`) with regular expression dotted-identifier matching.
+- [x] Implement SQLite FTS5 sparse provider with BM25 column weighting, query sanitization, and index synchronization (`SQLiteFTSSearchProvider`).
+- [x] Add PostgreSQL full-text search adapter (`PostgresFTSSearchProvider`).
+- [x] Implement versioned embedding text construction (`v1`) and evaluate embedding candidates (`LocalDeterministicEmbeddingProvider`, `SentenceTransformerEmbeddingProvider`).
+- [x] Implement persistent, versioned embedding store with atomic staging rebuilds and validation guards (`EmbeddingStore`).
+- [x] Implement local NumPy dense semantic search (`SQLiteNumPyDenseSearchProvider`) and pgvector adapter (`PostgresPgVectorSearchProvider`).
+- [x] Implement unweighted Reciprocal Rank Fusion ($k=60$) with rank provenance and deterministic tie-breaking (`RRFEngine`).
+- [x] Implement bounded evidence graph expansion for parent headers and cross-referenced clauses (`EvidenceExpander`).
+- [x] Build unified `RetrievalService` with pre-search applicability gating, timing diagnostics, and strict bundle confinement.
+- [x] Construct 65-item labelled benchmark across 15 categories (`benchmark_v1.jsonl`, `benchmark_schema.json`).
+- [x] Build automated benchmark evaluation harness (`evaluate_retrieval.py`) achieving Recall@5: 89.66%, MRR: 0.7477, Exact Acc: 100%, Supporting Recall: 100%, Leakage Rate: 0.0%, Latency: 7.26ms.
+- [x] Unit, integration, and evaluation test suite: 55 passed, 1 skipped (0 failures).
 
 Exit gate:
-- A small reviewed query set retrieves the expected evidence with inspectable provenance.
+- [x] 65-query labelled benchmark retrieves expected evidence with inspectable provenance.
+- [x] Zero cross-format or domestic regulatory leakage verified in tests (0.0%).
 
 ## Phase 4 — Grounded answer API
 

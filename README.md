@@ -105,7 +105,34 @@ Stop before the next milestone.
 - The proposed stack is a starting point, not a mandate. The agent must inspect the actual repository and justify changes before selecting or adding dependencies.
 - The benchmark size and quality targets in the documents are proposed targets, not existing results.
 
-## 6. Official Antigravity references
+## 6. Local Setup and Commands
+
+### Environment Setup
+```powershell
+# Using uv and Python 3.12+
+uv venv .venv
+.venv\Scripts\activate
+uv pip install -e ".[dev]"
+```
+
+### Running Test Suite
+```powershell
+.venv\Scripts\pytest -v
+```
+
+### Running Retrieval Subsystem Evaluation Benchmark
+```powershell
+.venv\Scripts\python evaluation/retrieval/evaluate_retrieval.py
+```
+
+### Current Development Status
+- **Phase 0:** Project discovery & repository setup [COMPLETED]
+- **Phase 1:** Single-source ingestion slice with SHA-256 integrity [COMPLETED]
+- **Phase 2:** Structured rule store, Alembic migrations, deterministic Applicability Engine, and secure downloader [COMPLETED]
+- **Phase 3:** Hybrid retrieval (Sparse FTS5 + Dense NumPy/EmbeddingStore + RRF + Bounded Evidence Expansion) [COMPLETED - 55 passed, 1 skipped, 0 failures]
+- **Phase 4:** Grounded answer API & citation validator [NEXT]
+
+## 7. Official Antigravity references
 
 - Rules and workspace instructions: https://antigravity.google/docs/rules/
 - Agent Skills: https://antigravity.google/docs/skills

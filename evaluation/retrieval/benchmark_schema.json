@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CricketIQ Retrieval Benchmark Item",
+  "type": "object",
+  "required": [
+    "question_id",
+    "question",
+    "category",
+    "expected_status",
+    "expected_primary_clause_numbers"
+  ],
+  "properties": {
+    "question_id": {
+      "type": "string",
+      "description": "Unique benchmark identifier"
+    },
+    "question": {
+      "type": "string",
+      "description": "Natural language inquiry or rule query"
+    },
+    "category": {
+      "type": "string",
+      "description": "Benchmark testing theme"
+    },
+    "match_context": {
+      "type": ["object", "null"],
+      "description": "Match context dictionary"
+    },
+    "expected_status": {
+      "type": "string",
+      "description": "Expected RetrievalStatus"
+    },
+    "expected_primary_clause_numbers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Authoritative primary clause numbers that must be retrieved"
+    },
+    "expected_supporting_clause_numbers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Supporting context or cross-referenced clauses expected from evidence expansion"
+    },
+    "forbidden_clause_numbers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Clauses from wrong formats or superseded editions that must NEVER be returned"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Evaluation notes and rationale"
+    }
+  }
+}
