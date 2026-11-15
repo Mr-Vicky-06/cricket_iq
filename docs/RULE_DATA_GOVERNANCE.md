@@ -33,17 +33,27 @@ Do not activate a source if publisher authenticity, version identity, or require
 
 ## 3. Rule applicability model
 
-A rule candidate may depend on:
+A rule candidate depends on:
+- Governing source and document type (`Law`, `Playing Conditions`, `Competition Regulations`, `Addendum`).
+- Format: `Test`, `ODI`, `T20I`, or `General`.
+- Category: `Men's`, `Women's`, or `Universal`.
+- Competition/tournament: e.g. `T20_WORLD_CUP_2026`, `WTC`, or standard international.
+- Date trigger basis:
+  - `series_start_date`: Governs ICC Playing Conditions transitions. Under ICC regulations, updated playing conditions (such as the 1 October 2026 changes) apply to international series starting on or after that date. Ongoing series that started before continue under previous regulations.
+  - `match_date`: Specific day of play. Cannot alone resolve an ICC transition when series start date is ambiguous.
+  - `competition_start_date`: Governs tournament-specific regulations.
+  - `season_edition`: Governs general MCC Laws editions.
+- Explicit relationships: `incorporates`, `modifies`, `supplements`, and `supersedes`.
 
-- Governing source and document type.
-- Format: Test, ODI, T20I, or another explicitly supported format.
-- Category: men's, women's, or another source-defined category.
-- Competition/tournament.
-- Match date and, where the regulation specifies it, series start date or other triggering event.
-- Effective-from/effective-until dates, transitional conditions, and amendment language.
-- Explicit modification, override, exception, or precedence provisions.
+**No Simplistic Universal Precedence:** ICC Playing Conditions modify MCC Laws only where explicit modifying language or clause relationships exist. Precedence order in an assembled Source Bundle is:
+$$\text{Competition Regulations} \longrightarrow \text{Addenda} \longrightarrow \text{Format Playing Conditions} \longrightarrow \text{MCC Laws Baseline}$$
 
-**Do not implement a simplistic universal precedence list.** The applicable playing conditions and their wording must be inspected. The engine should return both the selected sources and the reasons for selecting them. If two documents appear to conflict and the source texts do not resolve the conflict, surface it for human review.
+## 3.1 Dependency Licensing Audit & Compliance
+- **PyMuPDF (`fitz`):** Licensed under GNU AGPL v3 / Commercial.
+  - *Compliance Position:* For open-source and local development, CricketIQ complies with AGPL v3 by making full corresponding source code transparent and verifiable. For commercial distributions with proprietary hosting, CricketIQ isolates PDF extraction behind an adapter interface (`PDFExtractor`) that allows seamless substitution with Apache-2.0/MIT parsers (`pdfplumber` / `pypdfium2`).
+- **pdfplumber:** MIT License.
+- **SQLAlchemy & Pydantic:** MIT License.
+- **Alembic:** MIT License.
 
 ## 4. Suggested relational schema
 

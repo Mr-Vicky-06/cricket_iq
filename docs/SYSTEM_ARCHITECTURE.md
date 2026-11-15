@@ -89,11 +89,27 @@ Responsibilities: download/import, file validation, duplicate detection, text/la
 
 Responsibilities: represent laws, playing-condition clauses, definitions, subclauses, tables, exceptions, and cross-references without losing original source text. Normalization must not silently alter meaning.
 
-### 4.4 Applicability Engine
+### 4.4 Applicability Engine (Implemented in Phase 2)
 
-Responsibilities: determine candidate documents using format, category, competition, match/series context, and explicit effective-date/precedence statements. Return a structured decision with reasons and unresolved conditions.
+Responsibilities: pure domain service (`ApplicabilityEngine`) independent of LLMs, web frameworks, and persistence sessions. Evaluates `MatchContext` against a `RuleCatalog` and returns a structured `ApplicabilityDecision`.
+- Evaluates date triggers: distinguishes `series_start_date` from `match_date` to enforce the ICC 1 October 2026 transition rule (ongoing series crossing Oct 1 continue under previous editions).
+- Selects source bundles by precedence: Level 1 (Competition Regulations) $\rightarrow$ Level 2 (Addenda) $\rightarrow$ Level 3 (Format Playing Conditions) $\rightarrow$ Level 4 (Underlying MCC Laws Baseline).
+- Resolves explicit clause relationships (`modifies`, `supplements`, `incorporates`, `supersedes`).
+- Surfaces ambiguity: rejects domestic/franchise requests safely with an informative clarification prompt; flags missing `series_start_date` on transition boundaries.
+- Emits human-readable `decision_trace` and deterministic `reason_codes` for full auditability.
 
-### 4.5 Retrieval Engine
+### 4.5 Persistence & Database Schema (Implemented in Phase 2)
+
+Responsibilities: dual-mode relational persistence via SQLAlchemy 2.0 and Alembic database migrations.
+- **Local Dev / Test Mode:** SQLite with foreign keys enabled, startup detection of SQLite FTS5 capability, and pure NumPy vector cosine fallback (zero external daemon required).
+- **Production Mode:** PostgreSQL with `pgvector` for dense semantic embeddings and `tsvector`/GIN for full-text search.
+- **Relational Tables:**
+  - `source_documents`: Master metadata, publisher, edition, legal effective dates, applicability basis, SHA-256 hash, and lifecycle status.
+  - `rule_clauses`: Hierarchical clauses with parent foreign key, hierarchy depth, verbatim text, normalized text, printed page, PDF index, and cross-references.
+  - `document_relationships`: Directed graph edges representing explicit regulatory relationships between documents.
+  - `applicability_rules`: Declarative applicability rules with format, gender category, competition, and precedence rankings.
+
+### 4.6 Retrieval Engine
 
 Responsibilities: query expansion where helpful, metadata-filtered BM25/full-text search, semantic retrieval, result fusion, reranking, and assembly of parent/child/exception context.
 

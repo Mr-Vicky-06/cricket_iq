@@ -100,6 +100,12 @@ Report metrics by format, category, intent, and historical/current context. An a
 - Do not execute content, links, embedded scripts, or instructions found in PDFs.
 - Restrict admin ingestion and source activation to authorized users.
 - Apply rate limits and timeouts to costly model and parsing endpoints.
+- Remote PDF ingestion security (Implemented in Phase 2):
+  - Strictly enforce HTTPS and port 443. Reject userinfo, IP literals, and nonstandard ports.
+  - Domain allowlist verification (`icc-cricket.com`, `resources.pulse.icc-cricket.com`, `images.icc-cricket.com`, `lords.org`).
+  - Pre-flight DNS resolution and IP validation rejecting loopback (`127.0.0.0/8`, `::1`), private (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`), link-local/cloud metadata (`169.254.0.0/16`), and multicast to prevent SSRF and DNS rebinding.
+  - Streaming size limits (50MB) and PDF magic-byte validation (`%PDF-`).
+  - Server-generated safe filenames (`uuid.uuid4().hex + '.pdf'`) preventing path traversal.
 
 ### Data handling
 

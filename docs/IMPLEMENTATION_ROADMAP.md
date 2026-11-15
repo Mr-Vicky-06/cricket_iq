@@ -38,22 +38,24 @@ Exit gate:
 - [x] A reviewer can navigate from a structured clause to the exact source page.
 - [x] Duplicate detection, hash verification, and failed-ingestion handling work.
 
-## Phase 2 — Structured rule store and applicability model [STATUS: READY TO IMPLEMENT]
+## Phase 2 — Structured rule store and applicability model [STATUS: COMPLETED]
 
 **Goal:** represent rule text and its context without flattening away version differences.
 
 Tasks:
-- Create source-document, rule-clause, and relationship models.
-- Add format/category/competition/date applicability fields.
-- Implement explicit source status and amendment relationships.
-- Build deterministic applicability selection with reason codes.
-- Add tests for known effective-date and format differences from verified sources.
+- [x] Create source-document, rule-clause, and relationship models (`orm_models.py`, `models.py`).
+- [x] Add format/category/competition/date applicability fields and `MatchContext`.
+- [x] Implement explicit source status and amendment relationships (`incorporates`, `modifies`, `supplements`, `supersedes`).
+- [x] Build deterministic applicability selection with reason codes and decision trace (`ApplicabilityEngine`).
+- [x] Implement Alembic database migrations (`alembic.ini`, `migrations/`).
+- [x] Build secure document downloader with SSRF and DNS rebinding protections (`secure_downloader.py`).
+- [x] Add tests for known effective-date, series-start boundary, cross-clause evidence, and format differences (`test_applicability.py`, `test_persistence.py`, `test_security_downloader.py` - 29 passed, 1 skipped).
 
 Exit gate:
-- Given a test scenario, the resolver returns expected candidate documents and explains why.
-- Ambiguous or unsupported scenarios are not silently resolved.
+- [x] Given a test scenario, the resolver returns expected candidate documents, precedence order, and explains why.
+- [x] Ambiguous or unsupported scenarios (e.g. domestic IPL, missing series start date on transition boundaries) are surfaced safely with clarification requests.
 
-## Phase 3 — Retrieval baseline
+## Phase 3 — Retrieval baseline [STATUS: READY TO IMPLEMENT]
 
 **Goal:** retrieve exact and semantically relevant clauses.
 
