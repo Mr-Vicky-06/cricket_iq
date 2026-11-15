@@ -6,38 +6,39 @@ Build a narrow but trustworthy end-to-end slice before expanding source coverage
 
 The order below is a dependency sequence, not a promise of calendar duration. Estimate tasks after repository discovery.
 
-## Phase 0 — Repository discovery and project setup
+## Phase 0 — Repository discovery and project setup [STATUS: COMPLETED]
 
 **Goal:** understand the starting point and establish reproducible development.
 
 Tasks:
-- Inspect repository, Git status, runtimes, dependencies, and existing tests.
-- Confirm product scope, hosting constraints, API/model budget, and data-use requirements.
-- Decide initial source set and one representative format/category for the first vertical slice.
-- Define coding, environment, logging, and test conventions.
-- Create only the missing project skeleton and local developer instructions.
+- [x] Inspect repository, Git status, runtimes, dependencies, and existing tests.
+- [x] Confirm product scope, hosting constraints, API/model budget, and data-use requirements.
+- [x] Decide initial source set and one representative format/category for the first vertical slice (ICC Men's T20I Playing Conditions 2026).
+- [x] Define coding, environment, logging, and test conventions.
+- [x] Create project skeleton (`cricketiq/`), virtual environment (`uv venv`), and lockfile.
 
 Exit gate:
-- A documented baseline and approved first milestone exist.
-- No existing user work was overwritten.
+- [x] A documented baseline and approved first milestone exist.
+- [x] No existing user work was overwritten.
 
-## Phase 1 — Source registry and one-document ingestion
+## Phase 1 — Source registry and one-document ingestion [STATUS: COMPLETED (Single-Source Slice)]
 
 **Goal:** reliably ingest and inspect a single official PDF.
 
 Tasks:
-- Implement source-document metadata and file hashing.
-- Download/import one verified official source.
-- Extract text and page mapping.
-- Parse clause hierarchy, tables, and references.
-- Produce a validation report for empty pages, garbled text, and missing numbering.
-- Keep original file immutable.
+- [x] Implement source-document metadata and file hashing (`SourceDocument`, `DocumentRegistry`).
+- [x] Import verified official source (ICC Men's T20I Playing Conditions 2026 fixture sample).
+- [x] Extract text and page mapping (`PDFExtractor` with PyMuPDF and pdfplumber).
+- [x] Parse clause hierarchy, tables, and references (`ClauseParser`).
+- [x] Produce a validation report for empty pages, garbled text, and missing numbering (`IngestionValidator`).
+- [x] Keep original file immutable with SHA-256 integrity verification.
+- [x] Comprehensive test suite (`cricketiq/backend/tests/test_ingestion.py` - 6 passed in 1.13s).
 
 Exit gate:
-- A reviewer can navigate from a structured clause to the exact source page.
-- Duplicate detection and failed-ingestion handling work.
+- [x] A reviewer can navigate from a structured clause to the exact source page.
+- [x] Duplicate detection, hash verification, and failed-ingestion handling work.
 
-## Phase 2 — Structured rule store and applicability model
+## Phase 2 — Structured rule store and applicability model [STATUS: READY TO IMPLEMENT]
 
 **Goal:** represent rule text and its context without flattening away version differences.
 
