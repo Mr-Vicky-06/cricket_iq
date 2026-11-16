@@ -12,13 +12,13 @@
 This report establishes the data quality, completeness, integrity, and retrieval readiness of the CricketIQ rules corpus prior to any Phase 4 feature development.
 
 ### Global Corpus Metrics
-- **Total Registered Regulatory Documents:** 10 official documents (8 ICC Playing Conditions, 2 MCC Laws fixtures).
-- **Total Extracted PDF Pages:** 747 pages.
-- **Total Structured Clauses Parsed:** 8,808 clauses (7,591 unique active clauses in the primary relational and vector stores).
-- **Total Structured Table Assets:** 54 multi-cell table grids preserved in `data/extracted/tables/`.
+- **Total Registered Regulatory Documents:** 11 official documents (8 ICC Playing Conditions, 2 full MCC Laws booklets, 1 MCC 2026 Amendments Explanatory document).
+- **Total Extracted PDF Pages:** 1,162 pages (747 ICC + 415 MCC).
+- **Total Structured Clauses Parsed:** 12,522 clauses (9,454 unique active clauses in the primary relational and vector stores).
+- **Total Structured Table Assets:** 246 multi-cell table grids preserved in `data/extracted/tables/`.
 - **Extraction Integrity:** 0 corrupted or garbled pages; 100% of pages successfully parsed.
 - **Multi-View Coverage:** 100% of clauses have all 7 representations generated (`original_text`, `normalized_text`, `lexical_text`, `embedding_text`, `sentence_segments`, `chunks`, `display_text`).
-- **Full Database Footprint:** Persistent SQLite database at `data/cricketiq.db` (43,220,992 bytes) with integrated FTS5 virtual table and 384-dimensional dense vector embeddings.
+- **Full Database Footprint:** Persistent SQLite database at `data/cricketiq.db` (54,652,928 bytes) with integrated FTS5 virtual table and 384-dimensional dense vector embeddings.
 
 ---
 
@@ -34,9 +34,10 @@ This report establishes the data quality, completeness, integrity, and retrieval
 | **`ICC_ODI_WOMEN_2026`** | ICC | October 2026 | 106 | 1,221 | 9 | 0 | 52 | 0 | **PASSED (Audited)** |
 | **`ICC_T20I_WOMEN_2026`** | ICC | October 2026 | 106 | 1,247 | 9 | 0 | 54 | 0 | **PASSED (Audited)** |
 | **`ICC_WTC_2025_2027_PC`** | ICC | 2025–2027 | 102 | 1,273 | 6 | 0 | 49 | 0 | **PASSED (Audited)** |
-| **`MCC_LAWS_2026`** | MCC | 2017 Code (4th Ed) | 6 | 38 | 0 | 0 | 37 | 0 | **PASSED (Audited)** |
-| **`MCC_LAWS_2022`** | MCC | 2017 Code (3rd Ed) | 6 | 38 | 0 | 0 | 37 | 0 | **PASSED (Audited)** |
-| **TOTALS** | — | — | **747** | **8,808** | **54** | **0** | **447** | **0** | **ZERO ERRORS** |
+| **`MCC_LAWS_2026`** | MCC | 2017 Code (4th Ed) | 178 | 1,212 | 0 | 0 | 42 | 0 | **PASSED (Audited)** |
+| **`MCC_LAWS_2022`** | MCC | 2017 Code (3rd Ed) | 221 | 2,396 | 192 | 0 | 42 | 0 | **PASSED (Audited)** |
+| **`MCC_CHANGES_EXPLAINED_2026`**| MCC | 2026 Amendments | 16 | 182 | 0 | 0 | 14 | 0 | **PASSED (Audited)** |
+| **TOTALS** | — | — | **1,162** | **12,522** | **246** | **0** | **471** | **0** | **ZERO ERRORS** |
 
 *Note on Warnings: All warnings represent non-critical structural references where subclauses point to parent headings or external incorporated Laws rather than separate body paragraphs.*
 

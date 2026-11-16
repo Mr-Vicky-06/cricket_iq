@@ -62,5 +62,32 @@
     "sha256": "32e1c0de5fa8dcd49b591f5801557d5221d7fd8724a262f328639900836af01d",
     "file_size_bytes": 2960049,
     "page_count": 102
+  },
+  {
+    "source_document_id": "MCC_LAWS_2026",
+    "download_method": "direct_official_sni",
+    "url": "https://www.lords.org/getattachment/8c96a135-beff-4a46-b5c6-2a02a7245386/Laws-of-Cricket-2017-Code-4th-Edition-(2026).pdf",
+    "sha256": "ea3186ab759a160414926c54bfb8d31ed3604f23d24ad1a02841561631e8fb34",
+    "file_size_bytes": 980684,
+    "page_count": 178,
+    "status": "downloaded"
+  },
+  {
+    "source_document_id": "MCC_LAWS_2022",
+    "download_method": "direct_official_sni",
+    "url": "https://www.lords.org/getmedia/db31df04-e6b0-446e-8fc0-34674fb16c71/Laws-Of-Cricket-3rd-Edition-2022_1.pdf",
+    "sha256": "ce072992e3f06180dc93bae6b4af5069f59bb1f10e2dc44cb1eaba710ac6a6c9",
+    "file_size_bytes": 4100996,
+    "page_count": 221,
+    "status": "downloaded"
+  },
+  {
+    "source_document_id": "MCC_CHANGES_EXPLAINED_2026",
+    "download_method": "direct_official_sni",
+    "url": "https://www.lords.org/getattachment/39ccb9ea-b159-443e-9f1f-0358eb46d01e/Changes-to-Laws-for-2026-edition-explained.pdf",
+    "sha256": "e6bd9329d7dfb552f4f160c5d6b429e5b049d4875b180a7197b68842057efff6",
+    "file_size_bytes": 189363,
+    "page_count": 16,
+    "status": "downloaded"
   }
 ]

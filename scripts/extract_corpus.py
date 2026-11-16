@@ -50,6 +50,26 @@ def main():
     for item in manifest:
         doc_id = item["source_document_id"]
         pdf_path = root_dir / item["relative_path"]
+        clauses_file = clauses_dir / f"{doc_id}_clauses.json"
+
+        # Check if already extracted (except MCC documents which were newly acquired)
+        if clauses_file.exists() and doc_id not in ["MCC_LAWS_2026", "MCC_LAWS_2022", "MCC_CHANGES_EXPLAINED_2026"] and "--force" not in sys.argv:
+            print(f"Skipping already extracted document: {doc_id}")
+            report_file = reports_dir / f"{doc_id}_report.json"
+            if report_file.exists():
+                with open(report_file, "r", encoding="utf-8") as rf:
+                    rdata = json.load(rf)
+                    summary.append({
+                        "source_document_id": doc_id,
+                        "pages": rdata.get("pages_extracted", 0),
+                        "clauses": rdata.get("clauses_found", 0),
+                        "tables": rdata.get("tables_found", 0),
+                        "status": rdata.get("status", "VALIDATED"),
+                        "warnings": rdata.get("warnings_count", 0),
+                        "errors": rdata.get("errors_count", 0)
+                    })
+            continue
+
         print(f"Processing {doc_id} ({pdf_path.name})...")
 
         if not pdf_path.exists():

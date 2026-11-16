@@ -2,8 +2,8 @@
   "manifest_version": "1.0.0",
   "pipeline_version": "1.0.0",
   "normalization_version": "v1",
-  "total_documents": 10,
-  "total_clauses": 8808,
+  "total_documents": 11,
+  "total_clauses": 12522,
   "documents": [
     {
       "source_document_id": "ICC_TEST_MEN_2026",
@@ -192,7 +192,7 @@
     {
       "source_document_id": "MCC_LAWS_2026",
       "authority": "MCC",
-      "title": "The Laws of Cricket (2017 Code 4th Edition - 2026)",
+      "title": "The Laws of Cricket (2017 Code 4th Edition \u2013 2026)",
       "edition": "2017 Code 4th Edition (2026)",
       "format": "Universal",
       "category": "Open",
@@ -201,7 +201,7 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 38,
+      "total_clauses": 1212,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -215,7 +215,7 @@
     {
       "source_document_id": "MCC_LAWS_2022",
       "authority": "MCC",
-      "title": "The Laws of Cricket (2017 Code 3rd Edition - 2022)",
+      "title": "The Laws of Cricket (2017 Code 3rd Edition \u2013 2022)",
       "edition": "2017 Code 3rd Edition (2022)",
       "format": "Universal",
       "category": "Open",
@@ -224,7 +224,30 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 38,
+      "total_clauses": 2396,
+      "views_generated": [
+        "original_text",
+        "normalized_text",
+        "lexical_text",
+        "embedding_text",
+        "sentence_segments",
+        "chunks",
+        "display_text"
+      ]
+    },
+    {
+      "source_document_id": "MCC_CHANGES_EXPLAINED_2026",
+      "authority": "MCC",
+      "title": "Changes to Laws for 2026 Edition Explained",
+      "edition": "2026 Amendments",
+      "format": "Universal",
+      "category": "Open",
+      "effective_date": "2026-10-01",
+      "applicability_basis": "SERIES_START_DATE",
+      "parent_doc_id": "MCC_LAWS_2026",
+      "pipeline_version": "1.0.0",
+      "normalization_version": "v1",
+      "total_clauses": 182,
       "views_generated": [
         "original_text",
         "normalized_text",

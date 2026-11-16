@@ -125,7 +125,8 @@ def main():
         ("ICC_T20I_WOMEN_2026", "MCC_LAWS_2026", RelationshipType.INCORPORATES),
         ("ICC_T20I_MEN_ADD_2026", "ICC_T20I_MEN_2026", RelationshipType.SUPPLEMENTS),
         ("ICC_WTC_2025_2027_PC", "ICC_TEST_MEN_2026", RelationshipType.MODIFIES),
-        ("MCC_LAWS_2026", "MCC_LAWS_2022", RelationshipType.SUPERSEDES)
+        ("MCC_LAWS_2026", "MCC_LAWS_2022", RelationshipType.SUPERSEDES),
+        ("MCC_CHANGES_EXPLAINED_2026", "MCC_LAWS_2026", RelationshipType.SUPPLEMENTS)
     ]
     for source_id, target_id, rel_type in relationships:
         rel = DocumentRelationship(

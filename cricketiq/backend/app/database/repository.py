@@ -197,7 +197,7 @@ class CricketIQRepository:
                 supporting_clause_id=rel.supporting_clause_id,
                 review_status=rel.review_status
             )
-            self.session.add(entity)
+            self.session.merge(entity)
             self.session.commit()
             return rel
         except Exception:
