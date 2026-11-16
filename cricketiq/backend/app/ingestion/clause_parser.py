@@ -21,13 +21,20 @@ MAJOR_SECTION_RE = re.compile(
     re.IGNORECASE
 )
 SUB_CLAUSE_HEADER_RE = re.compile(
-    r"^([0-9]{1,2}\.[0-9]{1,2}(?:\.[0-9]{1,2})?)\s+([A-Z][A-Za-z0-9\s,\-–'\(\)]+)$"
+    r"^([0-9]{1,2}\.[0-9]{1,2}(?:\.[0-9]{1,2}){0,2})\s+([A-Z][A-Za-z0-9\s,\-–'\(\)]+)$"
 )
 SUB_CLAUSE_INLINE_RE = re.compile(
-    r"^([0-9]{1,2}\.[0-9]{1,2}(?:\.[0-9]{1,2})?)\s+(.+)$"
+    r"^([0-9]{1,2}\.[0-9]{1,2}(?:\.[0-9]{1,2}){0,2})\s+(.+)$"
+)
+STANDALONE_CLAUSE_RE = re.compile(
+    r"^([0-9]{1,2}(?:\.[0-9]{1,2}){1,3})\s*$"
 )
 CROSS_REF_RE = re.compile(
     r"(?:clause|law|clauses|laws)\s+([0-9]{1,2}(?:\.[0-9]{1,2}(?:\.[0-9]{1,2})?)?)",
+    re.IGNORECASE
+)
+UNITS_RE = re.compile(
+    r"^(?:ounces?|grams?|inches?|centimetres?|cm|mm|kg|g|m|yards?|yd|degrees?|deg|\%|percent)\b",
     re.IGNORECASE
 )
 
@@ -79,74 +86,109 @@ class ClauseParser:
             current_lines = []
 
         for page in pages:
-            lines = [ln.strip() for ln in page.text.split("\n") if ln.strip()]
+            raw_lines = [ln.strip() for ln in page.text.split("\n") if ln.strip()]
 
-            for line in lines:
+            for line in raw_lines:
+                clean_line = line.replace("\u202f", " ").replace("\xa0", " ").strip()
+
                 # Check for major section / Law header, e.g. "21 No Ball" or "LAW 21 NO BALL"
-                major_match = MAJOR_SECTION_RE.match(line)
+                major_match = MAJOR_SECTION_RE.match(clean_line)
                 if major_match and not ("." in major_match.group(1)):
-                    flush_current()
-                    current_major_num = major_match.group(1)
-                    current_major_heading = major_match.group(2).strip()
+                    major_val = int(major_match.group(1))
+                    if 1 <= major_val <= 42:
+                        flush_current()
+                        current_major_num = major_match.group(1)
+                        current_major_heading = major_match.group(2).strip()
 
-                    # Register the major section as a parent clause itself
-                    major_clause_id = f"{self.document_id}:{current_major_num}"
-                    clauses.append(
-                        RuleClause(
-                            id=major_clause_id,
-                            source_document_id=self.document_id,
-                            clause_number=current_major_num,
-                            parent_clause_id=None,
-                            heading=current_major_heading,
-                            original_text=f"{current_major_num}. {current_major_heading}",
-                            normalized_text=current_major_heading.lower(),
-                            page_start=page.page_number,
-                            page_end=page.page_number,
-                            clause_type=ClauseType.RULE,
-                            cross_references=[],
-                            validation_status=ValidationStatus.UNCHECKED
+                        # Register the major section as a parent clause itself
+                        major_clause_id = f"{self.document_id}:{current_major_num}"
+                        clauses.append(
+                            RuleClause(
+                                id=major_clause_id,
+                                source_document_id=self.document_id,
+                                clause_number=current_major_num,
+                                parent_clause_id=None,
+                                heading=current_major_heading,
+                                original_text=f"{current_major_num}. {current_major_heading}",
+                                normalized_text=current_major_heading.lower(),
+                                page_start=page.page_number,
+                                page_end=page.page_number,
+                                clause_type=ClauseType.RULE,
+                                cross_references=[],
+                                validation_status=ValidationStatus.UNCHECKED
+                            )
                         )
-                    )
+                        continue
+
+                # Check for standalone clause number line, e.g. "5.1\t" or "21.18.3.1"
+                standalone_match = STANDALONE_CLAUSE_RE.match(clean_line)
+                if standalone_match and self._is_valid_clause_start(standalone_match.group(1)):
+                    flush_current()
+                    current_clause_num = standalone_match.group(1)
+                    current_heading = f"Clause {current_clause_num}"
+                    current_page_start = page.page_number
+                    current_page_end = page.page_number
+                    current_lines = [clean_line]
                     continue
 
                 # Check for sub-clause header, e.g. "21.18 Free Hit"
-                sub_header_match = SUB_CLAUSE_HEADER_RE.match(line)
-                if sub_header_match:
+                sub_header_match = SUB_CLAUSE_HEADER_RE.match(clean_line)
+                if sub_header_match and self._is_valid_clause_start(sub_header_match.group(1), sub_header_match.group(2)):
                     flush_current()
                     current_clause_num = sub_header_match.group(1)
                     current_heading = sub_header_match.group(2).strip()
                     current_page_start = page.page_number
                     current_page_end = page.page_number
-                    current_lines = [line]
+                    current_lines = [clean_line]
                     continue
 
                 # Check for inline clause, e.g. "21.18.2 For any free hit, the striker can..."
-                inline_match = SUB_CLAUSE_INLINE_RE.match(line)
-                if inline_match and self._is_valid_clause_start(inline_match.group(1)):
+                inline_match = SUB_CLAUSE_INLINE_RE.match(clean_line)
+                if inline_match and self._is_valid_clause_start(inline_match.group(1), inline_match.group(2)):
                     flush_current()
                     current_clause_num = inline_match.group(1)
                     body_text = inline_match.group(2).strip()
                     current_heading = current_heading or f"Clause {current_clause_num}"
                     current_page_start = page.page_number
                     current_page_end = page.page_number
-                    current_lines = [line]
+                    current_lines = [clean_line]
                     continue
+
+                # If current_lines has only the standalone clause number, check if this line is a short heading
+                if current_clause_num and len(current_lines) == 1 and current_lines[0] == current_clause_num:
+                    if len(clean_line) < 60 and not clean_line.endswith("."):
+                        current_heading = clean_line
+                        current_lines.append(clean_line)
+                        continue
 
                 # Continuation line
                 if current_clause_num:
-                    current_lines.append(line)
+                    current_lines.append(clean_line)
                     current_page_end = page.page_number
 
         flush_current()
         return clauses
 
-    def _is_valid_clause_start(self, num_str: str) -> bool:
+    def _is_valid_clause_start(self, num_str: str, body_text: str = "") -> bool:
         parts = num_str.split(".")
-        return all(p.isdigit() for p in parts) and len(parts) in (2, 3)
+        if not (all(p.isdigit() for p in parts) and len(parts) in (2, 3, 4)):
+            return False
+        # Major law number must be 1..42
+        major = int(parts[0])
+        if major < 1 or major > 42:
+            return False
+        # Reject lines where the following token is a measurement unit
+        if body_text:
+            tokens = body_text.strip().split()
+            if tokens and UNITS_RE.match(tokens[0]):
+                return False
+        return True
 
     def _compute_parent_id(self, clause_num: str, major_num: Optional[str]) -> Optional[str]:
         parts = clause_num.split(".")
-        if len(parts) == 3:
+        if len(parts) == 4:
+            return f"{self.document_id}:{parts[0]}.{parts[1]}.{parts[2]}"
+        elif len(parts) == 3:
             return f"{self.document_id}:{parts[0]}.{parts[1]}"
         elif len(parts) == 2:
             return f"{self.document_id}:{parts[0]}"

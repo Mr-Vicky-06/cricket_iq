@@ -48,6 +48,17 @@ htmlcov/
 *.db
 cricketiq/data/temp/
 
+# Derived large corpus assets (reproducible via scripts/)
+data/sources/raw/
+data/extracted/page_text/
+data/extracted/layout_json/
+data/extracted/tables/
+data/extracted/extraction_reports/
+data/corpus/clauses/
+data/corpus/normalized/
+data/corpus/metadata/
+data/indexes/
+
 # Large local external bundles
 vignesh-universal-skill-book/
 cricketiq-antigravity-starter/

@@ -1,0 +1,38 @@
+[
+  {
+    "source_document_id": "MCC_LAWS_2026",
+    "authority": "MCC",
+    "title": "The Laws of Cricket (2017 Code 4th Edition - 2026)",
+    "edition": "2017 Code 4th Edition (2026)",
+    "format": "Universal",
+    "category": "Open",
+    "effective_date": "2026-10-01",
+    "applicability_basis": "SERIES_START_DATE",
+    "parent_doc_id": null,
+    "safe_filename": "mcc_laws_2017_code_4th_edition_2026.pdf",
+    "relative_path": "data/sources/raw/mcc/mcc_laws_2017_code_4th_edition_2026.pdf",
+    "file_size_bytes": 41220,
+    "page_count": 6,
+    "sha256": "5b08e8c2893647d000ace8b00b9a4567c18668fbe520d25af011501bdd94f079",
+    "official_url": "https://www.lords.org/mcc/about-the-laws-of-cricket",
+    "status": "fixture_verified"
+  },
+  {
+    "source_document_id": "MCC_LAWS_2022",
+    "authority": "MCC",
+    "title": "The Laws of Cricket (2017 Code 3rd Edition - 2022)",
+    "edition": "2017 Code 3rd Edition (2022)",
+    "format": "Universal",
+    "category": "Open",
+    "effective_date": "2022-10-01",
+    "applicability_basis": "MATCH_DATE",
+    "parent_doc_id": null,
+    "safe_filename": "mcc_laws_2017_code_3rd_edition_2022.pdf",
+    "relative_path": "data/sources/raw/mcc/mcc_laws_2017_code_3rd_edition_2022.pdf",
+    "file_size_bytes": 41220,
+    "page_count": 6,
+    "sha256": "a5b23f28feee12309ebae34ed906ff2908a879735cf4f153a1b28f37fd9dce80",
+    "official_url": "https://www.lords.org/mcc/about-the-laws-of-cricket/historical-laws",
+    "status": "fixture_verified"
+  }
+]

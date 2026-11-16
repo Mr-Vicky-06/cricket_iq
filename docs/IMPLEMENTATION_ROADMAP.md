@@ -79,6 +79,27 @@ Exit gate:
 - [x] 65-query labelled benchmark retrieves expected evidence with inspectable provenance.
 - [x] Zero cross-format or domestic regulatory leakage verified in tests (0.0%).
 
+## Pre-Phase 4 — Data Foundation, Corpus Engineering & NLP Readiness [STATUS: COMPLETED]
+
+**Goal:** establish a validated, version-aware, cricket-aware rules corpus and supporting NLP/data assets before implementing Phase 4 answer-generation features.
+
+Tasks:
+- [x] **Gate 0:** Complete repository, test baseline, and physical storage audit (`docs/reviews/DATA_FOUNDATION_PRE_IMPLEMENTATION_AUDIT.md`).
+- [x] **Gate 1:** Authoritative source discovery and corpus scope register across Tier 1 (Core ICC & MCC), Tier 2 (WTC & T20WC), and Tier 3 (Domestic out-of-scope) (`docs/DATA_SOURCE_INVENTORY.md`, `docs/CORPUS_SCOPE_AND_COVERAGE.md`, `docs/SOURCE_USE_AND_ATTRIBUTION_REGISTER.md`).
+- [x] **Gate 2:** Secure acquisition of 8 Tier 1 ICC Playing Conditions PDFs via `secure_downloader.py`, creation of 2 verified MCC Laws fixtures, and master raw manifest generation (`data/sources/manifests/raw_manifest.json`, `data/sources/manifests/acquisition_log.json`).
+- [x] **Gate 3:** Full document extraction and clause parsing across all 10 documents, extracting 747 pages, 8,808 clauses, and 54 tables with zero garbled pages (`docs/DOCUMENT_EXTRACTION_SPEC.md`, `data/extracted/`).
+- [x] **Gate 4:** Multi-view text normalization (7 views: `original_text`, `normalized_text`, `lexical_text`, `embedding_text`, `sentence_segments`, `chunks`, `display_text`) and tokenization evaluator module (`cricketiq/backend/app/nlp/normalizer.py`, `tokenization_evaluator.py`, `docs/TEXT_NORMALIZATION_SPEC.md`, `docs/TOKENIZATION_EVALUATION.md`, `test_text_normalization.py`, `test_cricket_tokenization.py`).
+- [x] **Gate 5:** Cricket domain terminology lexicon and ontology dataset with non-equivalence mappings (`data/corpus/lexicon/cricket_lexicon.json`, `docs/CRICKET_DOMAIN_LEXICON_SPEC.md`, `test_lexicon.py`).
+- [x] **Gate 6:** Corpus quality validation, atomic SQLite database and FTS5 index build, persistent vector store creation (7,591 clauses, 384 dimensions, `data/cricketiq.db`), and benchmark expansion to 92 items (`benchmark_v2.jsonl`, `eval_report_v2.json`, `docs/CORPUS_QUALITY_REPORT.md`).
+- [x] **Gate 7:** Final delivery report, test suite verification (67 passed, 1 skipped), and milestone stopping gate before Phase 4 (`docs/reviews/DATA_FOUNDATION_FINAL_DELIVERY_REPORT.md`).
+
+Exit gate:
+- [x] 100% of Tier 1 official sources acquired, cryptographically verified, and ingested.
+- [x] Multi-view representations generated for all 8,808 clauses with full provenance.
+- [x] Persistent SQLite database, FTS5 virtual table, and vector store built with zero errors.
+- [x] Benchmark v1 regression verified with zero drop in accuracy (100% exact accuracy, 0.0% leakage).
+- [x] **Explicit boundary confirmed: No Phase 4 answer generation, LLM prompts, API endpoints, or chat UI implemented.**
+
 ## Phase 4 — Grounded answer API
 
 **Goal:** produce clear answers based only on retrieved evidence.

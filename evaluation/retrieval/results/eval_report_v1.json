@@ -1,7 +1,7 @@
 {
   "benchmark_file": "evaluation\\retrieval\\benchmark_v1.jsonl",
   "total_queries": 65,
-  "evaluated_at": "2026-11-15T07:55:40Z",
+  "evaluated_at": "2026-11-16T10:02:36Z",
   "configurations": [
     {
       "mode": "Sparse-Only (SQLite FTS5)",
@@ -14,12 +14,12 @@
       "supporting_clause_recall": 100.0,
       "leakage_rate": 0.0,
       "latencies_ms": {
-        "avg_sparse": 1.43,
+        "avg_sparse": 2.23,
         "avg_dense": 0.0,
-        "avg_fusion": 0.07,
-        "avg_expansion": 2.74,
-        "avg_total": 5.62,
-        "p95_total": 8.42
+        "avg_fusion": 0.12,
+        "avg_expansion": 4.35,
+        "avg_total": 9.16,
+        "p95_total": 13.79
       }
     },
     {
@@ -34,11 +34,11 @@
       "leakage_rate": 0.0,
       "latencies_ms": {
         "avg_sparse": 0.0,
-        "avg_dense": 1.63,
-        "avg_fusion": 0.08,
-        "avg_expansion": 2.89,
-        "avg_total": 5.96,
-        "p95_total": 8.89
+        "avg_dense": 2.64,
+        "avg_fusion": 0.13,
+        "avg_expansion": 4.59,
+        "avg_total": 9.47,
+        "p95_total": 12.7
       }
     },
     {
@@ -52,12 +52,12 @@
       "supporting_clause_recall": 100.0,
       "leakage_rate": 0.0,
       "latencies_ms": {
-        "avg_sparse": 1.39,
-        "avg_dense": 1.66,
-        "avg_fusion": 0.09,
-        "avg_expansion": 2.78,
-        "avg_total": 7.26,
-        "p95_total": 12.28
+        "avg_sparse": 2.23,
+        "avg_dense": 2.35,
+        "avg_fusion": 0.14,
+        "avg_expansion": 4.38,
+        "avg_total": 11.2,
+        "p95_total": 14.69
       }
     }
   ]

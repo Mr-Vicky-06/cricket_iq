@@ -460,8 +460,19 @@ def evaluate_configuration(
     }
 
 
+def setup_full_corpus_environment(db_path: Path) -> Tuple[CricketIQRepository, SQLiteFTSSearchProvider, EmbeddingStore]:
+    """Connect to persistent on-disk full corpus database for benchmark v2 evaluation."""
+    engine = create_db_engine(f"sqlite:///{db_path}")
+    session = Session(bind=engine)
+    repo = CricketIQRepository(session)
+    sparse_prov = SQLiteFTSSearchProvider(repo)
+    embedder = LocalDeterministicEmbeddingProvider(dimension=384)
+    store = EmbeddingStore(repo, embedder)
+    return repo, sparse_prov, store
+
+
 def main():
-    benchmark_path = Path("evaluation/retrieval/benchmark_v1.jsonl")
+    benchmark_path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("evaluation/retrieval/benchmark_v1.jsonl")
     if not benchmark_path.exists():
         print(f"Benchmark file not found at {benchmark_path}")
         return
@@ -470,17 +481,22 @@ def main():
         benchmark_items = [json.loads(line) for line in f if line.strip()]
 
     print(f"Loaded {len(benchmark_items)} evaluation queries from {benchmark_path}")
-    repo = setup_benchmark_environment()
 
-    # Sparse Provider
-    sparse_prov = SQLiteFTSSearchProvider(repo)
-    sparse_prov.rebuild_index()
-
-    # Dense Provider
-    embedder = LocalDeterministicEmbeddingProvider(dimension=384)
-    store = EmbeddingStore(repo, embedder)
-    store.build_all_embeddings()
-    dense_prov = SQLiteNumPyDenseSearchProvider(repo, embedder, store)
+    db_path = PROJECT_ROOT / "data" / "cricketiq.db"
+    if "v2" in benchmark_path.name and db_path.exists():
+        print(f"Running against full persistent database at {db_path}...")
+        repo, sparse_prov, store = setup_full_corpus_environment(db_path)
+        embedder = LocalDeterministicEmbeddingProvider(dimension=384)
+        dense_prov = SQLiteNumPyDenseSearchProvider(repo, embedder, store)
+    else:
+        print("Running against in-memory baseline benchmark environment...")
+        repo = setup_benchmark_environment()
+        sparse_prov = SQLiteFTSSearchProvider(repo)
+        sparse_prov.rebuild_index()
+        embedder = LocalDeterministicEmbeddingProvider(dimension=384)
+        store = EmbeddingStore(repo, embedder)
+        store.build_all_embeddings()
+        dense_prov = SQLiteNumPyDenseSearchProvider(repo, embedder, store)
 
     # 1. Config A: Sparse Only
     service_sparse = RetrievalService(
@@ -519,13 +535,14 @@ def main():
 
     out_dir = Path("evaluation/retrieval/results")
     out_dir.mkdir(parents=True, exist_ok=True)
-    report_file = out_dir / "eval_report_v1.json"
+    report_filename = "eval_report_v2.json" if "v2" in benchmark_path.name else "eval_report_v1.json"
+    report_file = out_dir / report_filename
     with open(report_file, "w", encoding="utf-8") as f:
         json.dump(results_all, f, indent=2)
 
     # Print summary table
     print("\n" + "=" * 100)
-    print("CRICKETIQ RETRIEVAL SUBSYSTEM BENCHMARK EVALUATION (65 QUERIES)")
+    print(f"CRICKETIQ RETRIEVAL BENCHMARK EVALUATION ({len(benchmark_items)} QUERIES - {benchmark_path.name})")
     print("=" * 100)
     print(f"{'Configuration':<42} | {'Recall@5':<9} | {'MRR':<8} | {'Exact Acc':<9} | {'Supp Recall':<11} | {'Leakage':<7} | {'Latency':<8}")
     print("-" * 100)

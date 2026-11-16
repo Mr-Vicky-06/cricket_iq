@@ -1,0 +1,66 @@
+[
+  {
+    "source_document_id": "ICC_TEST_MEN_2026",
+    "url": "https://images.icc-cricket.com/image/upload/prd/a8114zro5tkioifz0jqg.pdf",
+    "status": "SUCCESS",
+    "sha256": "5a0af1cf472252a5bc63d2418e6af77babb88c57af70abfcba1703c9d9e20ead",
+    "file_size_bytes": 2954299,
+    "page_count": 103
+  },
+  {
+    "source_document_id": "ICC_ODI_MEN_2026",
+    "url": "https://images.icc-cricket.com/image/upload/prd/bxkzkcyvfn6tvi70zh0w.pdf",
+    "status": "SUCCESS",
+    "sha256": "dc120005d2176cc8f442410352b7ce64c84295f0fd0f9a3ed7dc424f4765b6be",
+    "file_size_bytes": 3005268,
+    "page_count": 107
+  },
+  {
+    "source_document_id": "ICC_T20I_MEN_2026",
+    "url": "https://images.icc-cricket.com/image/upload/prd/bsxcho7ufe2pjban0wjp.pdf",
+    "status": "SUCCESS",
+    "sha256": "396a6c64e5ddadbfe6687f4a6653b5be2f3c7fff1038e19e9b3f52bacff4fa47",
+    "file_size_bytes": 2929111,
+    "page_count": 106
+  },
+  {
+    "source_document_id": "ICC_T20I_MEN_ADD_2026",
+    "url": "https://images.icc-cricket.com/image/upload/prd/pzyejpstlhptewq9qs2n.pdf",
+    "status": "SUCCESS",
+    "sha256": "9732ecd4d774ce7d32627d2089a79956cb3647be04a504308b8d87c88b05683d",
+    "file_size_bytes": 176789,
+    "page_count": 3
+  },
+  {
+    "source_document_id": "ICC_TEST_WOMEN_2026",
+    "url": "https://images.icc-cricket.com/image/upload/prd/hbwwi78pugzpdwft0v4v.pdf",
+    "status": "SUCCESS",
+    "sha256": "264e7c430228f8dd580f1f723e80a9251308f7584c8b5228e78476cefd6d5aeb",
+    "file_size_bytes": 2952960,
+    "page_count": 102
+  },
+  {
+    "source_document_id": "ICC_ODI_WOMEN_2026",
+    "url": "https://images.icc-cricket.com/image/upload/prd/qunpw1kfh3ibxlz58jlw.pdf",
+    "status": "SUCCESS",
+    "sha256": "72fc6650d55d747533b1c1a9a8dc9ce8a569394b8dfe2691e12298425e2eec1b",
+    "file_size_bytes": 2996725,
+    "page_count": 106
+  },
+  {
+    "source_document_id": "ICC_T20I_WOMEN_2026",
+    "url": "https://images.icc-cricket.com/image/upload/prd/o3vhm0zw7pppoxpgopke.pdf",
+    "status": "SUCCESS",
+    "sha256": "b709833d25193e8eb406a7834b8f1e3c4d5f1b58aca94d20aefa7576a31c9088",
+    "file_size_bytes": 2927593,
+    "page_count": 106
+  },
+  {
+    "source_document_id": "ICC_WTC_2025_2027_PC",
+    "url": "https://images.icc-cricket.com/image/upload/prd/jrwhpcwk8mmpv0fx3lnd.pdf",
+    "status": "SUCCESS",
+    "sha256": "32e1c0de5fa8dcd49b591f5801557d5221d7fd8724a262f328639900836af01d",
+    "file_size_bytes": 2960049,
+    "page_count": 102
+  }
+]
