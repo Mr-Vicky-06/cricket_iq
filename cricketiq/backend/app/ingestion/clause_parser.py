@@ -29,6 +29,10 @@ SUB_CLAUSE_INLINE_RE = re.compile(
 STANDALONE_CLAUSE_RE = re.compile(
     r"^([0-9]{1,2}(?:\.[0-9]{1,2}){1,3})\s*$"
 )
+APPENDIX_HEADER_RE = re.compile(
+    r"^APPENDIX\s+([A-Z])(?:\s*[:–\-]\s*.*)?$",
+    re.IGNORECASE
+)
 CROSS_REF_RE = re.compile(
     r"(?:clause|law|clauses|laws)\s+([0-9]{1,2}(?:\.[0-9]{1,2}(?:\.[0-9]{1,2})?)?)",
     re.IGNORECASE
@@ -56,14 +60,22 @@ class ClauseParser:
         current_lines: List[str] = []
         current_page_start: int = 1
         current_page_end: int = 1
+        current_appendix: Optional[str] = None
 
         def flush_current():
-            nonlocal current_clause_num, current_heading, current_lines, current_page_start, current_page_end
+            nonlocal current_clause_num, current_heading, current_lines, current_page_start, current_page_end, current_appendix
             if current_clause_num and current_lines:
                 full_text = "\n".join(current_lines).strip()
                 if full_text:
-                    clause_id = f"{self.document_id}:{current_clause_num}"
-                    parent_id = self._compute_parent_id(current_clause_num, current_major_num)
+                    if current_appendix:
+                        eff_num = f"APP_{current_appendix}:{current_clause_num}"
+                        clause_id = f"{self.document_id}:{eff_num}"
+                        parent_id = f"{self.document_id}:APP_{current_appendix}"
+                    else:
+                        eff_num = current_clause_num
+                        clause_id = f"{self.document_id}:{current_clause_num}"
+                        parent_id = self._compute_parent_id(current_clause_num, current_major_num)
+
                     clause_type = self._classify_clause(current_heading, full_text)
                     cross_refs = self._extract_cross_refs(full_text)
 
@@ -71,9 +83,9 @@ class ClauseParser:
                         RuleClause(
                             id=clause_id,
                             source_document_id=self.document_id,
-                            clause_number=current_clause_num,
+                            clause_number=eff_num,
                             parent_clause_id=parent_id,
-                            heading=current_heading or current_major_heading or f"Clause {current_clause_num}",
+                            heading=current_heading or current_major_heading or f"Clause {eff_num}",
                             original_text=full_text,
                             normalized_text=self._normalize_text(full_text),
                             page_start=current_page_start,
@@ -86,14 +98,48 @@ class ClauseParser:
             current_lines = []
 
         for page in pages:
+            # Exclude back index in MCC_LAWS_2026 (pages 167-178 are the alphabetical Index)
+            if self.document_id == "MCC_LAWS_2026" and page.page_number >= 167:
+                continue
+
             raw_lines = [ln.strip() for ln in page.text.split("\n") if ln.strip()]
 
             for line in raw_lines:
+                # Filter out Devanagari (Hindi) lines in MCC_LAWS_2022 Diglot edition
+                if self.document_id == "MCC_LAWS_2022" and any("\u0900" <= c <= "\u097f" for c in line):
+                    continue
+
                 clean_line = line.replace("\u202f", " ").replace("\xa0", " ").strip()
+
+                # Check for Appendix header, e.g. "APPENDIX A: DEFINITIONS" or "APPENDIX D: DECISION"
+                app_match = APPENDIX_HEADER_RE.match(clean_line)
+                if app_match:
+                    flush_current()
+                    current_appendix = app_match.group(1).upper()
+                    current_major_num = None
+                    current_major_heading = f"Appendix {current_appendix}"
+                    app_parent_id = f"{self.document_id}:APP_{current_appendix}"
+                    clauses.append(
+                        RuleClause(
+                            id=app_parent_id,
+                            source_document_id=self.document_id,
+                            clause_number=f"APP_{current_appendix}",
+                            parent_clause_id=None,
+                            heading=clean_line,
+                            original_text=clean_line,
+                            normalized_text=clean_line.lower(),
+                            page_start=page.page_number,
+                            page_end=page.page_number,
+                            clause_type=ClauseType.RULE,
+                            cross_references=[],
+                            validation_status=ValidationStatus.UNCHECKED
+                        )
+                    )
+                    continue
 
                 # Check for major section / Law header, e.g. "21 No Ball" or "LAW 21 NO BALL"
                 major_match = MAJOR_SECTION_RE.match(clean_line)
-                if major_match and not ("." in major_match.group(1)):
+                if major_match and not ("." in major_match.group(1)) and not current_appendix:
                     major_val = int(major_match.group(1))
                     if 1 <= major_val <= 42:
                         flush_current()

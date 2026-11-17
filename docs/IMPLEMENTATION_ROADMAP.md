@@ -100,20 +100,29 @@ Exit gate:
 - [x] Benchmark v1 regression verified with zero drop in accuracy (100% exact accuracy, 0.0% leakage).
 - [x] **Explicit boundary confirmed: No Phase 4 answer generation, LLM prompts, API endpoints, or chat UI implemented.**
 
-## Phase 4 — Grounded answer API
+## Phase 4 — Grounded answer API [STATUS: COMPLETED]
 
-**Goal:** produce clear answers based only on retrieved evidence.
+**Goal:** produce clear answers based only on retrieved evidence, format-aware applicability resolution, deterministic citation verification, and strict abstention.
 
 Tasks:
-- Parse intent and structured context from the user question.
-- Clarify missing material context.
-- Build evidence-bounded prompts.
-- Generate direct answer, explanation, exceptions, and citations.
-- Validate citations against retrieved records.
-- Implement abstention and safe provider-error handling.
+- [x] **Gate 0:** Pre-implementation architecture and data readiness audit (`docs/reviews/PHASE_4_PRE_IMPLEMENTATION_AUDIT.md`, `docs/reviews/PHASE_4_DATA_READINESS_AUDIT.md`, `docs/adr/0003-grounded-answer-api.md`, `docs/reviews/PHASE_4_COMPONENT_IMPLEMENTATION_PLAN.md`).
+- [x] **Gate 0 Remediation:** Elimination of primary key collision in `clause_parser.py` via appendix namespacing (`APP_<X>:<num>`), back index exclusion for `MCC_LAWS_2026`, and Devanagari filtering for `MCC_LAWS_2022`, bringing non-colliding corpus to 11,008 unique clauses across all 11 documents.
+- [x] **Gate 1:** Pydantic request/response schemas, FastAPI application skeleton, CORS, correlation ID middleware, liveness/readiness probes (`cricketiq/backend/app/api/schemas/`, `health.py`, `main.py`, `test_api_schemas.py`, `test_health_routes.py`).
+- [x] **Gate 2:** Natural-language match context extractor and end-to-end pipeline orchestrator (`context_extractor.py`, `query_orchestrator.py`, `test_context_extractor.py`, `test_query_orchestrator.py`).
+- [x] **Gate 3:** Pre-generation evidence sufficiency auditor, LLM provider protocol, deterministic offline fake provider, and Gemini provider adapter (`evidence_sufficiency.py`, `contracts.py`, `provider.py`, `provider_factory.py`, `test_evidence_sufficiency.py`, `test_llm_provider.py`).
+- [x] **Gate 4:** Evidence-bounded XML prompt builder and answer generator (`prompt_builder.py`, `answer_generator.py`, `test_prompt_builder.py`).
+- [x] **Gate 5:** Deterministic citation validator, DB metadata hydration, and claim support verification (`citation_validator.py`, `test_citation_validator.py`).
+- [x] **Gate 6:** End-to-end API route `POST /v1/rules/query`, golden benchmark of 50 curated Q&A cases (`evaluation/answers/grounded_answer_benchmark_v1.jsonl`), evaluation runner (`evaluate_answers.py`), security/abuse hardening tests (`test_rules_query_api.py`, `test_security_abuse.py`), and comprehensive final delivery report (`docs/reviews/PHASE_4_FINAL_DELIVERY_REPORT.md`).
 
 Exit gate:
-- Each benchmark answer is supported by source evidence or correctly abstains.
+- [x] 100% of benchmark answers supported by source evidence or correctly abstain (50/50 test cases, 100% status accuracy).
+- [x] Citation identity validity: 100.0% (117/117 citations verified in database).
+- [x] Claim citation coverage: 100.0% (117/117 claims substantiated).
+- [x] Regulatory leakage rate: 0.0% (0 cross-bundle citations).
+- [x] Appropriate abstention rate: 100.0% (11/11 domestic, ambiguous, and out-of-scope inquiries).
+- [x] Latency: Mean 138.6ms, p50 140.7ms, p95 268.9ms.
+- [x] Full test suite: 103 passed, 1 skipped (Postgres integration), 0 failed.
+- [x] Strict boundary preserved: No frontend UI, chat widgets, client apps, or unvalidated streaming.
 
 ## Phase 5 — Minimal user interface
 

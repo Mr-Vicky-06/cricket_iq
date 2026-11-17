@@ -19,10 +19,19 @@ Base = declarative_base()
 def get_database_url() -> str:
     url = os.getenv("DATABASE_URL")
     if not url:
-        base_dir = Path(__file__).resolve().parent.parent.parent.parent
-        db_path = base_dir / "cricketiq" / "data" / "cricketiq.db"
-        db_path.parent.mkdir(parents=True, exist_ok=True)
-        url = f"sqlite:///{db_path}"
+        curr = Path(__file__).resolve().parent
+        found_path = None
+        for _ in range(6):
+            cand = curr / "data" / "cricketiq.db"
+            if cand.exists():
+                found_path = cand
+                break
+            curr = curr.parent
+        if not found_path:
+            root_dir = Path(__file__).resolve().parents[4]
+            found_path = root_dir / "data" / "cricketiq.db"
+            found_path.parent.mkdir(parents=True, exist_ok=True)
+        url = f"sqlite:///{found_path}"
     return url
 
 

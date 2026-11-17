@@ -2,34 +2,34 @@
   {
     "source_document_id": "ICC_TEST_MEN_2026",
     "pages": 103,
-    "clauses": 1251,
+    "clauses": 1241,
     "tables": 6,
     "status": "WARNING",
-    "warnings": 48,
+    "warnings": 38,
     "errors": 0
   },
   {
     "source_document_id": "ICC_ODI_MEN_2026",
     "pages": 107,
-    "clauses": 1229,
+    "clauses": 1221,
     "tables": 9,
     "status": "WARNING",
-    "warnings": 52,
+    "warnings": 32,
     "errors": 0
   },
   {
     "source_document_id": "ICC_T20I_MEN_2026",
     "pages": 106,
-    "clauses": 1242,
+    "clauses": 1234,
     "tables": 9,
     "status": "WARNING",
-    "warnings": 54,
+    "warnings": 34,
     "errors": 0
   },
   {
     "source_document_id": "ICC_T20I_MEN_ADD_2026",
     "pages": 3,
-    "clauses": 16,
+    "clauses": 26,
     "tables": 0,
     "status": "WARNING",
     "warnings": 16,
@@ -38,55 +38,55 @@
   {
     "source_document_id": "ICC_TEST_WOMEN_2026",
     "pages": 102,
-    "clauses": 1253,
+    "clauses": 1243,
     "tables": 6,
     "status": "WARNING",
-    "warnings": 48,
+    "warnings": 38,
     "errors": 0
   },
   {
     "source_document_id": "ICC_ODI_WOMEN_2026",
     "pages": 106,
-    "clauses": 1221,
+    "clauses": 1213,
     "tables": 9,
     "status": "WARNING",
-    "warnings": 52,
+    "warnings": 32,
     "errors": 0
   },
   {
     "source_document_id": "ICC_T20I_WOMEN_2026",
     "pages": 106,
-    "clauses": 1247,
+    "clauses": 1239,
     "tables": 9,
     "status": "WARNING",
-    "warnings": 54,
+    "warnings": 34,
     "errors": 0
   },
   {
     "source_document_id": "ICC_WTC_2025_2027_PC",
     "pages": 102,
-    "clauses": 1273,
+    "clauses": 1263,
     "tables": 6,
     "status": "WARNING",
-    "warnings": 49,
+    "warnings": 38,
     "errors": 0
   },
   {
     "source_document_id": "MCC_LAWS_2026",
     "pages": 178,
-    "clauses": 1212,
+    "clauses": 949,
     "tables": 0,
     "status": "WARNING",
-    "warnings": 65,
+    "warnings": 33,
     "errors": 0
   },
   {
     "source_document_id": "MCC_LAWS_2022",
     "pages": 221,
-    "clauses": 2396,
+    "clauses": 1197,
     "tables": 192,
     "status": "WARNING",
-    "warnings": 148,
+    "warnings": 1,
     "errors": 0
   },
   {

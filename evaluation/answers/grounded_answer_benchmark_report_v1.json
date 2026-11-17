@@ -1,0 +1,876 @@
+{
+  "benchmark_file": "D:\\Cricket_Rules_NLP_Chatbot\\evaluation\\answers\\grounded_answer_benchmark_v1.jsonl",
+  "total_cases": 50,
+  "metrics": {
+    "status_accuracy_pct": 100.0,
+    "citation_validity_pct": 100.0,
+    "claim_coverage_pct": 100.0,
+    "regulatory_leakage_pct": 0.0,
+    "appropriate_abstention_pct": 100.0,
+    "total_citations_emitted": 117,
+    "total_claims_emitted": 117,
+    "latency_mean_ms": 138.59357399865985,
+    "latency_p50_ms": 140.65270000719465,
+    "latency_p95_ms": 268.9333700371207
+  },
+  "category_breakdown": {
+    "free_hit": {
+      "total": 4,
+      "status_correct": 4,
+      "citations_valid": 4
+    },
+    "no_ball": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "dismissals": {
+      "total": 3,
+      "status_correct": 3,
+      "citations_valid": 3
+    },
+    "penalties": {
+      "total": 1,
+      "status_correct": 1,
+      "citations_valid": 1
+    },
+    "bouncers": {
+      "total": 3,
+      "status_correct": 3,
+      "citations_valid": 3
+    },
+    "wide_ball": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "boundary": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "substitutes": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "drs": {
+      "total": 3,
+      "status_correct": 3,
+      "citations_valid": 3
+    },
+    "fielding_restrictions": {
+      "total": 3,
+      "status_correct": 3,
+      "citations_valid": 3
+    },
+    "rain_interruption": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "over_rate": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "mcc_vs_icc": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "womens_conditions": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "wtc_rules": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "historical_comparison": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    },
+    "domestic_screening": {
+      "total": 5,
+      "status_correct": 5,
+      "citations_valid": 0
+    },
+    "clarification_required": {
+      "total": 3,
+      "status_correct": 3,
+      "citations_valid": 0
+    },
+    "unanswerable_nonsense": {
+      "total": 3,
+      "status_correct": 3,
+      "citations_valid": 0
+    },
+    "dead_ball": {
+      "total": 2,
+      "status_correct": 2,
+      "citations_valid": 2
+    }
+  },
+  "detailed_results": [
+    {
+      "id": "ans_001",
+      "category": "free_hit",
+      "question": "Can a batter be dismissed caught on a free hit in Men's T20I?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 102.39389998605475,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_2026:21.18.2",
+        "ICC_T20I_MEN_2026:21.18.1",
+        "ICC_T20I_MEN_2026:21.18.5"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_002",
+      "category": "free_hit",
+      "question": "Can fielders be changed before a free hit delivery in T20I?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 65.62159996246919,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_2026:21.18.2",
+        "ICC_T20I_MEN_2026:21.18.4",
+        "ICC_T20I_MEN_2026:21.18.1"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_003",
+      "category": "free_hit",
+      "question": "Does a free hit apply after a bowler delivers a front foot no ball in Men's ODI?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 75.71820000885054,
+      "citations_count": 3,
+      "citations": [
+        "ICC_ODI_MEN_2026:21.18.5",
+        "ICC_ODI_MEN_2026:21.18.2",
+        "ICC_ODI_MEN_2026:21.18.1"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_004",
+      "category": "free_hit",
+      "question": "What happens if a free hit delivery in T20I is bowled as a wide ball?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 148.16129999235272,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_2026:21.18.1",
+        "ICC_T20I_MEN_2026:21.18.2",
+        "ICC_T20I_MEN_2026:21.18.5"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_005",
+      "category": "no_ball",
+      "question": "What constitutes a high full pitched delivery (beamer) no ball in T20I?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 348.9990999805741,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:36.1.2",
+        "MCC_CHANGES_EXPLAINED_2026:36.1.3",
+        "MCC_CHANGES_EXPLAINED_2026:41.7.3"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_006",
+      "category": "dismissals",
+      "question": "Can the bowler run out the non-striker before entering the delivery stride?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 299.62790000718087,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:38.3.1.1",
+        "MCC_CHANGES_EXPLAINED_2026:38.3.1",
+        "MCC_CHANGES_EXPLAINED_2026:20.4.2.10"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_007",
+      "category": "dismissals",
+      "question": "Can a batter be given out caught if the ball hits the helmet grill before being caught?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 258.1977000227198,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:37.5.1",
+        "MCC_CHANGES_EXPLAINED_2026:37.5.2",
+        "MCC_CHANGES_EXPLAINED_2026:33.2.2.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_008",
+      "category": "dismissals",
+      "question": "Can a batter be given out stumped on a free hit delivery?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 191.78509997436777,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_2026:21.18.2",
+        "ICC_T20I_MEN_2026:21.18.1",
+        "ICC_T20I_MEN_2026:21.18.4"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_009",
+      "category": "penalties",
+      "question": "What is the penalty if a fielded ball strikes a protective helmet placed on the ground?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 277.7171000489034,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:41.17.2",
+        "MCC_CHANGES_EXPLAINED_2026:41.17.5",
+        "MCC_CHANGES_EXPLAINED_2026:18.5.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_010",
+      "category": "no_ball",
+      "question": "Is a double bounce delivery legal in cricket?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 157.50699996715412,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:21.7",
+        "MCC_CHANGES_EXPLAINED_2026:21.7.2",
+        "MCC_CHANGES_EXPLAINED_2026:41.6.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_011",
+      "category": "bouncers",
+      "question": "How many short-pitched bouncers are permitted per over in Men's T20I?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 161.33949998766184,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:41.6",
+        "MCC_CHANGES_EXPLAINED_2026:41.6.2",
+        "MCC_CHANGES_EXPLAINED_2026:41.6.1"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_012",
+      "category": "bouncers",
+      "question": "How many short-pitched deliveries per over are allowed in Men's ODI cricket?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 156.2703000381589,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:41.6",
+        "MCC_CHANGES_EXPLAINED_2026:41.6.2",
+        "MCC_CHANGES_EXPLAINED_2026:41.6.1"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_013",
+      "category": "bouncers",
+      "question": "How many bouncers per over are allowed in Men's Test matches?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 177.35040001571178,
+      "citations_count": 3,
+      "citations": [
+        "ICC_TEST_MEN_2026:12.9.1",
+        "ICC_TEST_MEN_2026:12.9.3.7",
+        "ICC_TEST_MEN_2026:APP_D:4.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_014",
+      "category": "wide_ball",
+      "question": "What is the rule for judging a leg-side wide in T20I?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 180.4136999999173,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_2026:4.9",
+        "ICC_T20I_MEN_2026:APP_A:4.9",
+        "ICC_T20I_MEN_2026:APP_A:12.3"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_015",
+      "category": "wide_ball",
+      "question": "Can a delivery be both a Wide and a No ball?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 175.21820002002642,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:22.1.1",
+        "MCC_CHANGES_EXPLAINED_2026:22.1.3",
+        "MCC_CHANGES_EXPLAINED_2026:36.1.1"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_016",
+      "category": "boundary",
+      "question": "What happens if a fielder catches the ball outside the boundary ropes?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 127.77449999703094,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:19.5.2.2",
+        "MCC_CHANGES_EXPLAINED_2026:24.2.1",
+        "MCC_CHANGES_EXPLAINED_2026:19.5.2.1"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_017",
+      "category": "boundary",
+      "question": "Can an airborne fielder jump from outside the boundary and flick the ball back in?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 153.7928999750875,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:19.5.2.1",
+        "MCC_CHANGES_EXPLAINED_2026:19.5.2.2",
+        "MCC_CHANGES_EXPLAINED_2026:24.2.1"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_018",
+      "category": "substitutes",
+      "question": "What is the like-for-like concussion substitute rule in Test cricket?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 178.6446999758482,
+      "citations_count": 3,
+      "citations": [
+        "ICC_TEST_MEN_2026:1.2.7.4",
+        "ICC_TEST_MEN_2026:1.2.7.3",
+        "ICC_TEST_MEN_2026:1.2.7.5"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_019",
+      "category": "substitutes",
+      "question": "Can a standard substitute fielder bat or bowl in a Test match?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 125.6157000316307,
+      "citations_count": 3,
+      "citations": [
+        "ICC_TEST_MEN_2026:3.8.2",
+        "ICC_TEST_MEN_2026:APP_D:3.8.2",
+        "ICC_TEST_MEN_2026:24.1.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_020",
+      "category": "drs",
+      "question": "How many unsuccessful player reviews per innings does a team get in Men's Test matches?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 117.5480000092648,
+      "citations_count": 3,
+      "citations": [
+        "ICC_TEST_MEN_2026:34.5",
+        "ICC_TEST_MEN_2026:37.6",
+        "ICC_TEST_MEN_2026:40.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_021",
+      "category": "drs",
+      "question": "How many player reviews are allocated per team per innings in T20I matches?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 224.36940000625327,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_2026:12.8.1",
+        "ICC_T20I_MEN_2026:16.10.2",
+        "ICC_T20I_MEN_2026:13.9.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_022",
+      "category": "drs",
+      "question": "Is a DRS review lost if the ball-tracking outcome is Umpire's Call on hitting the stumps?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 191.75460003316402,
+      "citations_count": 3,
+      "citations": [
+        "ICC_TEST_MEN_2026:1.1.3",
+        "ICC_TEST_MEN_2026:APP_D:1.1.3",
+        "ICC_TEST_MEN_2026:3.4.3"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_023",
+      "category": "fielding_restrictions",
+      "question": "How many fielders are allowed outside the 30-yard circle in the first 6 overs of a Men's T20I?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 227.1957999910228,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_2026:30",
+        "ICC_T20I_MEN_2026:28.7.3",
+        "ICC_T20I_MEN_2026:APP_C:4.4"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_024",
+      "category": "fielding_restrictions",
+      "question": "What are the three Powerplay phases in a 50-over Men's ODI?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 164.53180002281442,
+      "citations_count": 3,
+      "citations": [
+        "ICC_ODI_MEN_2026:28.7.2.4",
+        "ICC_ODI_MEN_2026:28.7.2.2",
+        "ICC_ODI_MEN_2026:28.7.2.6"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_025",
+      "category": "fielding_restrictions",
+      "question": "What happens if a team bowls with more than 5 fielders on the leg side?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 172.38390003331006,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:4.4",
+        "MCC_CHANGES_EXPLAINED_2026:34.3",
+        "MCC_CHANGES_EXPLAINED_2026:4.1"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_026",
+      "category": "rain_interruption",
+      "question": "What is the minimum number of overs per side required to constitute an official match in Men's T20I?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 221.2123000063002,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_2026:12.8.1",
+        "ICC_T20I_MEN_2026:6.4.5.1",
+        "ICC_T20I_MEN_2026:6.4.5.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_027",
+      "category": "rain_interruption",
+      "question": "What is the minimum number of overs per side required to achieve a result in an ODI match?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 190.3376000118442,
+      "citations_count": 3,
+      "citations": [
+        "ICC_ODI_MEN_2026:12.8.1",
+        "ICC_ODI_MEN_2026:16.10.2",
+        "ICC_ODI_MEN_2026:13.7.1.4"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_028",
+      "category": "over_rate",
+      "question": "What in-match fielding penalty applies if the fielding team fails to start the final over by the scheduled cut-off time in T20I?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 189.51920000836253,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_2026:APP_F:4.2",
+        "ICC_T20I_MEN_2026:13.7.1.2",
+        "ICC_T20I_MEN_2026:13.7.1.4"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_029",
+      "category": "over_rate",
+      "question": "What is the minimum required over rate in Test cricket per day?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 135.87470003403723,
+      "citations_count": 3,
+      "citations": [
+        "ICC_TEST_MEN_2026:12.9.1",
+        "ICC_TEST_MEN_2026:12.7",
+        "ICC_TEST_MEN_2026:12.9.6"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_030",
+      "category": "mcc_vs_icc",
+      "question": "Do free hits exist in the baseline MCC Laws of Cricket?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 138.49929999560118,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:5.8.7",
+        "MCC_CHANGES_EXPLAINED_2026:33.2.2.2",
+        "MCC_CHANGES_EXPLAINED_2026:35.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_031",
+      "category": "mcc_vs_icc",
+      "question": "Which rule prevails if an ICC Playing Condition contradicts an MCC Law in a Men's ODI?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 109.39509997842833,
+      "citations_count": 3,
+      "citations": [
+        "ICC_ODI_MEN_2026:5.8.2",
+        "ICC_ODI_MEN_2026:2.1",
+        "ICC_ODI_MEN_2026:1.1.5"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_032",
+      "category": "womens_conditions",
+      "question": "What is the size of the boundary in Women's T20I matches compared to Men's?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 142.80610001878813,
+      "citations_count": 3,
+      "citations": [
+        "ICC_T20I_MEN_ADD_2026:19.1.3",
+        "ICC_T20I_WOMEN_2026:2.1.3",
+        "MCC_CHANGES_EXPLAINED_2026:4.6"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_033",
+      "category": "womens_conditions",
+      "question": "What is the specification of the cricket ball used in Women's ODI cricket?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 125.66660001175478,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:4.6",
+        "MCC_CHANGES_EXPLAINED_2026:4.6.1",
+        "MCC_CHANGES_EXPLAINED_2026:5.8.5"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_034",
+      "category": "wtc_rules",
+      "question": "What are the points awarded for a win in the ICC World Test Championship (2025-2027)?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 118.57140000211075,
+      "citations_count": 3,
+      "citations": [
+        "ICC_TEST_MEN_2026:41.10.4",
+        "ICC_TEST_MEN_2026:35.3",
+        "ICC_TEST_MEN_2026:41.9.3"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_035",
+      "category": "wtc_rules",
+      "question": "What penalty points are deducted for slow over rates in the World Test Championship?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 109.88129995530471,
+      "citations_count": 3,
+      "citations": [
+        "ICC_TEST_MEN_2026:12.7.11",
+        "ICC_TEST_MEN_2026:12.9.6",
+        "ICC_TEST_MEN_2026:12.9.1"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_036",
+      "category": "historical_comparison",
+      "question": "What changed regarding saliva application on the cricket ball in the 2022 and 2026 rules?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 111.23669997323304,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:9.2.1.3",
+        "MCC_CHANGES_EXPLAINED_2026:18.11.1.8",
+        "MCC_CHANGES_EXPLAINED_2026:19.8.2.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_037",
+      "category": "historical_comparison",
+      "question": "What rule governs the boundary catch when an airborne relay occurs under the 2026 MCC changes?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 113.2967000012286,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:19.8.2.2",
+        "MCC_CHANGES_EXPLAINED_2026:19.5.2.1",
+        "MCC_CHANGES_EXPLAINED_2026:35.2"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_038",
+      "category": "domestic_screening",
+      "question": "What is the Impact Player substitution rule in the IPL?",
+      "expected_status": "unsupported_competition",
+      "actual_status": "unsupported_competition",
+      "status_match": true,
+      "latency_ms": 0.2335000317543745,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "Domestic competitions like IPL operate under local board playing conditions. CricketIQ covers official ICC international playing conditions and MCC Laws. Please specify an international format (Test, ODI, T20I)."
+    },
+    {
+      "id": "ans_039",
+      "category": "domestic_screening",
+      "question": "How does the Power Surge and Bash Boost work in the Big Bash League (BBL)?",
+      "expected_status": "unsupported_competition",
+      "actual_status": "unsupported_competition",
+      "status_match": true,
+      "latency_ms": 0.16679998952895403,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "Domestic competitions like BBL operate under local board playing conditions. CricketIQ covers official ICC international playing conditions and MCC Laws. Please specify an international format (Test, ODI, T20I)."
+    },
+    {
+      "id": "ans_040",
+      "category": "domestic_screening",
+      "question": "What are the concussion substitute rules in the Pakistan Super League (PSL)?",
+      "expected_status": "unsupported_competition",
+      "actual_status": "unsupported_competition",
+      "status_match": true,
+      "latency_ms": 0.4309999640099704,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "Domestic competitions like PSL operate under local board playing conditions. CricketIQ covers official ICC international playing conditions and MCC Laws. Please specify an international format (Test, ODI, T20I)."
+    },
+    {
+      "id": "ans_041",
+      "category": "domestic_screening",
+      "question": "How many balls per bowler are allowed in The Hundred competition in England?",
+      "expected_status": "unsupported_competition",
+      "actual_status": "unsupported_competition",
+      "status_match": true,
+      "latency_ms": 0.20159996347501874,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "Domestic competitions like THE_HUNDRED operate under local board playing conditions. CricketIQ covers official ICC international playing conditions and MCC Laws. Please specify an international format (Test, ODI, T20I)."
+    },
+    {
+      "id": "ans_042",
+      "category": "domestic_screening",
+      "question": "What is the follow-on rule in the Ranji Trophy tournament?",
+      "expected_status": "unsupported_competition",
+      "actual_status": "unsupported_competition",
+      "status_match": true,
+      "latency_ms": 0.17369998386129737,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "Domestic competitions like RANJI operate under local board playing conditions. CricketIQ covers official ICC international playing conditions and MCC Laws. Please specify an international format (Test, ODI, T20I)."
+    },
+    {
+      "id": "ans_043",
+      "category": "clarification_required",
+      "question": "How many overs can a bowler bowl in this match on 2026-10-15?",
+      "expected_status": "clarification_required",
+      "actual_status": "clarification_required",
+      "status_match": true,
+      "latency_ms": 20.357499946840107,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "The match date 2026-10-15 falls after the 1 October 2026 ICC regulatory transition. However, under ICC regulations, updated playing conditions apply only to series that started on or after 1 October 2026. Matches in ongoing series continue under the previous regulations. Please provide the series start date to confirm whether this match is under current or previous playing conditions."
+    },
+    {
+      "id": "ans_044",
+      "category": "clarification_required",
+      "question": "Can a team use 3 DRS reviews in this match on 2026-10-20?",
+      "expected_status": "clarification_required",
+      "actual_status": "clarification_required",
+      "status_match": true,
+      "latency_ms": 0.8429000154137611,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "The match date 2026-10-20 falls after the 1 October 2026 ICC regulatory transition. However, under ICC regulations, updated playing conditions apply only to series that started on or after 1 October 2026. Matches in ongoing series continue under the previous regulations. Please provide the series start date to confirm whether this match is under current or previous playing conditions."
+    },
+    {
+      "id": "ans_045",
+      "category": "clarification_required",
+      "question": "Is the boundary 65 yards in this match on 2026-10-05?",
+      "expected_status": "clarification_required",
+      "actual_status": "clarification_required",
+      "status_match": true,
+      "latency_ms": 0.610699993558228,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "The match date 2026-10-05 falls after the 1 October 2026 ICC regulatory transition. However, under ICC regulations, updated playing conditions apply only to series that started on or after 1 October 2026. Matches in ongoing series continue under the previous regulations. Please provide the series start date to confirm whether this match is under current or previous playing conditions."
+    },
+    {
+      "id": "ans_046",
+      "category": "unanswerable_nonsense",
+      "question": "How many points does a team get for scoring a touchdown in cricket?",
+      "expected_status": "insufficient_evidence",
+      "actual_status": "insufficient_evidence",
+      "status_match": true,
+      "latency_ms": 118.14769997727126,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "The inquiry references terms or concepts from outside cricket regulations ('How many points does a team get for scoring a touchdown in cricket?'). Official ICC and MCC rules do not contain provisions for these concepts."
+    },
+    {
+      "id": "ans_047",
+      "category": "unanswerable_nonsense",
+      "question": "Can a bowler use an ice hockey stick instead of bowling the ball?",
+      "expected_status": "insufficient_evidence",
+      "actual_status": "insufficient_evidence",
+      "status_match": true,
+      "latency_ms": 237.12970002088696,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "The inquiry references terms or concepts from outside cricket regulations ('Can a bowler use an ice hockey stick instead of bowling the ball?'). Official ICC and MCC rules do not contain provisions for these concepts."
+    },
+    {
+      "id": "ans_048",
+      "category": "unanswerable_nonsense",
+      "question": "What is the penalty if a batter shoots a basketball into the wicket?",
+      "expected_status": "insufficient_evidence",
+      "actual_status": "insufficient_evidence",
+      "status_match": true,
+      "latency_ms": 110.03629997139797,
+      "citations_count": 0,
+      "citations": [],
+      "abstention_reason": "The inquiry references terms or concepts from outside cricket regulations ('What is the penalty if a batter shoots a basketball into the wicket?'). Official ICC and MCC rules do not contain provisions for these concepts."
+    },
+    {
+      "id": "ans_049",
+      "category": "dead_ball",
+      "question": "Does the ball become dead when an umpire calls Over or Time in Test cricket?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 159.03629997046664,
+      "citations_count": 3,
+      "citations": [
+        "ICC_TEST_MEN_2026:17.4",
+        "ICC_TEST_MEN_2026:21.13",
+        "ICC_TEST_MEN_2026:22.5"
+      ],
+      "abstention_reason": null
+    },
+    {
+      "id": "ans_050",
+      "category": "dead_ball",
+      "question": "What happens if a dog runs onto the pitch and picks up the cricket ball?",
+      "expected_status": "answered",
+      "actual_status": "answered",
+      "status_match": true,
+      "latency_ms": 116.08170002000406,
+      "citations_count": 3,
+      "citations": [
+        "MCC_CHANGES_EXPLAINED_2026:21.7",
+        "MCC_CHANGES_EXPLAINED_2026:41.16",
+        "MCC_CHANGES_EXPLAINED_2026:19.5.2.2"
+      ],
+      "abstention_reason": null
+    }
+  ]
+}

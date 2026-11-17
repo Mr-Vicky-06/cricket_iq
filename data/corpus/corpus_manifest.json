@@ -3,7 +3,7 @@
   "pipeline_version": "1.0.0",
   "normalization_version": "v1",
   "total_documents": 11,
-  "total_clauses": 12522,
+  "total_clauses": 11008,
   "documents": [
     {
       "source_document_id": "ICC_TEST_MEN_2026",
@@ -17,7 +17,7 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 1251,
+      "total_clauses": 1241,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -40,7 +40,7 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 1229,
+      "total_clauses": 1221,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -63,7 +63,7 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 1242,
+      "total_clauses": 1234,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -86,7 +86,7 @@
       "parent_doc_id": "ICC_T20I_MEN_2026",
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 16,
+      "total_clauses": 26,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -109,7 +109,7 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 1253,
+      "total_clauses": 1243,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -132,7 +132,7 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 1221,
+      "total_clauses": 1213,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -155,7 +155,7 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 1247,
+      "total_clauses": 1239,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -178,7 +178,7 @@
       "parent_doc_id": "ICC_TEST_MEN_2026",
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 1273,
+      "total_clauses": 1263,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -201,7 +201,7 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 1212,
+      "total_clauses": 949,
       "views_generated": [
         "original_text",
         "normalized_text",
@@ -224,7 +224,7 @@
       "parent_doc_id": null,
       "pipeline_version": "1.0.0",
       "normalization_version": "v1",
-      "total_clauses": 2396,
+      "total_clauses": 1197,
       "views_generated": [
         "original_text",
         "normalized_text",
