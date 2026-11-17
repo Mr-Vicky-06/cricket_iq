@@ -315,8 +315,12 @@ def evaluate_configuration(
 ) -> Dict[str, Any]:
     """Run evaluation for a specified retrieval mode."""
     total_queries = len(benchmark_items)
+    recalls_at_1: List[float] = []
+    recalls_at_3: List[float] = []
     recalls_at_5: List[float] = []
     recalls_at_10: List[float] = []
+    ndcgs_at_5: List[float] = []
+    ndcgs_at_10: List[float] = []
     reciprocal_ranks: List[float] = []
     exact_accuracies: List[float] = []
     supporting_recalls: List[float] = []
@@ -391,9 +395,19 @@ def evaluate_configuration(
         if has_leakage:
             leakage_count += 1
 
-        # 2. Recall@5 & Recall@10
+        # 2. Recall@1, @3, @5 & @10
+        top1_cnums = retrieved_primary_cnums[:1]
+        top3_cnums = retrieved_primary_cnums[:3]
         top5_cnums = retrieved_primary_cnums[:5]
         top10_cnums = retrieved_primary_cnums[:10]
+
+        matched_1 = sum(1 for ep in expected_primaries if ep in top1_cnums)
+        r_1 = matched_1 / len(expected_primaries) if expected_primaries else 1.0
+        recalls_at_1.append(r_1)
+
+        matched_3 = sum(1 for ep in expected_primaries if ep in top3_cnums)
+        r_3 = matched_3 / len(expected_primaries) if expected_primaries else 1.0
+        recalls_at_3.append(r_3)
 
         matched_5 = sum(1 for ep in expected_primaries if ep in top5_cnums)
         r_5 = matched_5 / len(expected_primaries) if expected_primaries else 1.0
@@ -402,6 +416,18 @@ def evaluate_configuration(
         matched_10 = sum(1 for ep in expected_primaries if ep in top10_cnums)
         r_10 = matched_10 / len(expected_primaries) if expected_primaries else 1.0
         recalls_at_10.append(r_10)
+
+        # nDCG@5 & nDCG@10
+        def calc_ndcg(cnums: List[str], k: int) -> float:
+            dcg = 0.0
+            for i, cn in enumerate(cnums[:k]):
+                if cn in expected_primaries:
+                    dcg += 1.0 / np.log2(i + 2)
+            idcg = sum(1.0 / np.log2(i + 2) for i in range(min(k, len(expected_primaries))))
+            return dcg / idcg if idcg > 0 else 1.0
+
+        ndcgs_at_5.append(calc_ndcg(retrieved_primary_cnums, 5))
+        ndcgs_at_10.append(calc_ndcg(retrieved_primary_cnums, 10))
 
         # 3. MRR
         rr = 0.0
@@ -432,8 +458,12 @@ def evaluate_configuration(
         latencies_expansion.append(diag.get("expansion_ms", 0.0))
         latencies_total.append(diag.get("total_retrieval_ms", 0.0))
 
+    avg_recall_1 = float(np.mean(recalls_at_1)) if recalls_at_1 else 0.0
+    avg_recall_3 = float(np.mean(recalls_at_3)) if recalls_at_3 else 0.0
     avg_recall_5 = float(np.mean(recalls_at_5)) if recalls_at_5 else 0.0
     avg_recall_10 = float(np.mean(recalls_at_10)) if recalls_at_10 else 0.0
+    avg_ndcg_5 = float(np.mean(ndcgs_at_5)) if ndcgs_at_5 else 0.0
+    avg_ndcg_10 = float(np.mean(ndcgs_at_10)) if ndcgs_at_10 else 0.0
     mrr = float(np.mean(reciprocal_ranks)) if reciprocal_ranks else 0.0
     exact_acc = float(np.mean(exact_accuracies)) if exact_accuracies else 0.0
     supp_recall = float(np.mean(supporting_recalls)) if supporting_recalls else 0.0
@@ -443,8 +473,12 @@ def evaluate_configuration(
         "mode": mode,
         "total_queries": total_queries,
         "valid_eval_queries": valid_eval_queries,
+        "recall_at_1": round(avg_recall_1 * 100, 2),
+        "recall_at_3": round(avg_recall_3 * 100, 2),
         "recall_at_5": round(avg_recall_5 * 100, 2),
         "recall_at_10": round(avg_recall_10 * 100, 2),
+        "ndcg_at_5": round(avg_ndcg_5, 4),
+        "ndcg_at_10": round(avg_ndcg_10, 4),
         "mrr": round(mrr, 4),
         "exact_clause_accuracy": round(exact_acc * 100, 2),
         "supporting_clause_recall": round(supp_recall * 100, 2),
@@ -455,7 +489,9 @@ def evaluate_configuration(
             "avg_fusion": round(float(np.mean(latencies_fusion)), 2) if latencies_fusion else 0.0,
             "avg_expansion": round(float(np.mean(latencies_expansion)), 2) if latencies_expansion else 0.0,
             "avg_total": round(float(np.mean(latencies_total)), 2) if latencies_total else 0.0,
-            "p95_total": round(float(np.percentile(latencies_total, 95)), 2) if latencies_total else 0.0
+            "median_total": round(float(np.percentile(latencies_total, 50)), 2) if latencies_total else 0.0,
+            "p95_total": round(float(np.percentile(latencies_total, 95)), 2) if latencies_total else 0.0,
+            "p99_total": round(float(np.percentile(latencies_total, 99)), 2) if latencies_total else 0.0
         }
     }
 

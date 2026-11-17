@@ -145,19 +145,31 @@ Exit gate:
 - [x] Zero hallucinated UI elements, strict HTTPS URL allowlist for governing bodies (`icc-cricket.com`, `lords.org`).
 - [x] Full responsive mobile support (375px+) and clean browser console (0 errors, 0 warnings).
 
-## Phase 6 — Expand sources and evaluation
+## Phase 6 — Intelligence Upgrade: Domain-Aware Semantic Search, Hybrid Retrieval, Regulatory Knowledge Graph & Corpus Expansion [STATUS: IN PROGRESS - GATE 0 COMPLETE]
 
-**Goal:** scale from one validated document to the MVP corpus.
+**Goal:** Improve CricketIQ's underlying retrieval and knowledge intelligence across the 11-document official corpus before expanding to additional tiers.
 
 Tasks:
-- Add underlying MCC Laws and remaining in-scope ICC formats/categories.
-- Add competition-specific documents only after separate source verification and schema support.
-- Create and review a benchmark approaching 300 questions across rule definitions, edge cases, scenarios, comparisons, historical questions, and unanswerable questions.
-- Measure retrieval, citation, answer, applicability, latency, and abstention performance.
-- Conduct expert review of high-impact rule categories.
+- [x] **Gate 0:** Mandatory pre-implementation baseline audit, corpus reconciliation, benchmark evaluation, retrieval failure diagnosis, and gap backlog:
+  - Deliverable 1: `docs/reviews/PHASE_6_PRE_IMPLEMENTATION_AUDIT.md` (System state, 11,008 vs 12,252 clause math, root-cause diagnosis).
+  - Deliverable 2: `docs/PHASE_6_CORPUS_INVENTORY.md` (11 documents catalog, text views, table extractions, 1,244-row inclusion/exclusion ledger).
+  - Deliverable 3: `docs/PHASE_6_RETRIEVAL_FAILURE_ANALYSIS.md` (Benchmark v2 failure post-mortems, 51 misses analyzed, failure taxonomy).
+  - Deliverable 4: `docs/PHASE_6_GAP_BACKLOG.md` (Prioritized engineering backlog for Gates 1-7).
+  - Deliverable 5: `docs/adr/0005-retrieval-intelligence-upgrade.md` (Proposed ADR for multi-view retrieval upgrade).
+- [ ] **Gate 1:** Authoritative source discovery and targeted corpus enrichment.
+- [ ] **Gate 2:** Applicability Engine bug fix (`MCC_LAWS_2026` overwrite) and non-destructive database reconciliation (purge 1,244 dirty rows).
+- [ ] **Gate 3:** Domain NLP, cricket synonym query expansion, hierarchy depth calculation, and table models.
+- [ ] **Gate 4:** Dense semantic search upgrade (local ONNX transformer embeddings `all-MiniLM-L6-v2` / `bge-small-en-v1.5` and vector re-indexing).
+- [ ] **Gate 5:** Multi-stage weighted hybrid fusion (Weighted RRF, adaptive gating, cross-encoder reranker, bidirectional graph expansion).
+- [ ] **Gate 6:** End-to-end evaluation & regression verification (Benchmark v2 target Recall@5 $\ge 75\%$, benchmark v3 authoring, 0% leakage, 100% exact lookup).
+- [ ] **Gate 7:** Production readiness, ADR 0005 acceptance, documentation updates, and release packaging.
 
-Exit gate:
-- Metrics meet agreed acceptance targets or gaps are documented with mitigation plans.
+Exit gate for Gate 0:
+- [x] Machine-generated corpus inventory with complete 11,008 vs 12,252 clause reconciliation.
+- [x] Benchmark v1 (65 queries) and Benchmark v2 (92 queries) evaluated with granular metrics (Recall@1,3,5,10, MRR, nDCG@5,10, exact acc, supporting recall, leakage, latencies).
+- [x] Exhaustive failure analysis and root-cause breakdown across all 51 missed queries.
+- [x] Prioritized backlog traceable to observed failures.
+- [x] Zero feature code modified, zero destructive migrations run, backward compatibility preserved.
 
 ## Phase 7 — Hardening and release
 
