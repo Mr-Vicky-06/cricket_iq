@@ -1,0 +1,82 @@
+{
+  "benchmark_file": "evaluation\\retrieval\\benchmark_v2.jsonl",
+  "total_queries": 92,
+  "evaluated_at": "2026-11-17T05:08:50Z",
+  "configurations": [
+    {
+      "mode": "Sparse-Only (SQLite FTS5)",
+      "total_queries": 92,
+      "valid_eval_queries": 82,
+      "recall_at_1": 33.54,
+      "recall_at_3": 41.46,
+      "recall_at_5": 44.71,
+      "recall_at_10": 44.71,
+      "ndcg_at_5": 0.4327,
+      "ndcg_at_10": 0.4327,
+      "mrr": 0.3749,
+      "exact_clause_accuracy": 100.0,
+      "supporting_clause_recall": 54.35,
+      "leakage_rate": 0.0,
+      "latencies_ms": {
+        "avg_sparse": 50.22,
+        "avg_dense": 0.0,
+        "avg_fusion": 0.16,
+        "avg_expansion": 8.95,
+        "avg_total": 64.17,
+        "median_total": 66.32,
+        "p95_total": 107.19,
+        "p99_total": 139.64
+      }
+    },
+    {
+      "mode": "Dense-Only (NumPy Cosine)",
+      "total_queries": 92,
+      "valid_eval_queries": 82,
+      "recall_at_1": 28.05,
+      "recall_at_3": 31.1,
+      "recall_at_5": 33.53,
+      "recall_at_10": 33.53,
+      "ndcg_at_5": 0.3403,
+      "ndcg_at_10": 0.3403,
+      "mrr": 0.2955,
+      "exact_clause_accuracy": 100.0,
+      "supporting_clause_recall": 47.83,
+      "leakage_rate": 0.0,
+      "latencies_ms": {
+        "avg_sparse": 0.0,
+        "avg_dense": 39.34,
+        "avg_fusion": 0.16,
+        "avg_expansion": 10.23,
+        "avg_total": 54.45,
+        "median_total": 66.78,
+        "p95_total": 80.6,
+        "p99_total": 96.94
+      }
+    },
+    {
+      "mode": "Hybrid (Sparse + Dense + RRF + Expansion)",
+      "total_queries": 92,
+      "valid_eval_queries": 82,
+      "recall_at_1": 30.49,
+      "recall_at_3": 37.8,
+      "recall_at_5": 38.82,
+      "recall_at_10": 38.82,
+      "ndcg_at_5": 0.3877,
+      "ndcg_at_10": 0.3877,
+      "mrr": 0.3373,
+      "exact_clause_accuracy": 100.0,
+      "supporting_clause_recall": 54.35,
+      "leakage_rate": 0.0,
+      "latencies_ms": {
+        "avg_sparse": 37.18,
+        "avg_dense": 23.91,
+        "avg_fusion": 0.15,
+        "avg_expansion": 6.52,
+        "avg_total": 70.92,
+        "median_total": 53.34,
+        "p95_total": 149.8,
+        "p99_total": 193.4
+      }
+    }
+  ]
+}

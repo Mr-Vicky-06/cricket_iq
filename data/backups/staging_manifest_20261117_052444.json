@@ -1,0 +1,14 @@
+{
+  "timestamp": "20261117_052444",
+  "active_db_backup": "D:\\Cricket_Rules_NLP_Chatbot\\data\\backups\\cricketiq_backup_20261117_052444.db",
+  "active_db_sha256_before": "0e60c453eddbea7a5fab6a47e8136b6dc544f852c6638680a03f321bdac34472",
+  "staging_db_path": "D:\\Cricket_Rules_NLP_Chatbot\\data\\cricketiq_staging.db",
+  "staging_db_sha256": "1b33cc43ccec8d132d2d3bbe5c9bfaa1b61cfec8d4b86c3440fea4d0cff66627",
+  "staging_db_size_bytes": 58638336,
+  "canonical_clauses_count": 10388,
+  "relational_rows": 10388,
+  "fts_rows": 10388,
+  "embedding_rows": 10388,
+  "integrity_check": "ok",
+  "validation_passed": true
+}

@@ -16,7 +16,7 @@ User Query + Match Context
           ▼
 Phase 2 Applicability Engine ──(If Ambiguous/Domestic)──► Return Clarification (Halt)
           │
-          ▼ (Authoritative Source Bundle)
+          ▼ (Authoritative Source Bundle via RegulatoryRole Precedence)
 Candidate Document Pre-Filter
           │
      ┌────┼──────────────────────────┐
@@ -35,6 +35,19 @@ Lookup  (SQLite FTS5 / BM25)       (NumPy Cosine / pgvector)
                          ▼
              Ranked Structured Evidence Pack
 ```
+
+### Precedence Hierarchy & Regulatory Role Model
+As established in Phase 6 Gate 2, every document is tagged with an immutable `RegulatoryRole`:
+- `NORMATIVE_COMPETITION_REGULATION`: Overlays all format conditions (e.g. WTC).
+- `NORMATIVE_ADDENDUM`: Supplements primary format playing conditions (e.g. ICC T20I Addendum).
+- `NORMATIVE_FORMAT_PC`: Format baseline (Test, ODI, T20I).
+- `NORMATIVE_LAWS_BASELINE`: Universal underlying laws of cricket (`MCC_LAWS_2026`, historical `MCC_LAWS_2022`).
+- `EXPLANATORY_GUIDANCE`: Non-normative supplemental explanations (`MCC_CHANGES_EXPLAINED_2026`), appended at lowest precedence and never permitted to replace normative baseline laws.
+
+Bundles are assembled in strict precedence order:
+$$\text{Competition Regulation} \rightarrow \text{Addenda} \rightarrow \text{Format PC} \rightarrow \text{Normative Baseline Laws} \rightarrow \text{Explanatory Guidance}$$
+
+Catalog sorting is strictly deterministic by document identifier prior to resolution, guaranteeing complete catalog-order permutation invariance. All 10,388 unique canonical clauses across relational, FTS5, and vector tables map 1-to-1 with zero cross-bundle leakage (0.0%).
 
 ---
 

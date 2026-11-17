@@ -7,7 +7,7 @@ from typing import List, Optional
 from cricketiq.backend.app.database.models import (
     MatchContext, CricketFormat, GenderCategory, DocumentAuthority,
     DocumentType, ScopeLevel, ApplicabilityBasis, DocumentStatus,
-    SourceDocument, DocumentRelationship, RelationshipType
+    SourceDocument, DocumentRelationship, RelationshipType, RegulatoryRole
 )
 from cricketiq.backend.app.core.applicability_engine import ApplicabilityEngine
 from cricketiq.backend.app.database.repository import RuleCatalog
@@ -346,3 +346,258 @@ def test_source_bundle_preserves_relationships(test_catalog):
     applied_rel_types = [r.relationship_type for r in decision.relationships_applied]
     assert RelationshipType.MODIFIES in applied_rel_types
     assert any("21.18" in (r.supporting_clause_id or "") for r in decision.relationships_applied)
+
+
+# --- Gate 2A: Normative Baseline & Explanatory Guidance Separation Tests ---
+
+def test_universal_mcc_baseline_never_replaced_by_explanatory():
+    """Verify that MCC_CHANGES_EXPLAINED_2026 never overwrites MCC_LAWS_2026 as baseline."""
+    mcc_2026 = SourceDocument(
+        id="MCC_LAWS_2026",
+        publisher=DocumentAuthority.MCC,
+        title="The Laws of Cricket (2017 Code 4th Edition - 2026)",
+        document_type=DocumentType.LAW,
+        scope_level=ScopeLevel.LAWS_BASELINE,
+        regulatory_role=RegulatoryRole.NORMATIVE_LAWS_BASELINE,
+        edition="2017 Code 4th Edition (2026)",
+        effective_from="2026-10-01",
+        applicability_basis=ApplicabilityBasis.SERIES_START_DATE,
+        official_url="https://www.lords.org/mcc/the-laws-of-cricket",
+        sha256="1" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+    mcc_changes = SourceDocument(
+        id="MCC_CHANGES_EXPLAINED_2026",
+        publisher=DocumentAuthority.MCC,
+        title="Summary of Changes to the Laws of Cricket 2026",
+        document_type=DocumentType.AMENDMENT,
+        scope_level=ScopeLevel.LAWS_BASELINE,
+        regulatory_role=RegulatoryRole.EXPLANATORY_GUIDANCE,
+        edition="2026 Amendments",
+        effective_from="2026-10-01",
+        applicability_basis=ApplicabilityBasis.SERIES_START_DATE,
+        official_url="https://www.lords.org/mcc/the-laws-of-cricket",
+        sha256="2" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+
+    catalog = MockRuleCatalog([mcc_changes, mcc_2026])  # Deliberately put explanatory first
+    engine = ApplicabilityEngine()
+    ctx = MatchContext(cricket_level="universal", format=None, category=GenderCategory.UNIVERSAL)
+    decision = engine.resolve(ctx, catalog)
+
+    assert not decision.is_ambiguous
+    assert decision.baseline_document is not None
+    assert decision.baseline_document.id == "MCC_LAWS_2026"
+    assert decision.primary_document is not None
+    assert decision.primary_document.id == "MCC_LAWS_2026"
+
+    bundle_ids = [d.id for d in decision.selected_bundle]
+    assert "MCC_LAWS_2026" in bundle_ids
+    assert "MCC_CHANGES_EXPLAINED_2026" in bundle_ids
+    # Precedence: Normative baseline before explanatory
+    assert bundle_ids.index("MCC_LAWS_2026") < bundle_ids.index("MCC_CHANGES_EXPLAINED_2026")
+    assert "PRECEDENCE_4_MCC_BASELINE_MCC_LAWS_2026" in decision.reason_codes
+    assert "PRECEDENCE_5_EXPLANATORY_MCC_CHANGES_EXPLAINED_2026" in decision.reason_codes
+
+
+def test_catalog_order_permutation_invariance():
+    """Verify that permuting catalog active document order produces identical results and reason codes."""
+    import itertools
+
+    doc_a = SourceDocument(
+        id="ICC_T20I_MEN_2026",
+        publisher=DocumentAuthority.ICC,
+        title="ICC Men's T20I PC 2026",
+        document_type=DocumentType.PLAYING_CONDITIONS,
+        scope_level=ScopeLevel.FORMAT_PC,
+        regulatory_role=RegulatoryRole.NORMATIVE_FORMAT_PC,
+        format=CricketFormat.T20I,
+        category=GenderCategory.MENS,
+        edition="October 2026",
+        effective_from="2026-10-01",
+        applicability_basis=ApplicabilityBasis.SERIES_START_DATE,
+        official_url="https://icc-cricket.com",
+        sha256="a" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+    doc_b = SourceDocument(
+        id="ICC_T20I_MEN_ADD_2026",
+        publisher=DocumentAuthority.ICC,
+        title="ICC Men's T20I Addendum 2026",
+        document_type=DocumentType.ADDENDUM,
+        scope_level=ScopeLevel.ADDENDUM,
+        regulatory_role=RegulatoryRole.NORMATIVE_ADDENDUM,
+        format=CricketFormat.T20I,
+        category=GenderCategory.MENS,
+        edition="October 2026",
+        effective_from="2026-10-01",
+        applicability_basis=ApplicabilityBasis.SERIES_START_DATE,
+        official_url="https://icc-cricket.com",
+        sha256="b" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+    doc_c = SourceDocument(
+        id="MCC_LAWS_2026",
+        publisher=DocumentAuthority.MCC,
+        title="MCC Laws 2026",
+        document_type=DocumentType.LAW,
+        scope_level=ScopeLevel.LAWS_BASELINE,
+        regulatory_role=RegulatoryRole.NORMATIVE_LAWS_BASELINE,
+        edition="2017 Code 4th Edition (2026)",
+        effective_from="2026-10-01",
+        applicability_basis=ApplicabilityBasis.SERIES_START_DATE,
+        official_url="https://lords.org",
+        sha256="c" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+    doc_d = SourceDocument(
+        id="MCC_CHANGES_EXPLAINED_2026",
+        publisher=DocumentAuthority.MCC,
+        title="Summary of Changes 2026",
+        document_type=DocumentType.AMENDMENT,
+        scope_level=ScopeLevel.LAWS_BASELINE,
+        regulatory_role=RegulatoryRole.EXPLANATORY_GUIDANCE,
+        edition="2026 Amendments",
+        effective_from="2026-10-01",
+        applicability_basis=ApplicabilityBasis.SERIES_START_DATE,
+        official_url="https://lords.org",
+        sha256="d" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+
+    docs = [doc_a, doc_b, doc_c, doc_d]
+    engine = ApplicabilityEngine()
+    ctx = MatchContext(format=CricketFormat.T20I, category=GenderCategory.MENS, series_start_date="2026-10-15")
+
+    expected_bundle_ids = None
+    expected_reasons = None
+
+    # Test all permutations of the 4 documents
+    for perm in itertools.permutations(docs):
+        cat = MockRuleCatalog(list(perm))
+        decision = engine.resolve(ctx, cat)
+        b_ids = [d.id for d in decision.selected_bundle]
+
+        if expected_bundle_ids is None:
+            expected_bundle_ids = b_ids
+            expected_reasons = decision.reason_codes
+        else:
+            assert b_ids == expected_bundle_ids, f"Permutation failed: {b_ids} != {expected_bundle_ids}"
+            assert decision.reason_codes == expected_reasons
+
+
+def test_multiple_applicable_addenda_supported_deterministically():
+    """Verify that multiple matching addenda are all retained in deterministic sorted order."""
+    t20_pc = SourceDocument(
+        id="ICC_T20I_MEN_2026",
+        publisher=DocumentAuthority.ICC,
+        title="ICC T20I PC 2026",
+        document_type=DocumentType.PLAYING_CONDITIONS,
+        scope_level=ScopeLevel.FORMAT_PC,
+        format=CricketFormat.T20I,
+        category=GenderCategory.MENS,
+        edition="October 2026",
+        effective_from="2026-10-01",
+        official_url="https://icc-cricket.com",
+        sha256="1" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+    addendum_1 = SourceDocument(
+        id="ICC_T20I_MEN_ADD_B_2026",
+        publisher=DocumentAuthority.ICC,
+        title="Addendum B",
+        document_type=DocumentType.ADDENDUM,
+        scope_level=ScopeLevel.ADDENDUM,
+        format=CricketFormat.T20I,
+        edition="October 2026",
+        effective_from="2026-10-01",
+        official_url="https://icc-cricket.com",
+        sha256="2" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+    addendum_2 = SourceDocument(
+        id="ICC_T20I_MEN_ADD_A_2026",
+        publisher=DocumentAuthority.ICC,
+        title="Addendum A",
+        document_type=DocumentType.ADDENDUM,
+        scope_level=ScopeLevel.ADDENDUM,
+        format=CricketFormat.T20I,
+        edition="October 2026",
+        effective_from="2026-10-01",
+        official_url="https://icc-cricket.com",
+        sha256="3" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+    unrelated_addendum = SourceDocument(
+        id="ICC_TEST_MEN_ADD_2026",
+        publisher=DocumentAuthority.ICC,
+        title="Test Addendum",
+        document_type=DocumentType.ADDENDUM,
+        scope_level=ScopeLevel.ADDENDUM,
+        format=CricketFormat.TEST,  # Unrelated format!
+        edition="October 2026",
+        effective_from="2026-10-01",
+        official_url="https://icc-cricket.com",
+        sha256="4" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+
+    cat = MockRuleCatalog([addendum_1, unrelated_addendum, t20_pc, addendum_2])
+    engine = ApplicabilityEngine()
+    ctx = MatchContext(format=CricketFormat.T20I, category=GenderCategory.MENS, series_start_date="2026-10-15")
+    decision = engine.resolve(ctx, cat)
+
+    bundle_ids = [d.id for d in decision.selected_bundle]
+    # Both T20I addenda present in deterministic sorted order
+    assert "ICC_T20I_MEN_ADD_A_2026" in bundle_ids
+    assert "ICC_T20I_MEN_ADD_B_2026" in bundle_ids
+    # Unrelated Test addendum excluded
+    assert "ICC_TEST_MEN_ADD_2026" not in bundle_ids
+    # Addenda sorted before format PC
+    assert bundle_ids.index("ICC_T20I_MEN_ADD_A_2026") < bundle_ids.index("ICC_T20I_MEN_ADD_B_2026")
+    assert bundle_ids.index("ICC_T20I_MEN_ADD_B_2026") < bundle_ids.index("ICC_T20I_MEN_2026")
+
+
+def test_mcc_historical_edition_selection():
+    """Verify that matches prior to Oct 2026 select MCC_LAWS_2022 rather than 2026."""
+    mcc_2026 = SourceDocument(
+        id="MCC_LAWS_2026",
+        publisher=DocumentAuthority.MCC,
+        title="MCC Laws 2026 (4th Edition)",
+        document_type=DocumentType.LAW,
+        scope_level=ScopeLevel.LAWS_BASELINE,
+        edition="2017 Code 4th Edition (2026)",
+        effective_from="2026-10-01",
+        official_url="https://lords.org",
+        sha256="1" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+    mcc_2022 = SourceDocument(
+        id="MCC_LAWS_2022",
+        publisher=DocumentAuthority.MCC,
+        title="MCC Laws 2022 (3rd Edition)",
+        document_type=DocumentType.LAW,
+        scope_level=ScopeLevel.LAWS_BASELINE,
+        edition="2017 Code 3rd Edition (2022)",
+        effective_from="2022-10-01",
+        effective_until="2026-09-30",
+        official_url="https://lords.org",
+        sha256="2" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+
+    cat = MockRuleCatalog([mcc_2026, mcc_2022])
+    engine = ApplicabilityEngine()
+
+    # Pre-Oct 2026 match
+    ctx_hist = MatchContext(match_date="2024-05-10")
+    dec_hist = engine.resolve(ctx_hist, cat)
+    assert dec_hist.baseline_document.id == "MCC_LAWS_2022"
+    assert "MCC_LAWS_2026" not in [d.id for d in dec_hist.selected_bundle]
+
+    # Post-Oct 2026 match
+    ctx_current = MatchContext(series_start_date="2026-10-15")
+    dec_current = engine.resolve(ctx_current, cat)
+    assert dec_current.baseline_document.id == "MCC_LAWS_2026"
+    assert "MCC_LAWS_2022" not in [d.id for d in dec_current.selected_bundle]

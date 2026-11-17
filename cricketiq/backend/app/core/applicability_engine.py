@@ -12,7 +12,8 @@ from typing import List, Optional, Dict, Any
 from cricketiq.backend.app.database.models import (
     MatchContext, ApplicabilityDecision, SourceDocument,
     DocumentRelationship, CricketFormat, GenderCategory,
-    ScopeLevel, ApplicabilityBasis, DocumentStatus, DocumentAuthority
+    ScopeLevel, ApplicabilityBasis, DocumentStatus, DocumentAuthority,
+    RegulatoryRole
 )
 from cricketiq.backend.app.database.repository import RuleCatalog
 
@@ -149,20 +150,24 @@ class ApplicabilityEngine:
             reason_codes.append("DEFAULTED_TO_MENS_CATEGORY")
 
         # 5. Retrieve Active Documents from Catalog
-        all_active_docs = catalog.list_active_documents()
+        # Deterministically sort catalog documents by ID to guarantee catalog-order independence
+        raw_active_docs = catalog.list_active_documents()
+        all_active_docs = sorted(raw_active_docs, key=lambda d: d.id)
         decision_trace.append(f"Evaluating {len(all_active_docs)} active documents in catalog.")
 
         selected_competition_doc: Optional[SourceDocument] = None
-        selected_addendum_doc: Optional[SourceDocument] = None
+        selected_addenda_docs: List[SourceDocument] = []
         selected_format_doc: Optional[SourceDocument] = None
         selected_mcc_baseline_doc: Optional[SourceDocument] = None
+        selected_explanatory_docs: List[SourceDocument] = []
 
         # 6. Screen Documents by Scope and Edition
         for doc in all_active_docs:
             doc_id = doc.id
+            role = getattr(doc, "regulatory_role", None) or RegulatoryRole.NORMATIVE_FORMAT_PC
 
             # A. Competition Regulations
-            if doc.scope_level == ScopeLevel.COMPETITION_PC:
+            if doc.scope_level == ScopeLevel.COMPETITION_PC or role == RegulatoryRole.NORMATIVE_COMPETITION_REGULATION:
                 if context.competition and context.competition.lower() in (doc.competition or "").lower():
                     selected_competition_doc = doc
                     effective_date_basis_used[doc_id] = doc.applicability_basis.value
@@ -171,10 +176,10 @@ class ApplicabilityEngine:
                     rejected_candidates.append({"doc_id": doc_id, "reason": "Competition mismatch or no competition specified"})
                 continue
 
-            # B. Addenda
-            if doc.scope_level == ScopeLevel.ADDENDUM:
-                if doc.format == context.format and (target_edition_family in doc.edition or "2026" in doc.edition):
-                    selected_addendum_doc = doc
+            # B. Addenda (Support multiple matching addenda in deterministic order)
+            if doc.scope_level == ScopeLevel.ADDENDUM or role == RegulatoryRole.NORMATIVE_ADDENDUM:
+                if (doc.format == context.format or doc.format is None) and (target_edition_family in doc.edition or "2026" in doc.edition):
+                    selected_addenda_docs.append(doc)
                     effective_date_basis_used[doc_id] = doc.applicability_basis.value
                     decision_trace.append(f"Matched Addendum: {doc_id}")
                 else:
@@ -182,7 +187,7 @@ class ApplicabilityEngine:
                 continue
 
             # C. Format Playing Conditions
-            if doc.scope_level == ScopeLevel.FORMAT_PC:
+            if doc.scope_level == ScopeLevel.FORMAT_PC or role == RegulatoryRole.NORMATIVE_FORMAT_PC:
                 if doc.format == context.format and doc.category == target_category:
                     edition_matches = (target_edition_family == "2026" and "2026" in doc.edition) or \
                                       (target_edition_family == "previous" and ("2024" in doc.edition or "2022" in doc.edition))
@@ -196,10 +201,23 @@ class ApplicabilityEngine:
                     rejected_candidates.append({"doc_id": doc_id, "reason": f"Format/Category mismatch. Needed {context.format}/{target_category}, got {doc.format}/{doc.category}"})
                 continue
 
-            # D. Baseline MCC Laws
-            if doc.scope_level == ScopeLevel.LAWS_BASELINE or doc.publisher == DocumentAuthority.MCC:
+            # D. Explanatory Guidance (e.g. Summary of Changes / Amendments Guide)
+            # Must remain separate from Normative Baseline Laws to prevent overwriting
+            if role == RegulatoryRole.EXPLANATORY_GUIDANCE or "changes" in doc_id.lower():
+                exp_edition_matches = (target_edition_family == "2026" and "2026" in doc.edition) or \
+                                      (target_edition_family == "previous" and "2022" in doc.edition)
+                if exp_edition_matches:
+                    selected_explanatory_docs.append(doc)
+                    effective_date_basis_used[doc_id] = doc.applicability_basis.value
+                    decision_trace.append(f"Matched Explanatory Guidance: {doc_id} ({doc.edition})")
+                else:
+                    rejected_candidates.append({"doc_id": doc_id, "reason": f"Explanatory guidance edition mismatch. Needed {target_edition_family}, doc is {doc.edition}"})
+                continue
+
+            # E. Normative Baseline MCC Laws (The actual Laws of Cricket)
+            if doc.scope_level == ScopeLevel.LAWS_BASELINE or doc.publisher == DocumentAuthority.MCC or role == RegulatoryRole.NORMATIVE_LAWS_BASELINE:
                 mcc_edition_matches = (target_edition_family == "2026" and ("2026" in doc.edition or "4th" in doc.edition)) or \
-                                      (target_edition_family == "previous" and ("2022" in doc.edition or "3rd" in doc.edition or "2017" in doc.edition))
+                                      (target_edition_family == "previous" and ("2022" in doc.edition or "3rd" in doc.edition) and not ("2026" in doc.edition or "4th" in doc.edition))
                 if mcc_edition_matches:
                     selected_mcc_baseline_doc = doc
                     effective_date_basis_used[doc_id] = doc.applicability_basis.value
@@ -208,20 +226,23 @@ class ApplicabilityEngine:
                     rejected_candidates.append({"doc_id": doc_id, "reason": f"MCC edition mismatch. Needed {target_edition_family}, doc is {doc.edition}"})
                 continue
 
-        # 7. Assemble Source Bundle in Precedence Order
+        # 7. Assemble Source Bundle in Strict Precedence Order
         selected_bundle: List[SourceDocument] = []
         if selected_competition_doc:
             selected_bundle.append(selected_competition_doc)
             reason_codes.append(f"PRECEDENCE_1_COMPETITION_{selected_competition_doc.id}")
-        if selected_addendum_doc:
-            selected_bundle.append(selected_addendum_doc)
-            reason_codes.append(f"PRECEDENCE_2_ADDENDUM_{selected_addendum_doc.id}")
+        for add_doc in selected_addenda_docs:
+            selected_bundle.append(add_doc)
+            reason_codes.append(f"PRECEDENCE_2_ADDENDUM_{add_doc.id}")
         if selected_format_doc:
             selected_bundle.append(selected_format_doc)
             reason_codes.append(f"PRECEDENCE_3_FORMAT_PC_{selected_format_doc.id}")
         if selected_mcc_baseline_doc:
             selected_bundle.append(selected_mcc_baseline_doc)
             reason_codes.append(f"PRECEDENCE_4_MCC_BASELINE_{selected_mcc_baseline_doc.id}")
+        for exp_doc in selected_explanatory_docs:
+            selected_bundle.append(exp_doc)
+            reason_codes.append(f"PRECEDENCE_5_EXPLANATORY_{exp_doc.id}")
 
         # 8. Collect Document Relationships
         for doc in selected_bundle:
@@ -234,7 +255,7 @@ class ApplicabilityEngine:
                         relationships_applied.append(rel)
                         decision_trace.append(f"Applied relationship: {rel.source_doc_id} {rel.relationship_type.value} {rel.target_doc_id}")
 
-        # Primary and Baseline doc assignment
+        # Primary and Baseline doc assignment (Baseline is strictly normative MCC Laws)
         primary_doc = selected_competition_doc or selected_format_doc or selected_mcc_baseline_doc
         baseline_doc = selected_mcc_baseline_doc
 

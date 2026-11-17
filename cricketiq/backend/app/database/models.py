@@ -8,7 +8,7 @@ from __future__ import annotations
 from datetime import datetime, timezone, date
 from enum import Enum
 from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class DocumentAuthority(str, Enum):
@@ -34,6 +34,15 @@ class ScopeLevel(str, Enum):
     COMPETITION_PC = "competition_pc"
     ADDENDUM = "addendum"
     DOMESTIC = "domestic"
+
+
+class RegulatoryRole(str, Enum):
+    NORMATIVE_LAWS_BASELINE = "normative_laws_baseline"
+    NORMATIVE_FORMAT_PC = "normative_format_pc"
+    NORMATIVE_COMPETITION_REGULATION = "normative_competition_regulation"
+    NORMATIVE_ADDENDUM = "normative_addendum"
+    EXPLANATORY_GUIDANCE = "explanatory_guidance"
+    ADMINISTRATIVE_REFERENCE = "administrative_reference"
 
 
 class ApplicabilityBasis(str, Enum):
@@ -111,6 +120,7 @@ class SourceDocument(BaseModel):
     title: str = Field(..., description="Official title as printed on document")
     document_type: DocumentType = Field(..., description="Law, Playing Conditions, etc.")
     scope_level: ScopeLevel = Field(default=ScopeLevel.FORMAT_PC)
+    regulatory_role: RegulatoryRole = Field(default=RegulatoryRole.NORMATIVE_FORMAT_PC, description="Normative legal role of the document")
     format: Optional[CricketFormat] = Field(default=None)
     category: Optional[GenderCategory] = Field(default=None)
     competition: Optional[str] = Field(default=None)
@@ -126,6 +136,26 @@ class SourceDocument(BaseModel):
     file_path: Optional[str] = Field(default=None)
     status: DocumentStatus = Field(default=DocumentStatus.CANDIDATE)
     terms_notes: str = Field(default="")
+
+    @model_validator(mode="before")
+    @classmethod
+    def _resolve_regulatory_role(cls, values: Any) -> Any:
+        if isinstance(values, dict):
+            if not values.get("regulatory_role"):
+                doc_id = str(values.get("id", ""))
+                scope = values.get("scope_level")
+                doc_type = values.get("document_type")
+                if "changes" in doc_id.lower() or doc_type in ("Amendment", DocumentType.AMENDMENT):
+                    values["regulatory_role"] = RegulatoryRole.EXPLANATORY_GUIDANCE
+                elif scope in (ScopeLevel.LAWS_BASELINE, "laws_baseline") or values.get("publisher") in (DocumentAuthority.MCC, "MCC"):
+                    values["regulatory_role"] = RegulatoryRole.NORMATIVE_LAWS_BASELINE
+                elif scope in (ScopeLevel.COMPETITION_PC, "competition_pc") or doc_type in (DocumentType.COMPETITION_REGULATIONS, "Competition Regulations"):
+                    values["regulatory_role"] = RegulatoryRole.NORMATIVE_COMPETITION_REGULATION
+                elif scope in (ScopeLevel.ADDENDUM, "addendum") or doc_type in (DocumentType.ADDENDUM, "Addendum"):
+                    values["regulatory_role"] = RegulatoryRole.NORMATIVE_ADDENDUM
+                else:
+                    values["regulatory_role"] = RegulatoryRole.NORMATIVE_FORMAT_PC
+        return values
 
 
 class RuleClause(BaseModel):
