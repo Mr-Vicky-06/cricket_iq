@@ -27,14 +27,16 @@ We evaluated three candidate architectures against weighted selection criteria:
 
 | Criterion | Weight | React + Vite + TypeScript (SPA) | Next.js (App Router) | Lightweight Vanilla / HTMX |
 | :--- | :---: | :---: | :---: | :---: |
-| **Maintainability** | 20% | **9 / 10** (Clean separation, typed contracts) | 7 / 10 (Node server runtime overhead) | 6 / 10 (Complex state for citation drawers) |
-| **Developer Velocity** | 15% | **9.5 / 10** (Fast HMR, instant dev startup) | 7.5 / 10 (Route conventions & SSR complexity)| 7 / 10 (Manual DOM wiring) |
-| **Performance** | 15% | **9 / 10** (Zero SSR cold start, < 150KB bundle) | 8.5 / 10 (SSR overhead for private SPA) | 9 / 10 (Small, but harder accessibility) |
-| **Accessibility Ecosystem** | 10% | **9 / 10** (Radix/headless primitives, ARIA) | 9 / 10 (Same ecosystem) | 5 / 10 (Custom ARIA focus traps required) |
-| **API Integration / Type Safety** | 15% | **9.5 / 10** (Direct TypeScript OpenAPI client)| 9 / 10 (Extra server-action layer) | 6 / 10 (Limited typing at boundaries) |
-| **Deployment Simplicity** | 10% | **10 / 10** (Static assets; serve via Nginx/S3/FastAPI) | 6 / 10 (Requires Node/Vercel server daemon) | 9 / 10 (Static or templated) |
-| **Security & Operational Simplicity** | 10% | **9 / 10** (No server-side secrets; static asset) | 7 / 10 (SSR secret leakage risks) | 8 / 10 |
-| **Weighted Total** | 100% | **9.25 / 10** | 7.75 / 10 | 7.05 / 10 |
+| **Maintainability** | 20% | **9.0 / 10** (Clean separation, typed contracts) | 7.0 / 10 (Node server runtime overhead) | 6.0 / 10 (Complex state for citation drawers) |
+| **Developer Velocity** | 15% | **9.5 / 10** (Fast HMR, instant dev startup) | 7.5 / 10 (Route conventions & SSR complexity)| 7.0 / 10 (Manual DOM wiring) |
+| **Performance** | 15% | **9.0 / 10** (Zero SSR cold start, < 300KB bundle) | 8.5 / 10 (SSR overhead for private SPA) | 9.0 / 10 (Small, but harder accessibility) |
+| **Accessibility Ecosystem** | 10% | **9.0 / 10** (Headless primitives, ARIA attributes)| 9.0 / 10 (Same ecosystem) | 5.0 / 10 (Custom ARIA focus traps required) |
+| **API Integration / Type Safety** | 15% | **9.5 / 10** (Direct TypeScript OpenAPI client)| 9.0 / 10 (Extra server-action layer) | 6.0 / 10 (Limited typing at boundaries) |
+| **Deployment Simplicity** | 10% | **10.0 / 10** (Static assets; serve via Nginx/S3/FastAPI) | 6.0 / 10 (Requires Node/Vercel server daemon) | 9.0 / 10 (Static or templated) |
+| **Security & Operational Simplicity** | 15% | **9.0 / 10** (No server-side secrets; static asset) | 7.0 / 10 (SSR secret leakage risks) | 8.0 / 10 (Moderate attack surface) |
+| **Weighted Total** | **100%** | **9.25 / 10** | **7.70 / 10** | **7.10 / 10** |
+
+*Weighted calculation: $\sum (\text{rating} \times \text{weight}) / 100$. All weights sum to exactly 100%.*
 
 ### Chosen Stack:
 - **Framework & Bundler:** **React 19 + TypeScript (strict mode) + Vite**.

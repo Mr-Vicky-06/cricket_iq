@@ -73,7 +73,7 @@ export class CricketIQClient {
     );
 
     if (!response.ok) {
-      let errorDetail = '';
+      let errorDetail: string;
       try {
         const errorJson = await response.json();
         errorDetail = errorJson.detail || errorJson.error || JSON.stringify(errorJson);
