@@ -110,6 +110,13 @@ LIMIT :limit;
 
 ## 4. Dense Semantic Search & Vector Store
 
+### Pseudo-Embedding Channel Safety (Gate 2 Remediation Invariant)
+In the initial baseline, `LocalDeterministicEmbeddingProvider` generated 384-dimensional MD5 feature buckets for vector schema testing. In Phase 6 Gate 2, the channel safety contract was formalized:
+- `EmbeddingProvider.is_semantic`: Boolean flag indicating whether the provider outputs genuine semantic representations (`True`) or diagnostic structural pseudo-vectors (`False`).
+- `LocalDeterministicEmbeddingProvider.is_semantic = False`.
+- In `RetrievalService`, dense participation in production Reciprocal Rank Fusion is **gated by semantic readiness**. By default (`enable_diagnostic_dense=False`), `local-deterministic-v1` vectors are excluded from production RRF ranking, ensuring that pseudo-vector artifacts cannot displace high-scoring BM25 lexical hits.
+- Genuine semantic embeddings (`all-MiniLM-L6-v2` / `bge-small-en-v1.5`) will be introduced in Gate 4.
+
 ### Versioned Embedding Text Template (`v1`)
 Embedding text incorporates regulatory context without modifying the stored `original_text`:
 
@@ -179,3 +186,23 @@ Cricket rules require composite evidence to be legally actionable. For example:
    - Traversal depth is capped at $\le 2$ hops.
    - Visited clause IDs are tracked to guarantee cycle termination.
    - Inapplicable documents or superseded editions are strictly excluded.
+
+---
+
+## 7. Gate 3 Intelligence Boundaries (Proposed Design)
+
+Gate 3 introduces domain NLP intelligence while maintaining the frozen public API schema:
+1. **Controlled Lexicon Query Expansion:**
+   - Grounded in `data/corpus/lexicon/cricket_lexicon.json` (20 approved terms).
+   - Enforces hard non-equivalence boundaries (`retired hurt` $\neq$ `retired out`, `wide` $\neq$ `no ball`, `run out` $\neq$ `stumped`).
+   - Capped expansion ($K \le 2$ phrases per term, max 3 terms per query) prevents FTS query inflation.
+2. **Deterministic Hierarchy Traversal:**
+   - Canonical depth recalculation resolves the legacy depth-1 anomaly.
+   - Traversal is strictly confined to the active candidate document bundle.
+   - Maximum 1 hop upward (definitional parent) and 1 hop downward (operational children).
+3. **Structured Table Evidence:**
+   - Exposes quantitative specifications (DRS Hawk-Eye zones, Powerplay lookup tables) via typed `TableEvidence` models.
+   - Grounded via explicit clause links in `RuleClause.extracted_tables`.
+4. **Internal Typed Contracts & Observability:**
+   - All Gate 3 expansions remain internal to `cricketiq.backend.app.retrieval`.
+   - Per-stage latency diagnostics, expansion provenance, and traversed node counts recorded in `RetrievalObservabilityTrace`.

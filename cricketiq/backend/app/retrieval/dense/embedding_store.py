@@ -52,6 +52,34 @@ class EmbeddingStore:
         self.session.execute(text(index_sql))
         self.session.commit()
 
+    def get_store_metadata(self) -> Dict[str, Any]:
+        """Inspect and return metadata describing vectors currently in storage."""
+        sql = text(f"""
+            SELECT DISTINCT model_name, dimension, template_version
+            FROM {self.TABLE_NAME}
+        """)
+        rows = self.session.execute(sql).fetchall()
+        count_sql = text(f"SELECT count(*) FROM {self.TABLE_NAME}")
+        total = self.session.execute(count_sql).scalar() or 0
+
+        models = list({r[0] for r in rows})
+        dims = list({r[1] for r in rows})
+        templates = list({r[2] for r in rows})
+
+        is_consistent = len(models) == 1 and len(dims) == 1 and len(templates) == 1 and total > 0
+
+        return {
+            "total_rows": total,
+            "distinct_models": models,
+            "distinct_dimensions": dims,
+            "distinct_templates": templates,
+            "is_consistent": is_consistent,
+            "model_name": models[0] if len(models) == 1 else None,
+            "dimension": dims[0] if len(dims) == 1 else None,
+            "template_version": templates[0] if len(templates) == 1 else None,
+            "is_semantic_model": (models[0] != "local-deterministic-v1") if len(models) == 1 else False
+        }
+
     def _validate_vector(self, vec: List[float]) -> np.ndarray:
         """Validate vector dimensionality, finiteness, and norm."""
         if len(vec) != self.provider.dimension:

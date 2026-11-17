@@ -22,6 +22,18 @@ class PostgresPgVectorSearchProvider:
         self.session: Session = repository.session
         self.provider = provider
 
+    @property
+    def is_semantic(self) -> bool:
+        return getattr(self.provider, "is_semantic", False)
+
+    @property
+    def model_name(self) -> str:
+        return getattr(self.provider, "model_name", "unknown")
+
+    @property
+    def dimension(self) -> int:
+        return getattr(self.provider, "dimension", 0)
+
     def search(
         self,
         query: str,

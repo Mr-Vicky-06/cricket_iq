@@ -19,6 +19,14 @@ from cricketiq.backend.app.database.repository import RuleCatalog
 
 OCT_2026_TRANSITION_DATE = date(2026, 10, 1)
 
+CANONICAL_COMPETITION_ALIASES: Dict[str, set[str]] = {
+    "wtc": {"wtc", "world test championship", "icc world test championship", "icc wtc", "wtc 2025-2027"},
+    "world test championship": {"wtc", "world test championship", "icc world test championship", "icc wtc", "wtc 2025-2027"},
+    "icc world test championship": {"wtc", "world test championship", "icc world test championship", "icc wtc", "wtc 2025-2027"},
+    "icc wtc": {"wtc", "world test championship", "icc world test championship", "icc wtc", "wtc 2025-2027"},
+    "wtc 2025-2027": {"wtc", "world test championship", "icc world test championship", "icc wtc", "wtc 2025-2027"},
+}
+
 
 class ApplicabilityEngine:
     """Pure domain service for deterministic cricket rule applicability resolution."""
@@ -90,12 +98,36 @@ class ApplicabilityEngine:
                 series_start_parsed = datetime.strptime(context.series_start_date, "%Y-%m-%d").date()
             except ValueError:
                 unresolved.append(f"Invalid series_start_date format: {context.series_start_date}")
+                reason_codes.append("INVALID_SERIES_START_DATE_FORMAT")
+                decision_trace.append(f"Invalid series_start_date format: {context.series_start_date}")
+                return ApplicabilityDecision(
+                    context=context,
+                    selected_bundle=[],
+                    is_ambiguous=True,
+                    unresolved_conditions=["series_start_date"],
+                    clarification_needed=f"Invalid series_start_date format '{context.series_start_date}'. Expected ISO format YYYY-MM-DD.",
+                    reason_codes=reason_codes,
+                    decision_trace=decision_trace,
+                    engine_version=self.engine_version
+                )
 
         if context.match_date:
             try:
                 match_date_parsed = datetime.strptime(context.match_date, "%Y-%m-%d").date()
             except ValueError:
                 unresolved.append(f"Invalid match_date format: {context.match_date}")
+                reason_codes.append("INVALID_MATCH_DATE_FORMAT")
+                decision_trace.append(f"Invalid match_date format: {context.match_date}")
+                return ApplicabilityDecision(
+                    context=context,
+                    selected_bundle=[],
+                    is_ambiguous=True,
+                    unresolved_conditions=["match_date"],
+                    clarification_needed=f"Invalid match_date format '{context.match_date}'. Expected ISO format YYYY-MM-DD.",
+                    reason_codes=reason_codes,
+                    decision_trace=decision_trace,
+                    engine_version=self.engine_version
+                )
 
         # Transition state determination for ICC series-start basis
         target_edition_family: Optional[str] = None  # "2026" or "previous"
@@ -155,23 +187,70 @@ class ApplicabilityEngine:
         all_active_docs = sorted(raw_active_docs, key=lambda d: d.id)
         decision_trace.append(f"Evaluating {len(all_active_docs)} active documents in catalog.")
 
-        selected_competition_doc: Optional[SourceDocument] = None
+        # Validate competition canonical name/alias if competition provided
+        target_aliases: Optional[set[str]] = None
+        if context.competition:
+            comp_key = context.competition.strip().lower()
+            target_aliases = CANONICAL_COMPETITION_ALIASES.get(comp_key)
+            if not target_aliases:
+                for d in all_active_docs:
+                    if d.competition and d.competition.strip().lower() == comp_key:
+                        target_aliases = {comp_key}
+                        break
+            if not target_aliases:
+                decision_trace.append(f"Unrecognized competition '{context.competition}'.")
+                reason_codes.append("UNRECOGNIZED_COMPETITION")
+                return ApplicabilityDecision(
+                    context=context,
+                    selected_bundle=[],
+                    is_ambiguous=True,
+                    unresolved_conditions=["competition"],
+                    clarification_needed=(
+                        f"Competition '{context.competition}' is not recognized in the official international regulations catalog. "
+                        "Supported competitions include 'WTC' (World Test Championship) or standard international formats (Test, ODI, T20I)."
+                    ),
+                    reason_codes=reason_codes,
+                    decision_trace=decision_trace,
+                    engine_version=self.engine_version
+                )
+
+        matching_competition_docs: List[SourceDocument] = []
+        matching_format_docs: List[SourceDocument] = []
+        matching_mcc_baseline_docs: List[SourceDocument] = []
         selected_addenda_docs: List[SourceDocument] = []
-        selected_format_doc: Optional[SourceDocument] = None
-        selected_mcc_baseline_doc: Optional[SourceDocument] = None
         selected_explanatory_docs: List[SourceDocument] = []
 
         # 6. Screen Documents by Scope and Edition
+        normative_roles = {
+            RegulatoryRole.NORMATIVE_COMPETITION_REGULATION,
+            RegulatoryRole.NORMATIVE_ADDENDUM,
+            RegulatoryRole.NORMATIVE_FORMAT_PC,
+            RegulatoryRole.NORMATIVE_LAWS_BASELINE,
+            RegulatoryRole.EXPLANATORY_GUIDANCE,
+        }
+
         for doc in all_active_docs:
             doc_id = doc.id
-            role = getattr(doc, "regulatory_role", None) or RegulatoryRole.NORMATIVE_FORMAT_PC
+            role = getattr(doc, "regulatory_role", None)
+            role_enum = role if isinstance(role, RegulatoryRole) else (RegulatoryRole(role) if role in RegulatoryRole._value2member_map_ else None)
+
+            # Strict role validation: reject unknown, unapproved, or non-normative roles
+            if role_enum is None or role_enum not in normative_roles:
+                rejected_candidates.append({"doc_id": doc_id, "reason": f"Unknown or non-normative regulatory role: {role}"})
+                decision_trace.append(f"Rejected document {doc_id}: unapproved or non-normative regulatory role '{role}'.")
+                continue
 
             # A. Competition Regulations
-            if doc.scope_level == ScopeLevel.COMPETITION_PC or role == RegulatoryRole.NORMATIVE_COMPETITION_REGULATION:
-                if context.competition and context.competition.lower() in (doc.competition or "").lower():
-                    selected_competition_doc = doc
-                    effective_date_basis_used[doc_id] = doc.applicability_basis.value
-                    decision_trace.append(f"Matched Competition PC: {doc_id}")
+            if doc.scope_level == ScopeLevel.COMPETITION_PC or role == RegulatoryRole.NORMATIVE_COMPETITION_REGULATION or role == RegulatoryRole.NORMATIVE_COMPETITION_REGULATION.value:
+                if target_aliases:
+                    doc_comp = (doc.competition or "").strip().lower()
+                    doc_id_lower = doc_id.lower()
+                    if doc_comp in target_aliases or any(alias in doc_comp for alias in target_aliases) or any(alias in doc_id_lower for alias in target_aliases):
+                        matching_competition_docs.append(doc)
+                        effective_date_basis_used[doc_id] = doc.applicability_basis.value
+                        decision_trace.append(f"Matched Competition PC candidate: {doc_id}")
+                    else:
+                        rejected_candidates.append({"doc_id": doc_id, "reason": f"Competition alias mismatch for {doc_id}"})
                 else:
                     rejected_candidates.append({"doc_id": doc_id, "reason": "Competition mismatch or no competition specified"})
                 continue
@@ -192,9 +271,9 @@ class ApplicabilityEngine:
                     edition_matches = (target_edition_family == "2026" and "2026" in doc.edition) or \
                                       (target_edition_family == "previous" and ("2024" in doc.edition or "2022" in doc.edition))
                     if edition_matches:
-                        selected_format_doc = doc
+                        matching_format_docs.append(doc)
                         effective_date_basis_used[doc_id] = doc.applicability_basis.value
-                        decision_trace.append(f"Matched Format PC: {doc_id} ({doc.edition})")
+                        decision_trace.append(f"Matched Format PC candidate: {doc_id} ({doc.edition})")
                     else:
                         rejected_candidates.append({"doc_id": doc_id, "reason": f"Edition mismatch. Needed {target_edition_family}, document is {doc.edition}"})
                 else:
@@ -219,12 +298,67 @@ class ApplicabilityEngine:
                 mcc_edition_matches = (target_edition_family == "2026" and ("2026" in doc.edition or "4th" in doc.edition)) or \
                                       (target_edition_family == "previous" and ("2022" in doc.edition or "3rd" in doc.edition) and not ("2026" in doc.edition or "4th" in doc.edition))
                 if mcc_edition_matches:
-                    selected_mcc_baseline_doc = doc
+                    matching_mcc_baseline_docs.append(doc)
                     effective_date_basis_used[doc_id] = doc.applicability_basis.value
-                    decision_trace.append(f"Matched Baseline MCC Laws: {doc_id} ({doc.edition})")
+                    decision_trace.append(f"Matched Baseline MCC Laws candidate: {doc_id} ({doc.edition})")
                 else:
                     rejected_candidates.append({"doc_id": doc_id, "reason": f"MCC edition mismatch. Needed {target_edition_family}, doc is {doc.edition}"})
                 continue
+
+        # Cardinality & Conflict Resolution
+        if len(matching_competition_docs) > 1:
+            comp_ids = [d.id for d in matching_competition_docs]
+            conflicts.append(f"Multiple conflicting competition regulations matched: {comp_ids}")
+            decision_trace.append(f"Conflict: Multiple competition regulations matched: {comp_ids}")
+            reason_codes.append("COMPETING_COMPETITION_REGULATIONS_CONFLICT")
+            return ApplicabilityDecision(
+                context=context,
+                selected_bundle=[],
+                is_ambiguous=True,
+                unresolved_conditions=["competition_conflict"],
+                conflicts=conflicts,
+                clarification_needed=f"Multiple conflicting competition regulations match '{context.competition}': {comp_ids}. Please specify the exact competition edition.",
+                reason_codes=reason_codes,
+                decision_trace=decision_trace,
+                engine_version=self.engine_version
+            )
+        selected_competition_doc = matching_competition_docs[0] if matching_competition_docs else None
+
+        if len(matching_format_docs) > 1:
+            fmt_ids = [d.id for d in matching_format_docs]
+            conflicts.append(f"Multiple conflicting format playing conditions matched: {fmt_ids}")
+            decision_trace.append(f"Conflict: Multiple format playing conditions matched: {fmt_ids}")
+            reason_codes.append("COMPETING_FORMAT_PC_CONFLICT")
+            return ApplicabilityDecision(
+                context=context,
+                selected_bundle=[],
+                is_ambiguous=True,
+                unresolved_conditions=["format_pc_conflict"],
+                conflicts=conflicts,
+                clarification_needed=f"Multiple conflicting format playing conditions match format '{context.format}' and category '{target_category}': {fmt_ids}.",
+                reason_codes=reason_codes,
+                decision_trace=decision_trace,
+                engine_version=self.engine_version
+            )
+        selected_format_doc = matching_format_docs[0] if matching_format_docs else None
+
+        if len(matching_mcc_baseline_docs) > 1:
+            mcc_ids = [d.id for d in matching_mcc_baseline_docs]
+            conflicts.append(f"Multiple conflicting baseline MCC Laws matched: {mcc_ids}")
+            decision_trace.append(f"Conflict: Multiple baseline MCC Laws matched: {mcc_ids}")
+            reason_codes.append("COMPETING_MCC_BASELINE_CONFLICT")
+            return ApplicabilityDecision(
+                context=context,
+                selected_bundle=[],
+                is_ambiguous=True,
+                unresolved_conditions=["mcc_baseline_conflict"],
+                conflicts=conflicts,
+                clarification_needed=f"Multiple conflicting baseline MCC Laws match edition '{target_edition_family}': {mcc_ids}.",
+                reason_codes=reason_codes,
+                decision_trace=decision_trace,
+                engine_version=self.engine_version
+            )
+        selected_mcc_baseline_doc = matching_mcc_baseline_docs[0] if matching_mcc_baseline_docs else None
 
         # 7. Assemble Source Bundle in Strict Precedence Order
         selected_bundle: List[SourceDocument] = []

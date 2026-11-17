@@ -38,6 +38,7 @@ class SourceDocumentEntity(Base):
     file_path = Column(Text, nullable=True)
     status = Column(String(32), nullable=False, default="candidate", index=True)
     terms_notes = Column(Text, nullable=False, default="")
+    regulatory_role = Column(String(64), nullable=True, default=None)
 
     clauses = relationship("RuleClauseEntity", back_populates="document", cascade="all, delete-orphan")
     applicability_rules = relationship("ApplicabilityRuleEntity", back_populates="document", cascade="all, delete-orphan")

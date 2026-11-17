@@ -550,7 +550,8 @@ def main():
     service_dense = RetrievalService(
         repository=repo,
         sparse_provider=NullSparseProvider(),
-        dense_provider=dense_prov
+        dense_provider=dense_prov,
+        enable_diagnostic_dense=True
     )
     res_dense = evaluate_configuration(service_dense, benchmark_items, mode="Dense-Only (NumPy Cosine)")
 
@@ -558,7 +559,8 @@ def main():
     service_hybrid = RetrievalService(
         repository=repo,
         sparse_provider=sparse_prov,
-        dense_provider=dense_prov
+        dense_provider=dense_prov,
+        enable_diagnostic_dense=True
     )
     res_hybrid = evaluate_configuration(service_hybrid, benchmark_items, mode="Hybrid (Sparse + Dense + RRF + Expansion)")
 

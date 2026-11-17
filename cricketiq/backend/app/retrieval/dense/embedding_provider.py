@@ -59,6 +59,11 @@ class LocalDeterministicEmbeddingProvider:
     def model_name(self) -> str:
         return self._model_name
 
+    @property
+    def is_semantic(self) -> bool:
+        """Local deterministic hash model is non-semantic (diagnostic/test only)."""
+        return False
+
     def _text_to_vector(self, text: str) -> List[float]:
         if not text or not text.strip():
             return [0.0] * self._dim
@@ -113,6 +118,11 @@ class SentenceTransformerEmbeddingProvider:
     @property
     def model_name(self) -> str:
         return self._model_name
+
+    @property
+    def is_semantic(self) -> bool:
+        """Sentence transformer model is a genuine semantic neural embedding model."""
+        return True
 
     def embed_text(self, text: str) -> List[float]:
         vec = self._model.encode(text, normalize_embeddings=True)

@@ -11,7 +11,7 @@ Coordinates:
 
 from __future__ import annotations
 import time
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Tuple
 
 from cricketiq.backend.app.database.models import MatchContext, ApplicabilityDecision
 from cricketiq.backend.app.database.repository import CricketIQRepository
@@ -39,7 +39,8 @@ class RetrievalService:
         sparse_provider: Optional[SparseSearchProvider] = None,
         dense_provider: Optional[DenseSearchProvider] = None,
         rrf_engine: Optional[RRFEngine] = None,
-        expander: Optional[EvidenceExpander] = None
+        expander: Optional[EvidenceExpander] = None,
+        enable_diagnostic_dense: bool = False
     ):
         self.repository = repository
         self.applicability_engine = applicability_engine or ApplicabilityEngine()
@@ -48,6 +49,48 @@ class RetrievalService:
         self.dense_provider = dense_provider
         self.rrf_engine = rrf_engine or RRFEngine(k=60)
         self.expander = expander or EvidenceExpander(repository)
+        self.enable_diagnostic_dense = enable_diagnostic_dense
+
+    def check_dense_channel_readiness(self) -> Tuple[bool, str]:
+        """Evaluate whether dense semantic search is authorized to participate in RRF ranking.
+
+        Guarantees:
+        - local-deterministic-v1 is excluded from production RRF ranking unless enable_diagnostic_dense is True.
+        - Inconsistent, mixed, or missing database vector metadata disables dense ranking safely.
+        - Validated semantic models (e.g. transformer/ONNX) are enabled without code changes.
+        """
+        if self.dense_provider is None:
+            return False, "Dense search provider not configured."
+
+        is_semantic = getattr(self.dense_provider, "is_semantic", False)
+        provider_model = getattr(self.dense_provider, "model_name", "unknown")
+        provider_dim = getattr(self.dense_provider, "dimension", 0)
+
+        # Inspect database vector store if accessible
+        store = getattr(self.dense_provider, "store", None)
+        if store is not None and hasattr(store, "get_store_metadata"):
+            try:
+                meta = store.get_store_metadata()
+                if not meta.get("is_consistent", False):
+                    return False, f"Dense search disabled: mixed or inconsistent store metadata: {meta}"
+
+                stored_model = meta.get("model_name")
+                stored_dim = meta.get("dimension")
+
+                if stored_model != provider_model:
+                    return False, f"Dense search disabled: provider model '{provider_model}' does not match stored model '{stored_model}'."
+                if stored_dim != provider_dim:
+                    return False, f"Dense search disabled: provider dimension {provider_dim} does not match stored dimension {stored_dim}."
+
+                if stored_model == "local-deterministic-v1" and not self.enable_diagnostic_dense:
+                    return False, "Dense search disabled: stored model 'local-deterministic-v1' is a non-semantic diagnostic hash model and is excluded from production ranking."
+            except Exception as e:
+                return False, f"Dense search disabled: error validating store metadata: {e}"
+
+        if not is_semantic and not self.enable_diagnostic_dense:
+            return False, f"Dense search disabled: provider '{provider_model}' is not a semantic neural model and diagnostic mode is not enabled."
+
+        return True, f"Dense semantic search active with model '{provider_model}'."
 
     def retrieve(self, request: RetrievalRequest) -> RetrievalOutcome:
         """Execute full evidence retrieval pipeline."""
@@ -110,18 +153,28 @@ class RetrievalService:
         diagnostics["sparse_hits_count"] = len(sparse_results)
 
         # ------------------------------------------------------------------
-        # Step 4: Dense Semantic Search (if available)
+        # Step 4: Dense Semantic Search (if authorized)
         # ------------------------------------------------------------------
+        dense_authorized, dense_status_reason = self.check_dense_channel_readiness()
+        diagnostics["dense_channel_authorized"] = dense_authorized
+        diagnostics["dense_channel_status"] = dense_status_reason
+
         dense_results = []
-        if self.dense_provider is not None:
+        if dense_authorized and self.dense_provider is not None:
             t_dense_start = time.perf_counter()
-            dense_results = self.dense_provider.search(
-                query=request.query,
-                candidate_document_ids=candidate_docs,
-                top_k=request.top_k_dense
-            )
-            diagnostics["dense_search_ms"] = round((time.perf_counter() - t_dense_start) * 1000, 2)
-            diagnostics["dense_hits_count"] = len(dense_results)
+            try:
+                dense_results = self.dense_provider.search(
+                    query=request.query,
+                    candidate_document_ids=candidate_docs,
+                    top_k=request.top_k_dense
+                )
+                diagnostics["dense_search_ms"] = round((time.perf_counter() - t_dense_start) * 1000, 2)
+                diagnostics["dense_hits_count"] = len(dense_results)
+            except Exception as e:
+                diagnostics["dense_search_error"] = str(e)
+                diagnostics["dense_search_ms"] = 0.0
+                diagnostics["dense_hits_count"] = 0
+                dense_results = []
         else:
             diagnostics["dense_search_ms"] = 0.0
             diagnostics["dense_hits_count"] = 0

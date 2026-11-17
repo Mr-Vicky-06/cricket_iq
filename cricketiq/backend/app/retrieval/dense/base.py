@@ -27,9 +27,29 @@ class EmbeddingProvider(Protocol):
         """Model identifier and version."""
         ...
 
+    @property
+    def is_semantic(self) -> bool:
+        """True if backed by an authentic semantic neural model; False if hash/diagnostic."""
+        ...
+
 
 class DenseSearchProvider(Protocol):
     """Protocol for dense vector similarity search providers."""
+
+    @property
+    def is_semantic(self) -> bool:
+        """True if search is powered by authentic semantic neural embeddings."""
+        ...
+
+    @property
+    def model_name(self) -> str:
+        """Underlying model identifier."""
+        ...
+
+    @property
+    def dimension(self) -> int:
+        """Underlying vector dimension."""
+        ...
 
     def search(
         self,

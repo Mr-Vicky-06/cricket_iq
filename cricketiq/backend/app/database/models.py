@@ -120,7 +120,7 @@ class SourceDocument(BaseModel):
     title: str = Field(..., description="Official title as printed on document")
     document_type: DocumentType = Field(..., description="Law, Playing Conditions, etc.")
     scope_level: ScopeLevel = Field(default=ScopeLevel.FORMAT_PC)
-    regulatory_role: RegulatoryRole = Field(default=RegulatoryRole.NORMATIVE_FORMAT_PC, description="Normative legal role of the document")
+    regulatory_role: RegulatoryRole = Field(default=RegulatoryRole.ADMINISTRATIVE_REFERENCE, description="Normative legal role of the document")
     format: Optional[CricketFormat] = Field(default=None)
     category: Optional[GenderCategory] = Field(default=None)
     competition: Optional[str] = Field(default=None)
@@ -141,7 +141,16 @@ class SourceDocument(BaseModel):
     @classmethod
     def _resolve_regulatory_role(cls, values: Any) -> Any:
         if isinstance(values, dict):
-            if not values.get("regulatory_role"):
+            raw_role = values.get("regulatory_role")
+            if raw_role:
+                if isinstance(raw_role, RegulatoryRole):
+                    values["regulatory_role"] = raw_role
+                elif isinstance(raw_role, str) and raw_role in RegulatoryRole._value2member_map_:
+                    values["regulatory_role"] = RegulatoryRole(raw_role)
+                else:
+                    # Unknown or unapproved role: classify as ADMINISTRATIVE_REFERENCE (never silently promote to normative)
+                    values["regulatory_role"] = RegulatoryRole.ADMINISTRATIVE_REFERENCE
+            else:
                 doc_id = str(values.get("id", ""))
                 scope = values.get("scope_level")
                 doc_type = values.get("document_type")
@@ -153,8 +162,10 @@ class SourceDocument(BaseModel):
                     values["regulatory_role"] = RegulatoryRole.NORMATIVE_COMPETITION_REGULATION
                 elif scope in (ScopeLevel.ADDENDUM, "addendum") or doc_type in (DocumentType.ADDENDUM, "Addendum"):
                     values["regulatory_role"] = RegulatoryRole.NORMATIVE_ADDENDUM
-                else:
+                elif scope in (ScopeLevel.FORMAT_PC, "format_pc") or doc_type in (DocumentType.PLAYING_CONDITIONS, "Playing Conditions"):
                     values["regulatory_role"] = RegulatoryRole.NORMATIVE_FORMAT_PC
+                else:
+                    values["regulatory_role"] = RegulatoryRole.ADMINISTRATIVE_REFERENCE
         return values
 
 

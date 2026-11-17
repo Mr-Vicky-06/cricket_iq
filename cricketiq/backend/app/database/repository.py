@@ -14,7 +14,7 @@ from cricketiq.backend.app.database.models import (
     SourceDocument, RuleClause, DocumentAuthority, DocumentType,
     ScopeLevel, ApplicabilityBasis, CricketFormat, GenderCategory,
     DocumentStatus, ClauseType, ValidationStatus, DocumentRelationship,
-    RelationshipType
+    RelationshipType, RegulatoryRole
 )
 from cricketiq.backend.app.database.orm_models import (
     SourceDocumentEntity, RuleClauseEntity, DocumentRelationshipEntity,
@@ -42,6 +42,7 @@ class CricketIQRepository:
     def upsert_source_document(self, doc: SourceDocument) -> SourceDocument:
         try:
             entity = self.session.get(SourceDocumentEntity, doc.id)
+            role_val = doc.regulatory_role.value if hasattr(doc.regulatory_role, "value") else (str(doc.regulatory_role) if doc.regulatory_role else None)
             if not entity:
                 entity = SourceDocumentEntity(
                     id=doc.id,
@@ -49,6 +50,7 @@ class CricketIQRepository:
                     title=doc.title,
                     document_type=doc.document_type.value,
                     scope_level=doc.scope_level.value,
+                    regulatory_role=role_val,
                     format=doc.format.value if doc.format else None,
                     category=doc.category.value if doc.category else None,
                     competition=doc.competition,
@@ -70,6 +72,7 @@ class CricketIQRepository:
                 entity.title = doc.title
                 entity.edition = doc.edition
                 entity.scope_level = doc.scope_level.value
+                entity.regulatory_role = role_val
                 entity.published_at = doc.published_at
                 entity.effective_from = doc.effective_from
                 entity.effective_until = doc.effective_until
@@ -231,12 +234,18 @@ class CricketIQRepository:
     # --- Mapping Helpers ---
 
     def _entity_to_source_doc(self, entity: SourceDocumentEntity) -> SourceDocument:
+        role_val = getattr(entity, "regulatory_role", None)
+        if role_val:
+            role = RegulatoryRole(role_val) if role_val in RegulatoryRole._value2member_map_ else RegulatoryRole.ADMINISTRATIVE_REFERENCE
+        else:
+            role = None
         return SourceDocument(
             id=entity.id,
             publisher=DocumentAuthority(entity.publisher),
             title=entity.title,
             document_type=DocumentType(entity.document_type),
             scope_level=ScopeLevel(entity.scope_level) if entity.scope_level else ScopeLevel.FORMAT_PC,
+            regulatory_role=role,
             format=CricketFormat(entity.format) if entity.format else None,
             category=GenderCategory(entity.category) if entity.category else None,
             competition=entity.competition,

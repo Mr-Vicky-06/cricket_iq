@@ -145,27 +145,25 @@ Exit gate:
 - [x] Zero hallucinated UI elements, strict HTTPS URL allowlist for governing bodies (`icc-cricket.com`, `lords.org`).
 - [x] Full responsive mobile support (375px+) and clean browser console (0 errors, 0 warnings).
 
-## Phase 6 — Intelligence Upgrade: Domain-Aware Semantic Search, Hybrid Retrieval, Regulatory Knowledge Graph & Corpus Expansion [STATUS: IN PROGRESS - GATES 0, 1 & 2 COMPLETE]
+## Phase 6 — Intelligence Upgrade: Domain-Aware Semantic Search, Hybrid Retrieval, Regulatory Knowledge Graph & Corpus Expansion [STATUS: IN PROGRESS - GATES 0, 1 & 2 REMEDIATED & CLOSED; GATE 3 DESIGN READY]
 
 **Goal:** Improve CricketIQ's underlying retrieval and knowledge intelligence across the 11-document official corpus before expanding to additional tiers.
 
 Tasks:
-- [x] **Gate 0:** Mandatory pre-implementation baseline audit, corpus reconciliation, benchmark evaluation, retrieval failure diagnosis, and gap backlog:
-  - Deliverable 1: `docs/reviews/PHASE_6_PRE_IMPLEMENTATION_AUDIT.md` (System state, 11,008 vs 12,252 clause math, root-cause diagnosis).
-  - Deliverable 2: `docs/PHASE_6_CORPUS_INVENTORY.md` (11 documents catalog, text views, table extractions, 1,244-row inclusion/exclusion ledger).
-  - Deliverable 3: `docs/PHASE_6_RETRIEVAL_FAILURE_ANALYSIS.md` (Benchmark v2 failure post-mortems, 51 misses analyzed, failure taxonomy).
-  - Deliverable 4: `docs/PHASE_6_GAP_BACKLOG.md` (Prioritized engineering backlog for Gates 1-7).
-  - Deliverable 5: `docs/adr/0005-retrieval-intelligence-upgrade.md` (Proposed ADR for multi-view retrieval upgrade).
-- [x] **Gate 1:** Authoritative source discovery and targeted corpus enrichment:
-  - Deliverable 1: `docs/PHASE_6_SOURCE_GAP_ANALYSIS.md` (Benchmark v2 failure classification against active 11 documents).
-  - Deliverable 2: `docs/PHASE_6_SOURCE_DISCOVERY_REGISTER.md` (Official source register across candidates).
-  - Deliverable 3: `data/sources/manifests/phase6_candidate_sources.json` (Candidate manifest).
-  - Deliverable 4: `docs/reviews/PHASE_6_GATE_1_DELIVERY_REPORT.md` (Evidence-based NO-OP acquisition justification).
-- [x] **Gate 2:** Applicability Engine bug fix (`MCC_LAWS_2026` overwrite) and safe database reconciliation:
+- [x] **Gate 0:** Mandatory pre-implementation baseline audit, corpus reconciliation, benchmark evaluation, retrieval failure diagnosis, and gap backlog (`docs/reviews/PHASE_6_PRE_IMPLEMENTATION_AUDIT.md`, `docs/PHASE_6_CORPUS_INVENTORY.md`, `docs/PHASE_6_RETRIEVAL_FAILURE_ANALYSIS.md`, `docs/PHASE_6_GAP_BACKLOG.md`, `docs/adr/0005-retrieval-intelligence-upgrade.md`).
+- [x] **Gate 1:** Authoritative source discovery and targeted corpus enrichment (`docs/PHASE_6_SOURCE_GAP_ANALYSIS.md`, `docs/PHASE_6_SOURCE_DISCOVERY_REGISTER.md`, `data/sources/manifests/phase6_candidate_sources.json`, `docs/reviews/PHASE_6_GATE_1_DELIVERY_REPORT.md`).
+- [x] **Gate 2:** Applicability Engine repair, database reconciliation, and remediation hardening:
   - Gate 2A: Domain model `RegulatoryRole`, normative baseline protection, catalog-order determinism ($4! = 24$ permutations tested and verified invariant), multiple addenda support, historical edition matching (`models.py`, `applicability_engine.py`, `test_applicability.py`).
-  - Gate 2B/2C: Safe two-phase database reconciliation script (`scripts/reconcile_database.py`), immutable online backup, clean staging rebuild (10,388 unique canonical clauses, 0 Devanagari Hindi rows, 0 duplicate un-namespaced appendices), FTS5 virtual table, vector store synchronization, and atomic promotion to active `data/cricketiq.db`.
-  - Deliverable: `docs/reviews/PHASE_6_GATES_1_2_FINAL_DELIVERY_REPORT.md` (Comprehensive 20-point final report).
-- [ ] **Gate 3:** Domain NLP, cricket synonym query expansion, hierarchy depth calculation, and table models.
+  - Gate 2B: Safe two-phase database reconciliation script (`scripts/reconcile_database.py`), immutable online backup, clean staging rebuild (10,388 unique canonical clauses, 0 Devanagari Hindi rows, 0 duplicate un-namespaced appendices), FTS5 virtual table, vector store synchronization, and atomic promotion to active `data/cricketiq.db`.
+  - Gate 2 Remediation: Pseudo-embedding channel safety (`is_semantic = False`, diagnostic vectors excluded from production RRF ranking by default), 4-way cryptographic identifier set parity (`8c85beb895d40d4379ecdc3d9829b924c176cdebc59289b33f2c408ef4968904`), promotion protocol hardening with exclusive process locking (`reconcile.lock`), active database SHA invariance assertion, atomic filesystem swap recovery with permanent rollback snapshots, 10 fault-injection tests (`test_reconciliation_protocol.py`), multi-document candidate conflict resolution, canonical competition alias validation, and database schema migration for `regulatory_role`. Full backend test suite passes: 127 passed, 1 skipped.
+  - Deliverables: `docs/reviews/PHASE_6_GATES_1_2_FINAL_DELIVERY_REPORT.md`, `docs/reviews/PHASE_6_GATE_2_REMEDIATION_AUDIT.md`.
+- [x] **Gate 3 Pre-Implementation Audit & Design Package:**
+  - Lexicon audit: 20 terms, 10 hard semantic invariants, 27 benchmark queries mapped (`docs/PHASE_6_GATE_3_LEXICON_AUDIT.md`).
+  - Hierarchy integrity audit: 10,388 clauses, 0 cycles, depth-1 anomaly diagnosed, 3,126 cross-references mapped (`docs/PHASE_6_GATE_3_HIERARCHY_INTEGRITY_REPORT.md`).
+  - Structured table evidence audit: 240 extracted tables analyzed, DRS specifications in Appendix D, typed `TableEvidence` model designed (`docs/PHASE_6_GATE_3_TABLE_EVIDENCE_AUDIT.md`).
+  - Synthesis and implementation plan: `docs/reviews/PHASE_6_GATE_3_PRE_IMPLEMENTATION_AUDIT.md`, `docs/PHASE_6_GATE_3_IMPLEMENTATION_PLAN.md`.
+  - Status: Gate 3 Design Ready; zero feature code executed in Gate 2 milestone.
+- [ ] **Gate 3 Implementation:** Domain NLP, cricket synonym query expansion, hierarchy depth calculation, and table models.
 - [ ] **Gate 4:** Dense semantic search upgrade (local ONNX transformer embeddings `all-MiniLM-L6-v2` / `bge-small-en-v1.5` and vector re-indexing).
 - [ ] **Gate 5:** Multi-stage weighted hybrid fusion (Weighted RRF, adaptive gating, cross-encoder reranker, bidirectional graph expansion).
 - [ ] **Gate 6:** End-to-end evaluation & regression verification (Benchmark v2 target Recall@5 $\ge 75\%$, benchmark v3 authoring, 0% leakage, 100% exact lookup).
@@ -176,10 +174,13 @@ Exit gate for Gates 0–2:
 - [x] Benchmark v1 (65 queries) and Benchmark v2 (92 queries) evaluated with granular metrics.
 - [x] Evidence-based NO-OP source acquisition gate approved with zero index bloat.
 - [x] ApplicabilityEngine baseline overwrite resolved; MCC Laws recall increased from 0% to 100% on Benchmark v2.
-- [x] 100% database parity achieved: 10,388 canonical clauses in relational, FTS5, and vector stores.
+- [x] 100% database parity achieved: 10,388 canonical clauses in relational, FTS5, and vector stores with identical SHA-256 ID digests.
+- [x] Pseudo-embedding safety asserted: non-semantic vectors isolated from production RRF ranking.
+- [x] Promotion protocol hardened with active SHA invariance, exclusive process locking, and automated rollback recovery.
 - [x] 1,864 stale rows purged (831 Hindi, 817 duplicate un-namespaced appendices, 216 stale extraction rows).
-- [x] All 107 backend tests and 23 frontend tests passing; zero breaking API contract changes.
-- [x] 0.0% regulatory leakage and 100.0% exact clause accuracy maintained.
+- [x] All 127 backend tests and 23 frontend tests passing; zero breaking API contract changes.
+- [x] 0.0% regulatory leakage and 100.0% exact clause accuracy maintained on Benchmark v2.
+- [x] Gate 3 pre-implementation audit package completed and verified.
 
 ## Phase 7 — Hardening and release
 
