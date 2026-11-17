@@ -189,20 +189,30 @@ Cricket rules require composite evidence to be legally actionable. For example:
 
 ---
 
-## 7. Gate 3 Intelligence Boundaries (Proposed Design)
+## 7. Gate 3 Intelligence & Evidence Hydration (Implemented)
 
-Gate 3 introduces domain NLP intelligence while maintaining the frozen public API schema:
-1. **Controlled Lexicon Query Expansion:**
-   - Grounded in `data/corpus/lexicon/cricket_lexicon.json` (20 approved terms).
+Phase 6 Gate 3 introduces domain NLP intelligence, structural clause hierarchy traversal, and structured table evidence hydration while maintaining the frozen public API contract:
+
+1. **Controlled Lexicon Query Expansion (`LexiconExpansionService`):**
+   - Grounded in `data/corpus/lexicon/cricket_lexicon.json` (20 approved terms validated by `LexiconValidator`).
    - Enforces hard non-equivalence boundaries (`retired hurt` $\neq$ `retired out`, `wide` $\neq$ `no ball`, `run out` $\neq$ `stumped`).
-   - Capped expansion ($K \le 2$ phrases per term, max 3 terms per query) prevents FTS query inflation.
-2. **Deterministic Hierarchy Traversal:**
-   - Canonical depth recalculation resolves the legacy depth-1 anomaly.
-   - Traversal is strictly confined to the active candidate document bundle.
-   - Maximum 1 hop upward (definitional parent) and 1 hop downward (operational children).
-3. **Structured Table Evidence:**
-   - Exposes quantitative specifications (DRS Hawk-Eye zones, Powerplay lookup tables) via typed `TableEvidence` models.
-   - Grounded via explicit clause links in `RuleClause.extracted_tables`.
+   - Bounded expansion ($K \le 2$ phrases per term, max 3 terms per query) prevents FTS query inflation.
+   - Preserves raw query immutability; emits `NormalizedQueryView` and substitutes colloquial slang (`mankad`, `beamer`, `chucking`) with statutory legal phrasing.
+   - Suppresses redundant expansions when user already used canonical terms (e.g. `no-ball` / `no ball`).
+
+2. **Deterministic Hierarchy Traversal (`HierarchyTraversalService`):**
+   - True tree depths (Depths 1 through 4) calculated via `scripts/recompute_clause_depths.py`, resolving the legacy depth-1 anomaly with zero cycles across 10,388 unique clauses.
+   - Traversal is strictly confined to the active candidate document bundle (`candidate_document_ids`).
+   - Maximum 1 hop upward (`PARENT_CONTEXT`) and 1 hop downward (`OPERATIONAL_CHILD`).
+   - Resolves statutory cross-references within bundle (`STATUTORY_CROSS_REFERENCE`) while blocking out-of-bundle references.
+   - Enforces maximum 5-snippet budget and 1,200 token budget with direct evidence protection.
+
+3. **Structured Table Evidence Hydration (`TableEvidenceService`):**
+   - Exposes quantitative regulatory specifications (DRS Hawk-Eye pitching, impact, and wicket zones, review consequences, and Powerplay overs matrices) via typed `TableEvidence` models.
+   - Reconciles 246 total tables, restricting active retrieval strictly to 39 `SOURCE_VERIFIED` tables in active Playing Conditions while isolating 84 historical MCC 2022 tables as `EXTRACTED_UNVALIDATED`.
+   - Deterministic Markdown prompt rendering with pipe escaping (`\|`), line-break conversion, source document metadata, and numeric claim validation (`validate_numeric_claim`).
+
 4. **Internal Typed Contracts & Observability:**
-   - All Gate 3 expansions remain internal to `cricketiq.backend.app.retrieval`.
-   - Per-stage latency diagnostics, expansion provenance, and traversed node counts recorded in `RetrievalObservabilityTrace`.
+   - Independent feature flags in `RetrievalService`: `enable_lexicon_expansion`, `enable_hierarchy_traversal`, `enable_table_evidence` (all default `False`).
+   - Granular per-stage latency diagnostics, correlation ID, query hash, expansion provenance, traversed nodes by role, and hydrated table IDs recorded in `RetrievalObservabilityTrace`.
+   - Public API `POST /v1/rules/query` request/response schemas and OpenAPI specification remain 100% byte-identical.

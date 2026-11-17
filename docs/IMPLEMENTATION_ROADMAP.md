@@ -163,7 +163,15 @@ Tasks:
   - Structured table evidence audit: 240 extracted tables analyzed, DRS specifications in Appendix D, typed `TableEvidence` model designed (`docs/PHASE_6_GATE_3_TABLE_EVIDENCE_AUDIT.md`).
   - Synthesis and implementation plan: `docs/reviews/PHASE_6_GATE_3_PRE_IMPLEMENTATION_AUDIT.md`, `docs/PHASE_6_GATE_3_IMPLEMENTATION_PLAN.md`.
   - Status: Gate 3 Design Ready; zero feature code executed in Gate 2 milestone.
-- [ ] **Gate 3 Implementation:** Domain NLP, cricket synonym query expansion, hierarchy depth calculation, and table models.
+- [x] **Gate 3 Implementation:** Domain NLP, cricket synonym query expansion, hierarchy depth calculation, and table models [STATUS: COMPLETED]:
+  - Reconciled inventory: Exactly 10,388 unique clauses, 357 missing parent references classified into 3 structural categories, 246 raw tables reconciled with 39 active Playing Conditions tables isolated as `SOURCE_VERIFIED`.
+  - Task 3.1: Controlled domain lexicon expansion engine (`lexicon_service.py`, `test_lexicon_expansion.py` - 12 tests) enforcing 5 legal-semantic invariants and longest-phrase matching.
+  - Task 3.2: Hierarchy depth recalculation and dry-run validation (`recompute_clause_depths.py`, `test_hierarchy_depth_recalculation.py` - 2 tests) recovering Depths 1 to 4 with zero cycles.
+  - Task 3.3: Bounded hierarchy traversal engine (`traversal_service.py`, `test_hierarchy_traversal.py` - 5 tests) enforcing candidate bundle confinement, 1-hop parent/child traversal, and token budgets.
+  - Task 3.4: Structured table evidence hydration (`table_service.py`, `test_table_evidence.py` - 10 tests) with deterministic Markdown prompt rendering and numeric claim validation.
+  - Task 3.5: RetrievalService integration (`service.py`, `test_retrieval_service_gate3.py` - 5 tests) with independent feature flags and internal `RetrievalObservabilityTrace`.
+  - Task 3.6: Automated verification (161 backend tests pass, 23 frontend tests pass), Benchmark v2 comparative evaluation across 5 configurations (Supporting Recall elevated to 58.70%, 100% exact accuracy, 0.0% leakage), and OpenAPI schema invariance verified (SHA identical).
+  - Deliverables: `docs/reviews/PHASE_6_GATE_3_EXECUTION_BASELINE.md`, `docs/reviews/PHASE_6_GATE_3_INVENTORY_RECONCILIATION.md`, `docs/reviews/PHASE_6_GATE_3_HIERARCHY_MIGRATION_REPORT.md`, `docs/reviews/PHASE_6_GATE_3_FINAL_DELIVERY_REPORT.md`.
 - [ ] **Gate 4:** Dense semantic search upgrade (local ONNX transformer embeddings `all-MiniLM-L6-v2` / `bge-small-en-v1.5` and vector re-indexing).
 - [ ] **Gate 5:** Multi-stage weighted hybrid fusion (Weighted RRF, adaptive gating, cross-encoder reranker, bidirectional graph expansion).
 - [ ] **Gate 6:** End-to-end evaluation & regression verification (Benchmark v2 target Recall@5 $\ge 75\%$, benchmark v3 authoring, 0% leakage, 100% exact lookup).

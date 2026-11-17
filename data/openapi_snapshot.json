@@ -1,0 +1,687 @@
+{
+  "components": {
+    "schemas": {
+      "AnswerPayload": {
+        "description": "Structured synthesized answer grounded in retrieved evidence.",
+        "properties": {
+          "detailed_explanation": {
+            "description": "Detailed regulatory explanation with clause citations",
+            "title": "Detailed Explanation",
+            "type": "string"
+          },
+          "exceptions_and_edge_cases": {
+            "description": "Applicable exceptions, conditions, or umpire discretions",
+            "items": {
+              "type": "string"
+            },
+            "title": "Exceptions And Edge Cases",
+            "type": "array"
+          },
+          "historical_context": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Comparison to previous editions or note of recent rule changes",
+            "title": "Historical Context"
+          },
+          "key_points": {
+            "description": "Core bullet-point takeaways",
+            "items": {
+              "type": "string"
+            },
+            "title": "Key Points",
+            "type": "array"
+          },
+          "summary": {
+            "description": "Concise high-level answer to user query",
+            "title": "Summary",
+            "type": "string"
+          }
+        },
+        "required": [
+          "summary",
+          "detailed_explanation"
+        ],
+        "title": "AnswerPayload",
+        "type": "object"
+      },
+      "CitationItem": {
+        "description": "Authoritative citation grounded in database source documents.",
+        "properties": {
+          "authority": {
+            "description": "Governing authority (ICC, MCC, etc.)",
+            "title": "Authority",
+            "type": "string"
+          },
+          "citation_id": {
+            "description": "Unique citation identifier, e.g. 'cit-1'",
+            "title": "Citation Id",
+            "type": "string"
+          },
+          "clause_id": {
+            "description": "Corpus clause identifier, e.g. 'ICC_T20I_MEN_2026:21.18.2'",
+            "title": "Clause Id",
+            "type": "string"
+          },
+          "clause_number": {
+            "description": "Official clause number, e.g. '21.18.2'",
+            "title": "Clause Number",
+            "type": "string"
+          },
+          "confidence": {
+            "default": 1.0,
+            "description": "Retrieval / relevance confidence score",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence",
+            "type": "number"
+          },
+          "document_id": {
+            "description": "Source document identifier",
+            "title": "Document Id",
+            "type": "string"
+          },
+          "document_title": {
+            "description": "Official publication title",
+            "title": "Document Title",
+            "type": "string"
+          },
+          "document_version": {
+            "description": "Document edition / publication version",
+            "title": "Document Version",
+            "type": "string"
+          },
+          "exact_quote": {
+            "description": "Verbatim or authoritative excerpt from source clause",
+            "title": "Exact Quote",
+            "type": "string"
+          },
+          "official_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Official publisher URL",
+            "title": "Official Url"
+          },
+          "page_end": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Ending printed/PDF page",
+            "title": "Page End"
+          },
+          "page_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Starting printed/PDF page",
+            "title": "Page Start"
+          }
+        },
+        "required": [
+          "citation_id",
+          "clause_id",
+          "clause_number",
+          "document_id",
+          "document_title",
+          "document_version",
+          "authority",
+          "exact_quote"
+        ],
+        "title": "CitationItem",
+        "type": "object"
+      },
+      "ClaimSupportItem": {
+        "description": "Verification mapping connecting an answer claim to supporting citations.",
+        "properties": {
+          "claim_text": {
+            "description": "Specific substantive claim made in the answer",
+            "title": "Claim Text",
+            "type": "string"
+          },
+          "is_verified": {
+            "default": true,
+            "description": "True if claim is substantiated by at least one citation",
+            "title": "Is Verified",
+            "type": "boolean"
+          },
+          "supporting_citation_ids": {
+            "description": "IDs of citations supporting this claim",
+            "items": {
+              "type": "string"
+            },
+            "title": "Supporting Citation Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "claim_text"
+        ],
+        "title": "ClaimSupportItem",
+        "type": "object"
+      },
+      "CricketFormat": {
+        "enum": [
+          "Test",
+          "ODI",
+          "T20I",
+          "General"
+        ],
+        "title": "CricketFormat",
+        "type": "string"
+      },
+      "DocumentAuthority": {
+        "enum": [
+          "MCC",
+          "ICC",
+          "BCCI",
+          "ECB",
+          "CA",
+          "COMPETITION"
+        ],
+        "title": "DocumentAuthority",
+        "type": "string"
+      },
+      "GenderCategory": {
+        "enum": [
+          "Men's",
+          "Women's",
+          "Universal"
+        ],
+        "title": "GenderCategory",
+        "type": "string"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "MatchContextInput": {
+        "description": "User-supplied match or tournament context for rule applicability.",
+        "properties": {
+          "applicable_rules": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DocumentAuthority"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Preferred authority: 'ICC' or 'MCC'"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GenderCategory"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Gender category: 'Men\\'s', 'Women\\'s', or 'Universal'"
+          },
+          "competition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Competition identifier, e.g. 'T20_WORLD_CUP_2026', 'WTC', 'IPL'",
+            "title": "Competition"
+          },
+          "cricket_level": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "'international', 'domestic', or 'unspecified'",
+            "title": "Cricket Level"
+          },
+          "format": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CricketFormat"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Match format: 'Test', 'ODI', 'T20I', or 'General'"
+          },
+          "governing_body": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ICC, MCC, BCCI, ECB, CA, etc.",
+            "title": "Governing Body"
+          },
+          "match_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Date of the match in YYYY-MM-DD format",
+            "title": "Match Date"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Season string, e.g. '2025-2027'",
+            "title": "Season"
+          },
+          "series_start_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Start date of the series/tournament in YYYY-MM-DD format",
+            "title": "Series Start Date"
+          }
+        },
+        "title": "MatchContextInput",
+        "type": "object"
+      },
+      "QueryRequest": {
+        "description": "Inbound query payload for POST /v1/rules/query.",
+        "properties": {
+          "context": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MatchContextInput"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Explicit match/tournament context if known"
+          },
+          "preferences": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResponsePreferences"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Answer formatting and citation preferences"
+          },
+          "query": {
+            "description": "Natural language question about cricket rules",
+            "maxLength": 1000,
+            "minLength": 3,
+            "title": "Query",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "title": "QueryRequest",
+        "type": "object"
+      },
+      "QueryResponse": {
+        "description": "Top-level response payload for POST /v1/rules/query.",
+        "properties": {
+          "abstention_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Explanation when assistant must abstain from answering",
+            "title": "Abstention Reason"
+          },
+          "answer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnswerPayload"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Synthesized answer (present when status is ANSWERED)"
+          },
+          "citations": {
+            "description": "Authoritative citations backing the answer",
+            "items": {
+              "$ref": "#/components/schemas/CitationItem"
+            },
+            "title": "Citations",
+            "type": "array"
+          },
+          "claims": {
+            "description": "Clause-level support mapping for each substantive statement",
+            "items": {
+              "$ref": "#/components/schemas/ClaimSupportItem"
+            },
+            "title": "Claims",
+            "type": "array"
+          },
+          "status": {
+            "$ref": "#/components/schemas/QueryStatus",
+            "description": "Resolution status"
+          },
+          "suggested_clarifications": {
+            "description": "Targeted follow-up questions to resolve ambiguity",
+            "items": {
+              "type": "string"
+            },
+            "title": "Suggested Clarifications",
+            "type": "array"
+          },
+          "trace": {
+            "$ref": "#/components/schemas/QueryTrace",
+            "description": "Execution trace and telemetry"
+          }
+        },
+        "required": [
+          "status",
+          "trace"
+        ],
+        "title": "QueryResponse",
+        "type": "object"
+      },
+      "QueryStatus": {
+        "description": "Execution status for rule query processing.",
+        "enum": [
+          "answered",
+          "clarification_required",
+          "unsupported_competition",
+          "insufficient_evidence",
+          "error"
+        ],
+        "title": "QueryStatus",
+        "type": "string"
+      },
+      "QueryTrace": {
+        "description": "Audit and telemetry trace of the query resolution pipeline.",
+        "properties": {
+          "applicable_documents": {
+            "description": "IDs of documents resolved as applicable",
+            "items": {
+              "type": "string"
+            },
+            "title": "Applicable Documents",
+            "type": "array"
+          },
+          "latency_ms": {
+            "description": "Total pipeline latency in milliseconds",
+            "title": "Latency Ms",
+            "type": "number"
+          },
+          "model_used": {
+            "default": "none",
+            "description": "LLM model or provider used for synthesis",
+            "title": "Model Used",
+            "type": "string"
+          },
+          "precedence_applied": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Description of precedence rule applied (e.g. 'Playing Conditions override MCC Laws')",
+            "title": "Precedence Applied"
+          },
+          "query_id": {
+            "description": "UUID for query transaction",
+            "title": "Query Id",
+            "type": "string"
+          },
+          "retrieval_count": {
+            "default": 0,
+            "description": "Number of evidence clauses retrieved",
+            "title": "Retrieval Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query_id",
+          "latency_ms"
+        ],
+        "title": "QueryTrace",
+        "type": "object"
+      },
+      "ResponsePreferences": {
+        "description": "User-configurable answer generation preferences.",
+        "properties": {
+          "detail_level": {
+            "default": "standard",
+            "description": "Level of explanation detail",
+            "enum": [
+              "concise",
+              "standard",
+              "detailed"
+            ],
+            "title": "Detail Level",
+            "type": "string"
+          },
+          "include_cross_references": {
+            "default": true,
+            "description": "Whether to include related cross-referenced clauses",
+            "title": "Include Cross References",
+            "type": "boolean"
+          },
+          "include_historical_comparison": {
+            "default": false,
+            "description": "Whether to include historical rule comparison",
+            "title": "Include Historical Comparison",
+            "type": "boolean"
+          },
+          "max_citations": {
+            "default": 5,
+            "description": "Maximum number of authoritative citations to return (1-10)",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Max Citations",
+            "type": "integer"
+          }
+        },
+        "title": "ResponsePreferences",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Evidence-grounded cricket rules assistant with format-aware precedence resolution, deterministic citation verification, and strict abstention.",
+    "title": "CricketIQ \u2014 ICC & MCC Rules Intelligence API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/health/live": {
+      "get": {
+        "description": "Liveness probe: returns 200 if server process is running.",
+        "operationId": "liveness_health_live_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Liveness",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "description": "Readiness probe: verifies database connectivity and corpus readiness.",
+        "operationId": "readiness_health_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Readiness",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/v1/rules/query": {
+      "post": {
+        "description": "Processes a natural language cricket rule inquiry. Resolves governing applicability (MCC vs ICC), retrieves authoritative clauses via hybrid sparse/dense search, performs pre-generation evidence sufficiency checks, synthesizes an answer bounded strictly by retrieved evidence, and validates all citations deterministically against the source database.",
+        "operationId": "query_rules_v1_rules_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Query cricket rules with format-aware evidence grounding and deterministic citations",
+        "tags": [
+          "Cricket Rules"
+        ]
+      }
+    }
+  }
+}

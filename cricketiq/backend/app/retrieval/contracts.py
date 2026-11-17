@@ -15,9 +15,13 @@ from cricketiq.backend.app.database.models import (
 
 class EvidenceRole(str, Enum):
     PRIMARY = "PRIMARY"
+    DIRECT_EVIDENCE = "DIRECT_EVIDENCE"
     PARENT_CONTEXT = "PARENT_CONTEXT"
+    OPERATIONAL_CHILD = "OPERATIONAL_CHILD"
+    STATUTORY_CROSS_REFERENCE = "STATUTORY_CROSS_REFERENCE"
     RELATED_SUPPORT = "RELATED_SUPPORT"
     DEFINITION = "DEFINITION"
+    TABLE_SPECIFICATION = "TABLE_SPECIFICATION"
 
 
 class RetrievalStatus(str, Enum):
@@ -58,6 +62,31 @@ class RetrievalHit(BaseModel):
     evidence_role: EvidenceRole = EvidenceRole.PRIMARY
     relationship_path: List[str] = Field(default_factory=list)
     applicability_reason: Optional[str] = None
+
+
+class RetrievalObservabilityTrace(BaseModel):
+    """Internal diagnostic trace for Gate 3 retrieval observability."""
+    correlation_id: str
+    normalized_query_hash: str
+    lexicon_version: Optional[str] = None
+    lexicon_hash: Optional[str] = None
+    candidate_source_bundle: List[str] = Field(default_factory=list)
+    original_sparse_query: str
+    expansion_variants: List[str] = Field(default_factory=list)
+    exact_hit_count: int = 0
+    original_sparse_hit_count: int = 0
+    expansion_only_hit_count: int = 0
+    hierarchy_nodes_visited: int = 0
+    hierarchy_nodes_included: Dict[str, int] = Field(default_factory=dict)
+    blocked_cross_references: List[str] = Field(default_factory=list)
+    unresolved_cross_references: List[str] = Field(default_factory=list)
+    table_ids_hydrated: List[str] = Field(default_factory=list)
+    table_ids_excluded: List[str] = Field(default_factory=list)
+    stage_latencies_ms: Dict[str, float] = Field(default_factory=dict)
+    total_latency_ms: float = 0.0
+    feature_flags: Dict[str, bool] = Field(default_factory=dict)
+    token_budget: int = 1200
+    budget_overflow: bool = False
 
 
 class RetrievalOutcome(BaseModel):

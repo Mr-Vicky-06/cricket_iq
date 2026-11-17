@@ -1,0 +1,338 @@
+{
+  "file_path": "data/corpus/lexicon/cricket_lexicon.json",
+  "file_sha256": "04714a3a4bfcfc99a1e6cd7fb4ccfeea78e1b4823a5293076e766422a25bab45",
+  "lexicon_version": "1.0.0",
+  "total_terms": 20,
+  "alias_collisions": [
+    {
+      "alias": "mankad",
+      "colliding_term_ids": [
+        "CRIC_DISMISS_RUN_OUT",
+        "CRIC_NON_STRIKER_RUN_OUT"
+      ],
+      "reconciliation_policy": "Map mankad to CRIC_NON_STRIKER_RUN_OUT (Law 38.3) and suppress from CRIC_DISMISS_RUN_OUT"
+    }
+  ],
+  "unsupported_audit_claims": [
+    {
+      "term_id": "CRIC_DELIV_FREE_HIT",
+      "claimed_alias": "freebie",
+      "actual_in_json": false,
+      "reconciliation_note": "Audit claimed freebie was in colloquial forms; JSON asset omits it. Freebie remains inactive until formally added."
+    }
+  ],
+  "terms": {
+    "CRIC_DELIV_NO_BALL": {
+      "preferred_term": "No ball",
+      "term_type": "DELIVERY_LEGALITY",
+      "surface_forms_count": 5,
+      "colloquial_forms_count": 5,
+      "distinct_from": [
+        "Wide ball",
+        "Dead ball"
+      ],
+      "related_terms": [
+        "free hit",
+        "front foot crease",
+        "high full-pitched delivery",
+        "beamer"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DELIV_WIDE_BALL": {
+      "preferred_term": "Wide ball",
+      "term_type": "DELIVERY_LEGALITY",
+      "surface_forms_count": 5,
+      "colloquial_forms_count": 4,
+      "distinct_from": [
+        "No ball",
+        "Dead ball",
+        "Bye"
+      ],
+      "related_terms": [
+        "leg stump guideline",
+        "wide guideline",
+        "extra"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DELIV_DEAD_BALL": {
+      "preferred_term": "Dead ball",
+      "term_type": "DELIVERY_LEGALITY",
+      "surface_forms_count": 4,
+      "colloquial_forms_count": 3,
+      "distinct_from": [
+        "No ball",
+        "Wide ball"
+      ],
+      "related_terms": [
+        "call of time",
+        "settled ball",
+        "stoppage of play"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DELIV_FREE_HIT": {
+      "preferred_term": "Free Hit",
+      "term_type": "PLAYING_CONDITION_PROVISION",
+      "surface_forms_count": 5,
+      "colloquial_forms_count": 4,
+      "distinct_from": [
+        "Penalty run",
+        "Powerplay"
+      ],
+      "related_terms": [
+        "No ball",
+        "field restriction breach",
+        "change of striker"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DELIV_BEAMER": {
+      "preferred_term": "High full-pitched delivery",
+      "term_type": "DELIVERY_LEGALITY",
+      "surface_forms_count": 4,
+      "colloquial_forms_count": 5,
+      "distinct_from": [
+        "Bouncer",
+        "Short-pitched delivery"
+      ],
+      "related_terms": [
+        "No ball",
+        "dangerous and unfair bowling",
+        "bowler removal warning"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DELIV_BOUNCER": {
+      "preferred_term": "Short-pitched delivery",
+      "term_type": "DELIVERY_LEGALITY",
+      "surface_forms_count": 4,
+      "colloquial_forms_count": 4,
+      "distinct_from": [
+        "High full-pitched delivery",
+        "Beamer"
+      ],
+      "related_terms": [
+        "fast short-pitched bowling",
+        "over the shoulder warning",
+        "No ball"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_BOWLED": {
+      "preferred_term": "Bowled",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 3,
+      "colloquial_forms_count": 4,
+      "distinct_from": [
+        "Hit wicket",
+        "Stumped"
+      ],
+      "related_terms": [
+        "wicket put down",
+        "bail removed"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_CAUGHT": {
+      "preferred_term": "Caught",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 5,
+      "colloquial_forms_count": 4,
+      "distinct_from": [
+        "Bump ball",
+        "Ground contact"
+      ],
+      "related_terms": [
+        "fair catch",
+        "boundary catch",
+        "soft signal"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_LBW": {
+      "preferred_term": "Leg Before Wicket",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 4,
+      "colloquial_forms_count": 4,
+      "distinct_from": [
+        "Caught",
+        "Bowled"
+      ],
+      "related_terms": [
+        "pitching in line",
+        "impact in line",
+        "wickets hitting",
+        "DRS ball tracking"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_RUN_OUT": {
+      "preferred_term": "Run out",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 5,
+      "colloquial_forms_count": 5,
+      "distinct_from": [
+        "Stumped"
+      ],
+      "related_terms": [
+        "crease",
+        "grounded bat",
+        "Law 38.3 non-striker run out"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_STUMPED": {
+      "preferred_term": "Stumped",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 3,
+      "colloquial_forms_count": 3,
+      "distinct_from": [
+        "Run out"
+      ],
+      "related_terms": [
+        "wicket-keeper",
+        "popping crease"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_HIT_WICKET": {
+      "preferred_term": "Hit wicket",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 3,
+      "colloquial_forms_count": 3,
+      "distinct_from": [
+        "Bowled",
+        "Stumped"
+      ],
+      "related_terms": [
+        "wicket put down",
+        "delivery stride"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_HIT_BALL_TWICE": {
+      "preferred_term": "Hit the ball twice",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 3,
+      "colloquial_forms_count": 3,
+      "distinct_from": [
+        "Obstructing the field"
+      ],
+      "related_terms": [
+        "guarding the wicket",
+        "Free Hit exception"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_OBSTRUCTING_FIELD": {
+      "preferred_term": "Obstructing the field",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 2,
+      "colloquial_forms_count": 3,
+      "distinct_from": [
+        "Hit the ball twice"
+      ],
+      "related_terms": [
+        "handled the ball",
+        "wilful obstruction",
+        "Free Hit exception"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_TIMED_OUT": {
+      "preferred_term": "Timed out",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 3,
+      "colloquial_forms_count": 3,
+      "distinct_from": [
+        "Retired out"
+      ],
+      "related_terms": [
+        "fall of wicket",
+        "2 minute limit",
+        "3 minute limit"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_RETIRED_OUT": {
+      "preferred_term": "Retired out",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 2,
+      "colloquial_forms_count": 3,
+      "distinct_from": [
+        "Retired not out",
+        "Retired hurt"
+      ],
+      "related_terms": [
+        "unconsented retirement",
+        "tactical substitution"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_DISMISS_RETIRED_HURT": {
+      "preferred_term": "Retired hurt",
+      "term_type": "BATTER_STATUS",
+      "surface_forms_count": 3,
+      "colloquial_forms_count": 3,
+      "distinct_from": [
+        "Retired out"
+      ],
+      "related_terms": [
+        "concussion substitute",
+        "resuming innings"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_TECH_DRS": {
+      "preferred_term": "Decision Review System",
+      "term_type": "REVIEW_TECHNOLOGY",
+      "surface_forms_count": 5,
+      "colloquial_forms_count": 5,
+      "distinct_from": [
+        "Third umpire TV referral",
+        "Concussion review"
+      ],
+      "related_terms": [
+        "umpire's call",
+        "ball tracking",
+        "ultra edge",
+        "15 second timer"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_TECH_DLS": {
+      "preferred_term": "Duckworth-Lewis-Stern Method",
+      "term_type": "RAIN_REGULATION",
+      "surface_forms_count": 5,
+      "colloquial_forms_count": 4,
+      "distinct_from": [
+        "VJD Method",
+        "Average run rate"
+      ],
+      "related_terms": [
+        "resource percentage",
+        "par score",
+        "interrupted match"
+      ],
+      "review_status": "APPROVED"
+    },
+    "CRIC_NON_STRIKER_RUN_OUT": {
+      "preferred_term": "Non-striker leaving ground early",
+      "term_type": "DISMISSAL",
+      "surface_forms_count": 4,
+      "colloquial_forms_count": 4,
+      "distinct_from": [
+        "Unfair play penalty"
+      ],
+      "related_terms": [
+        "Law 38.3",
+        "Run out",
+        "backing up early",
+        "crease discipline"
+      ],
+      "review_status": "APPROVED"
+    }
+  }
+}

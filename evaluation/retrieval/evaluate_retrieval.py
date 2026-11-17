@@ -382,7 +382,7 @@ def evaluate_configuration(
 
         valid_eval_queries += 1
         hits = outcome.hits
-        primary_hits = [h for h in hits if h.evidence_role == EvidenceRole.PRIMARY]
+        primary_hits = [h for h in hits if h.evidence_role in (EvidenceRole.PRIMARY, EvidenceRole.DIRECT_EVIDENCE)]
         retrieved_primary_cnums = [h.clause_number for h in primary_hits]
         all_retrieved_cnums = [h.clause_number for h in hits]
 
@@ -534,41 +534,91 @@ def main():
         store.build_all_embeddings()
         dense_prov = SQLiteNumPyDenseSearchProvider(repo, embedder, store)
 
-    # 1. Config A: Sparse Only
-    service_sparse = RetrievalService(
-        repository=repo,
-        sparse_provider=sparse_prov,
-        dense_provider=None
-    )
-    res_sparse = evaluate_configuration(service_sparse, benchmark_items, mode="Sparse-Only (SQLite FTS5)")
+    configs_to_run = []
 
-    # 2. Config B: Dense Only
-    # A dummy sparse provider returning empty list to evaluate dense only
-    class NullSparseProvider:
-        def search(self, *args, **kwargs): return []
+    if "v2" in benchmark_path.name:
+        # Gate 3 Comparative Evaluation Protocol (Section 8.2)
+        # 1. Gate 2 production-safe baseline (sparse only, diagnostic dense excluded)
+        s_g2_base = RetrievalService(
+            repository=repo,
+            sparse_provider=sparse_prov,
+            dense_provider=None,
+            enable_lexicon_expansion=False,
+            enable_hierarchy_traversal=False,
+            enable_table_evidence=False
+        )
+        res_g2_base = evaluate_configuration(s_g2_base, benchmark_items, mode="1. Gate 2 Baseline (Sparse-Only)")
+        configs_to_run.append(res_g2_base)
 
-    service_dense = RetrievalService(
-        repository=repo,
-        sparse_provider=NullSparseProvider(),
-        dense_provider=dense_prov,
-        enable_diagnostic_dense=True
-    )
-    res_dense = evaluate_configuration(service_dense, benchmark_items, mode="Dense-Only (NumPy Cosine)")
+        # 2. Lexicon expansion enabled only
+        s_lex = RetrievalService(
+            repository=repo,
+            sparse_provider=sparse_prov,
+            dense_provider=None,
+            enable_lexicon_expansion=True,
+            enable_hierarchy_traversal=False,
+            enable_table_evidence=False
+        )
+        res_lex = evaluate_configuration(s_lex, benchmark_items, mode="2. Gate 3: Lexicon Expansion Only")
+        configs_to_run.append(res_lex)
 
-    # 3. Config C: Hybrid (Sparse + Dense + RRF + Expansion)
-    service_hybrid = RetrievalService(
-        repository=repo,
-        sparse_provider=sparse_prov,
-        dense_provider=dense_prov,
-        enable_diagnostic_dense=True
-    )
-    res_hybrid = evaluate_configuration(service_hybrid, benchmark_items, mode="Hybrid (Sparse + Dense + RRF + Expansion)")
+        # 3. Hierarchy traversal enabled only
+        s_hier = RetrievalService(
+            repository=repo,
+            sparse_provider=sparse_prov,
+            dense_provider=None,
+            enable_lexicon_expansion=False,
+            enable_hierarchy_traversal=True,
+            enable_table_evidence=False
+        )
+        res_hier = evaluate_configuration(s_hier, benchmark_items, mode="3. Gate 3: Hierarchy Traversal Only")
+        configs_to_run.append(res_hier)
+
+        # 4. Table evidence enabled only
+        s_tbl = RetrievalService(
+            repository=repo,
+            sparse_provider=sparse_prov,
+            dense_provider=None,
+            enable_lexicon_expansion=False,
+            enable_hierarchy_traversal=False,
+            enable_table_evidence=True
+        )
+        res_tbl = evaluate_configuration(s_tbl, benchmark_items, mode="4. Gate 3: Table Evidence Only")
+        configs_to_run.append(res_tbl)
+
+        # 5. All Gate 3 features enabled
+        s_g3_all = RetrievalService(
+            repository=repo,
+            sparse_provider=sparse_prov,
+            dense_provider=None,
+            enable_lexicon_expansion=True,
+            enable_hierarchy_traversal=True,
+            enable_table_evidence=True
+        )
+        res_g3_all = evaluate_configuration(s_g3_all, benchmark_items, mode="5. Gate 3: All Features Enabled")
+        configs_to_run.append(res_g3_all)
+    else:
+        # Benchmark v1 default run
+        service_sparse = RetrievalService(repository=repo, sparse_provider=sparse_prov, dense_provider=None)
+        res_sparse = evaluate_configuration(service_sparse, benchmark_items, mode="Sparse-Only (SQLite FTS5)")
+        configs_to_run.append(res_sparse)
+
+        class NullSparseProvider:
+            def search(self, *args, **kwargs): return []
+
+        service_dense = RetrievalService(repository=repo, sparse_provider=NullSparseProvider(), dense_provider=dense_prov, enable_diagnostic_dense=True)
+        res_dense = evaluate_configuration(service_dense, benchmark_items, mode="Dense-Only (NumPy Cosine)")
+        configs_to_run.append(res_dense)
+
+        service_hybrid = RetrievalService(repository=repo, sparse_provider=sparse_prov, dense_provider=dense_prov, enable_diagnostic_dense=True)
+        res_hybrid = evaluate_configuration(service_hybrid, benchmark_items, mode="Hybrid (Sparse + Dense + RRF + Expansion)")
+        configs_to_run.append(res_hybrid)
 
     results_all = {
         "benchmark_file": str(benchmark_path),
         "total_queries": len(benchmark_items),
         "evaluated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "configurations": [res_sparse, res_dense, res_hybrid]
+        "configurations": configs_to_run
     }
 
     out_dir = Path("evaluation/retrieval/results")
@@ -579,15 +629,15 @@ def main():
         json.dump(results_all, f, indent=2)
 
     # Print summary table
-    print("\n" + "=" * 100)
+    print("\n" + "=" * 110)
     print(f"CRICKETIQ RETRIEVAL BENCHMARK EVALUATION ({len(benchmark_items)} QUERIES - {benchmark_path.name})")
-    print("=" * 100)
-    print(f"{'Configuration':<42} | {'Recall@5':<9} | {'MRR':<8} | {'Exact Acc':<9} | {'Supp Recall':<11} | {'Leakage':<7} | {'Latency':<8}")
-    print("-" * 100)
-    for res in [res_sparse, res_dense, res_hybrid]:
+    print("=" * 110)
+    print(f"{'Configuration':<45} | {'Recall@5':<9} | {'MRR':<8} | {'Exact Acc':<9} | {'Supp Recall':<11} | {'Leakage':<7} | {'Latency':<8}")
+    print("-" * 110)
+    for res in configs_to_run:
         lat = f"{res['latencies_ms']['avg_total']}ms"
-        print(f"{res['mode']:<42} | {res['recall_at_5']:>7}% | {res['mrr']:>8} | {res['exact_clause_accuracy']:>8}% | {res['supporting_clause_recall']:>10}% | {res['leakage_rate']:>6}% | {lat:>8}")
-    print("=" * 100)
+        print(f"{res['mode']:<45} | {res['recall_at_5']:>7}% | {res['mrr']:>8} | {res['exact_clause_accuracy']:>8}% | {res['supporting_clause_recall']:>10}% | {res['leakage_rate']:>6}% | {lat:>8}")
+    print("=" * 110)
     print(f"\nDetailed JSON report written to: {report_file}")
 
 
