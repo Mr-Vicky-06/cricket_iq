@@ -124,18 +124,26 @@ Exit gate:
 - [x] Full test suite: 103 passed, 1 skipped (Postgres integration), 0 failed.
 - [x] Strict boundary preserved: No frontend UI, chat widgets, client apps, or unvalidated streaming.
 
-## Phase 5 — Minimal user interface
+## Phase 5 — Minimal user interface [STATUS: COMPLETED]
 
-**Goal:** make the vertical slice usable.
+**Goal:** make the vertical slice usable with an authoritative, responsive, and verifiable user interface.
 
 Tasks:
-- Create chat interface and match-context controls.
-- Display answer, assumptions, sources, clauses, and page links.
-- Add follow-up context handling and correction.
-- Include empty, loading, timeout, and no-evidence states.
+- [x] **Gate 0:** Pre-implementation frontend architecture audit, API contract mapping, and ADR 0004 (`docs/reviews/PHASE_5_PRE_IMPLEMENTATION_AUDIT.md`, `docs/PHASE_5_API_CONTRACT_MAP.md`, `docs/adr/0004-frontend-architecture.md`).
+- [x] **Gate 1:** Project bootstrap (React 19, TypeScript 5.7, Vite 6, Tailwind CSS 3.4, Lucide Icons, Vitest) in `frontend/`.
+- [x] **Gate 2:** Typed API client with 30s timeout, abort controller, error handling, and strict URL domain allowlist (`frontend/src/api/`).
+- [x] **Gate 3:** Design system tokens & accessible styles based on cricket editorial aesthetic (`frontend/tailwind.config.js`, `frontend/src/styles/index.css`).
+- [x] **Gate 4:** Interactive components: Header with live corpus status probe, Footer, QuestionInput composer, ExampleQueries benchmark chips, MatchContextPanel controls, AnswerCard, AbstentionCard, CitationCard, CitationDrawer slide-over, and TraceSummary telemetry.
+- [x] **Gate 5:** Unit and component test suites (20 tests passed across 6 test files, strict `tsc --noEmit` typecheck, production build verified).
+- [x] **Gate 6:** End-to-end browser journey verification via Playwright & Chrome DevTools (free hit answered ruling, citation drawer inspection, domestic IPL abstention, clarification flow, mobile 375x667 viewport, and clean console with 0 errors / 0 warnings).
+- [x] **Gate 7:** Comprehensive documentation and delivery report (`frontend/README.md`, `docs/reviews/PHASE_5_FINAL_DELIVERY_REPORT.md`).
 
 Exit gate:
-- A user can ask, inspect, and challenge an answer without seeing internal implementation details.
+- [x] A user can ask questions naturally and receive grounded rulings with exact official clause citations.
+- [x] Interactive citation drawer displays verbatim regulatory text with verified links to official governing bodies.
+- [x] Clarification requests and domestic screening abstentions are presented gracefully with clickable alternatives.
+- [x] Zero hallucinated UI elements, strict HTTPS URL allowlist for governing bodies (`icc-cricket.com`, `lords.org`).
+- [x] Full responsive mobile support (375px+) and clean browser console (0 errors, 0 warnings).
 
 ## Phase 6 — Expand sources and evaluation
 

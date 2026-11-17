@@ -66,3 +66,11 @@ cricketiq-antigravity-starter/
 # Large model weights / caches
 .cache/
 huggingface/
+
+# Node & Frontend
+*.tsbuildinfo
+node_modules/
+frontend/node_modules/
+frontend/dist/
+.playwright-mcp/
+.playwright-cli/

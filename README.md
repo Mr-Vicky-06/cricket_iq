@@ -115,22 +115,32 @@ uv venv .venv
 uv pip install -e ".[dev]"
 ```
 
-### Running Test Suite
+### Running Test Suites
 ```powershell
-.venv\Scripts\pytest -v
+# Backend Python test suite (103 passed, 1 skipped)
+.venv\Scripts\pytest cricketiq/backend/tests -v
+
+# Frontend TypeScript/React test suite (20 passed)
+npm --prefix frontend test
 ```
 
-### Running Retrieval Subsystem Evaluation Benchmark
+### Running the Application Locally
 ```powershell
-.venv\Scripts\python evaluation/retrieval/evaluate_retrieval.py
+# 1. Start FastAPI Backend (Port 8000)
+.venv\Scripts\uvicorn cricketiq.backend.app.main:app --port 8000 --host 127.0.0.1
+
+# 2. In a separate terminal, start Vite Frontend Dev Server (Port 5173)
+npm --prefix frontend run dev
 ```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ### Current Development Status
 - **Phase 0:** Project discovery & repository setup [COMPLETED]
 - **Phase 1:** Single-source ingestion slice with SHA-256 integrity [COMPLETED]
 - **Phase 2:** Structured rule store, Alembic migrations, deterministic Applicability Engine, and secure downloader [COMPLETED]
-- **Phase 3:** Hybrid retrieval (Sparse FTS5 + Dense NumPy/EmbeddingStore + RRF + Bounded Evidence Expansion) [COMPLETED - 55 passed, 1 skipped, 0 failures]
-- **Phase 4:** Grounded answer API & citation validator [NEXT]
+- **Phase 3:** Hybrid retrieval (Sparse FTS5 + Dense NumPy/EmbeddingStore + RRF + Bounded Evidence Expansion) [COMPLETED]
+- **Phase 4:** Grounded answer API & deterministic citation validator [COMPLETED]
+- **Phase 5:** Production-Grade Responsive User Interface, Context Controls & Verified Citation Drawer [COMPLETED]
 
 ## 7. Official Antigravity references
 
