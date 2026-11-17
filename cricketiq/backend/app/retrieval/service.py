@@ -59,6 +59,7 @@ class RetrievalService:
         enable_lexicon_expansion: bool = False,
         enable_hierarchy_traversal: bool = False,
         enable_table_evidence: bool = False,
+        include_raw_query_in_diagnostics: bool = False,
         lexicon_service: Optional[LexiconExpansionService] = None,
         hierarchy_service: Optional[HierarchyTraversalService] = None,
         table_service: Optional[TableEvidenceService] = None
@@ -71,6 +72,7 @@ class RetrievalService:
         self.rrf_engine = rrf_engine or RRFEngine(k=60)
         self.expander = expander or EvidenceExpander(repository)
         self.enable_diagnostic_dense = enable_diagnostic_dense
+        self.include_raw_query_in_diagnostics = include_raw_query_in_diagnostics
 
         # Feature Flags
         self.enable_lexicon_expansion = enable_lexicon_expansion
@@ -204,7 +206,7 @@ class RetrievalService:
 
         if self.enable_lexicon_expansion and self.lexicon_service:
             t_lex_start = time.perf_counter()
-            view = self.lexicon_service.expand_query(raw_query)
+            view = self.lexicon_service.expand_query(raw_query, candidate_document_ids=candidate_docs)
             lexicon_version = view.lexicon_version
             lexicon_hash = view.lexicon_hash
 
@@ -302,49 +304,75 @@ class RetrievalService:
             )
 
         # ------------------------------------------------------------------
-        # Step 7: Bounded Hierarchy Traversal vs Evidence Expansion
+        # Step 7 & 8: Bounded Hierarchy & Table Evidence with Query-Wide Budget
         # ------------------------------------------------------------------
-        t_hier_start = time.perf_counter()
-        expanded_hits: List[RetrievalHit] = []
-        visited_clause_ids: Set[str] = set()
+        t_expansion_start = time.perf_counter()
+        final_hits: List[RetrievalHit] = list(fused_hits)
+        primary_ids = {h.clause_id for h in fused_hits}
+
+        GLOBAL_TOKEN_BUDGET = 1200
+        MAX_SUPPORTING_SNIPPETS = 5
+
+        def _estimate_tokens(text: str) -> int:
+            return int(len((text or "").split()) * 1.3) + 1
+
+        primary_tokens = sum(_estimate_tokens(h.original_text) for h in fused_hits)
+        budget_overflow = primary_tokens > GLOBAL_TOKEN_BUDGET
+        current_tokens = primary_tokens
+
         hierarchy_visited_count = 0
         hierarchy_included_counts: Dict[str, int] = {}
         blocked_xrefs: List[str] = []
         unresolved_xrefs: List[str] = []
-        budget_overflow = False
+        table_ids_hydrated: List[str] = []
+        table_ids_excluded: List[str] = []
+        included_evidence_ids: List[str] = [h.clause_id for h in fused_hits]
+        pruned_evidence_ids: List[str] = []
+        over_budget_evidence_ids: List[str] = []
+        warnings_list: List[str] = []
 
-        if self.enable_hierarchy_traversal and self.hierarchy_service:
-            # 1. Retain all primary fused hits first
-            expanded_hits = list(fused_hits)
-            visited_clause_ids = {h.clause_id for h in fused_hits}
+        if self.enable_hierarchy_traversal or self.enable_table_evidence:
+            candidate_context_hits: List[Tuple[int, RetrievalHit]] = []
+            seen_context_ids: Set[str] = set()
 
-            # 2. Append bounded hierarchy context snippets
-            for hit in fused_hits:
-                trav_req = HierarchyTraversalRequest(
-                    seed_clause_id=hit.clause_id,
-                    candidate_document_ids=candidate_docs,
-                    include_parent=request.include_parent_context,
-                    include_children=True,
-                    include_cross_references=request.include_related_evidence,
-                    max_hops=1,
-                    max_evidence_count=5,
-                    token_budget=1200
-                )
-                trav_res = self.hierarchy_service.traverse(trav_req)
-                hierarchy_visited_count += len(trav_res.assembled_nodes)
-                blocked_xrefs.extend(trav_res.blocked_out_of_bundle_targets)
-                unresolved_xrefs.extend(trav_res.unresolved_targets)
-                if trav_res.budget_overflow:
-                    budget_overflow = True
+            # 1. Bounded Hierarchy Traversal
+            if self.enable_hierarchy_traversal and self.hierarchy_service:
+                t_hier_start = time.perf_counter()
+                for hit in fused_hits:
+                    trav_req = HierarchyTraversalRequest(
+                        seed_clause_id=hit.clause_id,
+                        candidate_document_ids=candidate_docs,
+                        include_parent=request.include_parent_context,
+                        include_children=True,
+                        include_cross_references=request.include_related_evidence,
+                        max_hops=1,
+                        max_evidence_count=5,
+                        token_budget=GLOBAL_TOKEN_BUDGET
+                    )
+                    trav_res = self.hierarchy_service.traverse(trav_req)
+                    hierarchy_visited_count += len(trav_res.assembled_nodes)
+                    blocked_xrefs.extend(trav_res.blocked_out_of_bundle_targets)
+                    unresolved_xrefs.extend(trav_res.unresolved_targets)
 
-                for node in trav_res.assembled_nodes:
-                    role_str = node.evidence_role.value
-                    hierarchy_included_counts[role_str] = hierarchy_included_counts.get(role_str, 0) + 1
-                    
-                    if node.clause.id not in visited_clause_ids:
-                        visited_clause_ids.add(node.clause.id)
-                        expanded_hits.append(
-                            RetrievalHit(
+                    for node in trav_res.assembled_nodes:
+                        node_id = node.clause.id if node.clause else (node.structural_node.id if node.structural_node else None)
+                        if not node_id or node_id in primary_ids or node_id in seen_context_ids:
+                            continue
+                        seen_context_ids.add(node_id)
+
+                        role = node.evidence_role
+                        if role in (EvidenceRole.PARENT_CONTEXT, EvidenceRole.DEFINITION, EvidenceRole.STRUCTURAL_CONTEXT):
+                            prio = 2
+                        elif role == EvidenceRole.STATUTORY_CROSS_REFERENCE:
+                            prio = 3
+                        elif role == EvidenceRole.OPERATIONAL_CHILD:
+                            prio = 4
+                        else:
+                            prio = 5
+
+                        role_str = role.value
+                        if node.clause:
+                            c_hit = RetrievalHit(
                                 clause_id=node.clause.id,
                                 document_id=node.clause.source_document_id,
                                 clause_number=node.clause.clause_number,
@@ -357,43 +385,39 @@ class RetrievalService:
                                 relationship_path=node.traversal_path,
                                 applicability_reason=f"Hierarchy {role_str} for {hit.clause_id}"
                             )
-                        )
-            stage_latencies["hierarchy_traversal_ms"] = round((time.perf_counter() - t_hier_start) * 1000, 2)
-            diagnostics["expansion_ms"] = stage_latencies["hierarchy_traversal_ms"]
-        else:
-            expanded_hits = self.expander.expand(
-                primary_hits=fused_hits,
-                candidate_document_ids=candidate_docs,
-                include_parent_context=request.include_parent_context,
-                include_related_evidence=request.include_related_evidence
-            )
-            exp_ms = round((time.perf_counter() - t_hier_start) * 1000, 2)
-            stage_latencies["expansion_ms"] = exp_ms
-            diagnostics["expansion_ms"] = exp_ms
+                        else:
+                            s_node = node.structural_node
+                            c_hit = RetrievalHit(
+                                clause_id=s_node.id,
+                                document_id=s_node.source_document_id,
+                                clause_number=s_node.source_locator or "STRUCTURAL",
+                                heading=s_node.heading_title,
+                                original_text=f"Structural Chapter: {s_node.heading_title}",
+                                normalized_text=s_node.heading_title.lower(),
+                                page_start=s_node.page_start,
+                                page_end=s_node.page_end,
+                                evidence_role=EvidenceRole.STRUCTURAL_CONTEXT,
+                                relationship_path=node.traversal_path,
+                                applicability_reason=f"Structural context {s_node.heading_title}"
+                            )
+                        candidate_context_hits.append((prio, c_hit))
+                stage_latencies["hierarchy_traversal_ms"] = round((time.perf_counter() - t_hier_start) * 1000, 2)
 
-        # ------------------------------------------------------------------
-        # Step 8: Structured Table Evidence Hydration (Feature-Flagged)
-        # ------------------------------------------------------------------
-        table_ids_hydrated: List[str] = []
-        table_ids_excluded: List[str] = []
-
-        if self.enable_table_evidence and self.table_service:
-            t_tbl_start = time.perf_counter()
-            table_hits: List[RetrievalHit] = []
-            hydrated_tables_set: Set[str] = set()
-
-            for hit in list(expanded_hits):
-                tables = self.table_service.get_table_evidence_for_clause(
-                    clause_id=hit.clause_id,
-                    candidate_document_ids=candidate_docs
-                )
-                for tbl in tables:
-                    if tbl.table_id not in hydrated_tables_set:
-                        hydrated_tables_set.add(tbl.table_id)
-                        table_ids_hydrated.append(tbl.table_id)
-                        md_table = self.table_service.render_markdown(tbl)
-                        table_hits.append(
-                            RetrievalHit(
+            # 2. Table Evidence Hydration
+            if self.enable_table_evidence and self.table_service:
+                t_tbl_start = time.perf_counter()
+                hydrated_tables_set: Set[str] = set()
+                for hit in fused_hits:
+                    tables = self.table_service.get_table_evidence_for_clause(
+                        clause_id=hit.clause_id,
+                        candidate_document_ids=candidate_docs
+                    )
+                    for tbl in tables:
+                        if tbl.table_id not in hydrated_tables_set and tbl.table_id not in seen_context_ids:
+                            hydrated_tables_set.add(tbl.table_id)
+                            seen_context_ids.add(tbl.table_id)
+                            md_table = self.table_service.render_markdown(tbl)
+                            tbl_hit = RetrievalHit(
                                 clause_id=tbl.table_id,
                                 document_id=tbl.source_document_id,
                                 clause_number=f"TBL_P{tbl.page_number}",
@@ -406,16 +430,66 @@ class RetrievalService:
                                 relationship_path=[hit.clause_id, tbl.table_id],
                                 applicability_reason=f"Authoritative table specification linked to {hit.clause_id}"
                             )
-                        )
-            expanded_hits.extend(table_hits)
-            stage_latencies["table_hydration_ms"] = round((time.perf_counter() - t_tbl_start) * 1000, 2)
+                            # Table priority 5
+                            candidate_context_hits.append((5, tbl_hit))
+                stage_latencies["table_hydration_ms"] = round((time.perf_counter() - t_tbl_start) * 1000, 2)
+
+            # Sort candidate supporting context by deterministic priority
+            candidate_context_hits.sort(key=lambda x: x[0])
+
+            # Apply Query-Wide Budget
+            supporting_snippets: List[RetrievalHit] = []
+            for prio, cand in candidate_context_hits:
+                cand_tok = _estimate_tokens(cand.original_text)
+
+                if len(supporting_snippets) >= MAX_SUPPORTING_SNIPPETS:
+                    pruned_evidence_ids.append(cand.clause_id)
+                    if cand.evidence_role == EvidenceRole.TABLE_SPECIFICATION:
+                        table_ids_excluded.append(cand.clause_id)
+                    continue
+
+                if current_tokens + cand_tok <= GLOBAL_TOKEN_BUDGET:
+                    supporting_snippets.append(cand)
+                    current_tokens += cand_tok
+                    included_evidence_ids.append(cand.clause_id)
+                    role_str = cand.evidence_role.value
+                    hierarchy_included_counts[role_str] = hierarchy_included_counts.get(role_str, 0) + 1
+                    if cand.evidence_role == EvidenceRole.TABLE_SPECIFICATION:
+                        table_ids_hydrated.append(cand.clause_id)
+                else:
+                    budget_overflow = True
+                    over_budget_evidence_ids.append(cand.clause_id)
+                    if cand.evidence_role == EvidenceRole.TABLE_SPECIFICATION:
+                        table_ids_excluded.append(cand.clause_id)
+                    if prio in (2, 3):
+                        warnings_list.append(f"Essential qualification {cand.clause_id} could not fit within token budget.")
+
+            final_hits.extend(supporting_snippets)
+            stage_latencies["expansion_ms"] = round((time.perf_counter() - t_expansion_start) * 1000, 2)
+            diagnostics["expansion_ms"] = stage_latencies["expansion_ms"]
+        else:
+            expanded_hits = self.expander.expand(
+                primary_hits=fused_hits,
+                candidate_document_ids=candidate_docs,
+                include_parent_context=request.include_parent_context,
+                include_related_evidence=request.include_related_evidence
+            )
+            final_hits = expanded_hits
+            current_tokens = sum(_estimate_tokens(h.original_text) for h in final_hits)
+            budget_overflow = current_tokens > GLOBAL_TOKEN_BUDGET
+            exp_ms = round((time.perf_counter() - t_expansion_start) * 1000, 2)
+            stage_latencies["expansion_ms"] = exp_ms
+            diagnostics["expansion_ms"] = exp_ms
 
         # ------------------------------------------------------------------
-        # Step 9: Observability Trace Assembly
+        # Step 9: Observability Trace Assembly & Production Privacy
         # ------------------------------------------------------------------
         total_retrieval_ms = round((time.perf_counter() - t0) * 1000, 2)
         stage_latencies["total_ms"] = total_retrieval_ms
         diagnostics["total_retrieval_ms"] = total_retrieval_ms
+
+        # Production privacy: raw query text omitted by default from trace & diagnostics
+        trace_query = raw_query if getattr(self, "include_raw_query_in_diagnostics", False) else None
 
         trace = RetrievalObservabilityTrace(
             correlation_id=corr_id,
@@ -423,7 +497,7 @@ class RetrievalService:
             lexicon_version=lexicon_version,
             lexicon_hash=lexicon_hash,
             candidate_source_bundle=candidate_docs,
-            original_sparse_query=raw_query,
+            original_sparse_query=trace_query,
             expansion_variants=expansion_variants,
             exact_hit_count=len(exact_results),
             original_sparse_hit_count=len(sparse_results),
@@ -434,6 +508,11 @@ class RetrievalService:
             unresolved_cross_references=unresolved_xrefs,
             table_ids_hydrated=table_ids_hydrated,
             table_ids_excluded=table_ids_excluded,
+            included_evidence_ids=included_evidence_ids,
+            pruned_evidence_ids=pruned_evidence_ids,
+            blocked_evidence_ids=blocked_xrefs,
+            unresolved_evidence_ids=unresolved_xrefs,
+            over_budget_evidence_ids=over_budget_evidence_ids,
             stage_latencies_ms=stage_latencies,
             total_latency_ms=total_retrieval_ms,
             feature_flags={
@@ -442,15 +521,16 @@ class RetrievalService:
                 "enable_table_evidence": self.enable_table_evidence,
                 "enable_diagnostic_dense": self.enable_diagnostic_dense
             },
-            token_budget=1200,
+            token_budget=GLOBAL_TOKEN_BUDGET,
+            token_estimate=current_tokens,
             budget_overflow=budget_overflow
         )
         diagnostics["observability_trace"] = trace.model_dump()
 
         return RetrievalOutcome(
             status=RetrievalStatus.SUCCESS,
-            hits=expanded_hits,
+            hits=final_hits,
             applicable_document_ids=candidate_docs,
             query_diagnostics=diagnostics,
-            warnings=[]
+            warnings=warnings_list
         )

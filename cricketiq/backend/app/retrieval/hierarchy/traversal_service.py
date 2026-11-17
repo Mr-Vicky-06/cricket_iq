@@ -13,14 +13,16 @@ from typing import Dict, List, Set, Tuple, Any, Optional
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 
-from cricketiq.backend.app.database.models import RuleClause
+from cricketiq.backend.app.database.models import RuleClause, ClauseStructureNode
 from cricketiq.backend.app.database.orm_models import RuleClauseEntity
 from cricketiq.backend.app.database.repository import CricketIQRepository
 from cricketiq.backend.app.retrieval.contracts import EvidenceRole
+from cricketiq.backend.app.retrieval.hierarchy.structure_store import ClauseStructureNodeStore
 
 
 class TraversedNode(BaseModel):
-    clause: RuleClause
+    clause: Optional[RuleClause] = None
+    structural_node: Optional[ClauseStructureNode] = None
     evidence_role: EvidenceRole
     hop_distance: int
     traversal_path: List[str] = Field(default_factory=list)
@@ -41,6 +43,7 @@ class HierarchyTraversalResult(BaseModel):
     seed_clause_id: str
     seed_clause: Optional[RuleClause] = None
     parent_context: Optional[RuleClause] = None
+    structural_context: Optional[ClauseStructureNode] = None
     operational_children: List[RuleClause] = Field(default_factory=list)
     resolved_cross_references: List[RuleClause] = Field(default_factory=list)
     blocked_out_of_bundle_targets: List[str] = Field(default_factory=list)
@@ -53,9 +56,14 @@ class HierarchyTraversalResult(BaseModel):
 class HierarchyTraversalService:
     """Bounded, bundle-confined traversal service for regulatory clause trees."""
 
-    def __init__(self, repository: CricketIQRepository):
+    def __init__(
+        self,
+        repository: CricketIQRepository,
+        structure_store: Optional[ClauseStructureNodeStore] = None
+    ):
         self.repository = repository
         self.session = repository.session
+        self.structure_store = structure_store or ClauseStructureNodeStore()
 
     def _get_clause_by_number(self, doc_id: str, clause_number: str) -> Optional[RuleClause]:
         full_id = f"{doc_id}:{clause_number}"
@@ -100,9 +108,9 @@ class HierarchyTraversalService:
         ]
 
         # 2. Hop Up: Parent Context (Max 1 hop)
-        if request.include_parent and seed_clause.parent_clause_id and request.max_hops >= 1:
+        if request.include_parent and request.max_hops >= 1:
             pid = seed_clause.parent_clause_id
-            if pid not in visited_ids:
+            if pid and pid not in visited_ids:
                 parent_clause = self.repository.get_clause(pid)
                 if parent_clause:
                     if parent_clause.source_document_id in request.candidate_document_ids:
@@ -119,7 +127,41 @@ class HierarchyTraversalService:
                     else:
                         result.blocked_out_of_bundle_targets.append(pid)
                 else:
-                    result.unresolved_targets.append(pid)
+                    # Check if pid refers to a structural node
+                    struct_node = self.structure_store.get_node(pid)
+                    if struct_node:
+                        if struct_node.source_document_id in request.candidate_document_ids:
+                            result.structural_context = struct_node
+                            visited_ids.add(struct_node.id)
+                            assembled.append(
+                                TraversedNode(
+                                    structural_node=struct_node,
+                                    evidence_role=EvidenceRole.STRUCTURAL_CONTEXT,
+                                    hop_distance=1,
+                                    traversal_path=[seed_clause.id, struct_node.id]
+                                )
+                            )
+                        else:
+                            result.blocked_out_of_bundle_targets.append(pid)
+                    else:
+                        result.unresolved_targets.append(pid)
+            elif not pid and self.structure_store:
+                # Resolve absent unnumbered chapter heading as structural context
+                struct_node = self.structure_store.get_structural_parent(seed_clause.id)
+                if struct_node and struct_node.id not in visited_ids:
+                    if struct_node.source_document_id in request.candidate_document_ids:
+                        result.structural_context = struct_node
+                        visited_ids.add(struct_node.id)
+                        assembled.append(
+                            TraversedNode(
+                                structural_node=struct_node,
+                                evidence_role=EvidenceRole.STRUCTURAL_CONTEXT,
+                                hop_distance=1,
+                                traversal_path=[seed_clause.id, struct_node.id]
+                            )
+                        )
+                    else:
+                        result.blocked_out_of_bundle_targets.append(struct_node.id)
 
         # 3. Hop Down: Operational Children (Max 1 hop)
         if request.include_children and request.max_hops >= 1:
@@ -193,7 +235,14 @@ class HierarchyTraversalService:
                     result.unresolved_targets.append(xref)
 
         # 5. Token budget accounting
-        total_tokens = sum(len((n.clause.original_text or "").split()) for n in assembled)
+        def _node_text(n: TraversedNode) -> str:
+            if n.clause:
+                return n.clause.original_text or ""
+            if n.structural_node:
+                return f"Chapter: {n.structural_node.heading_title}"
+            return ""
+
+        total_tokens = sum(len(_node_text(n).split()) for n in assembled)
         result.token_count_estimate = total_tokens
 
         # Check if direct evidence alone exceeds budget
@@ -208,7 +257,7 @@ class HierarchyTraversalService:
         while len(assembled) > 1 and total_tokens > request.token_budget:
             result.budget_overflow = True
             removed = assembled.pop()  # Pop lowest-priority (cross-ref or child)
-            total_tokens -= len((removed.clause.original_text or "").split())
+            total_tokens -= len(_node_text(removed).split())
 
         result.assembled_nodes = assembled[:request.max_evidence_count]
         result.token_count_estimate = total_tokens

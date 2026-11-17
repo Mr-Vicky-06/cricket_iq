@@ -236,3 +236,53 @@ def test_hierarchy_traversal_seed_blocked_if_out_of_bundle(traversal_repo):
     assert res.seed_clause is None
     assert "MCC_LAWS_2026:38.3" in res.blocked_out_of_bundle_targets
     assert len(res.assembled_nodes) == 0
+
+
+def test_hierarchy_traversal_structural_node_resolution(traversal_repo):
+    from cricketiq.backend.app.retrieval.hierarchy.structure_store import ClauseStructureNodeStore
+    store = ClauseStructureNodeStore()
+    assert store.total_nodes == 46
+    assert store.total_mapped_children == 267
+
+    # Ensure source document exists for foreign key integrity
+    doc_odi = SourceDocument(
+        id="ICC_ODI_MEN_2026",
+        publisher=DocumentAuthority.ICC,
+        title="ICC Men's ODI Playing Conditions",
+        document_type=DocumentType.PLAYING_CONDITIONS,
+        edition="October 2026",
+        format=CricketFormat.ODI,
+        category=GenderCategory.MENS,
+        official_url="https://www.icc-cricket.com/odi-2026.pdf",
+        sha256="c" * 64,
+        status=DocumentStatus.ACTIVE
+    )
+    traversal_repo.upsert_source_document(doc_odi)
+
+    # Insert a child clause whose parent in the source is the unnumbered Law 1 heading
+    child = RuleClause(
+        id="ICC_ODI_MEN_2026:1.1",
+        source_document_id="ICC_ODI_MEN_2026",
+        clause_number="1.1",
+        parent_clause_id=None,
+        hierarchy_depth=1,
+        heading="Number of players",
+        original_text="A match is played between two sides of eleven players each.",
+        page_start=4,
+        page_end=4
+    )
+    traversal_repo.upsert_clauses([child])
+
+    service = HierarchyTraversalService(traversal_repo, structure_store=store)
+    req = HierarchyTraversalRequest(
+        seed_clause_id="ICC_ODI_MEN_2026:1.1",
+        candidate_document_ids=["ICC_ODI_MEN_2026"],
+        include_parent=True
+    )
+    res = service.traverse(req)
+
+    assert res.structural_context is not None
+    assert res.structural_context.id == "ICC_ODI_MEN_2026:STRUCT_LAW_1"
+    assert res.structural_context.heading_title == "THE PLAYERS"
+    assert any(n.evidence_role == EvidenceRole.STRUCTURAL_CONTEXT for n in res.assembled_nodes)
+

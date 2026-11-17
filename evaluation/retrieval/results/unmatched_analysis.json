@@ -1,0 +1,680 @@
+[
+  {
+    "id": "phrase_004",
+    "q": "High full-pitched deliveries",
+    "category": "exact_phrase",
+    "expected": [
+      "21.5"
+    ],
+    "retrieved_top5": [
+      "36.1.3",
+      "36.1.2",
+      "41.6",
+      "41.7",
+      "41.7.1"
+    ],
+    "notes": "Official term for beamers"
+  },
+  {
+    "id": "nl_002",
+    "q": "What happens if a bowler delivers a full toss above the batter's waist?",
+    "category": "paraphrase",
+    "expected": [
+      "21.5"
+    ],
+    "retrieved_top5": [
+      "41.7.1",
+      "36.1.2",
+      "41.13.2",
+      "41.6.1.9",
+      "36.1.3"
+    ],
+    "notes": "Paraphrase of beamer / high full-pitch rule"
+  },
+  {
+    "id": "nl_003",
+    "q": "Does the umpire call a wide if the ball passes beyond the batter's reach?",
+    "category": "paraphrase",
+    "expected": [
+      "22.1",
+      "22.1.1"
+    ],
+    "retrieved_top5": [
+      "22.2",
+      "22",
+      "22.2",
+      "22",
+      "22.4.1"
+    ],
+    "notes": "Paraphrase of judging a wide ball"
+  },
+  {
+    "id": "nl_004",
+    "q": "Must a bowler inform the umpire before switching from right arm to left arm bowling?",
+    "category": "paraphrase",
+    "expected": [
+      "21.1",
+      "21.1.1"
+    ],
+    "retrieved_top5": [
+      "21.2",
+      "21.2",
+      "38.3.1.1",
+      "38.3.1.1",
+      "APP_A:9.1"
+    ],
+    "notes": "Paraphrase of mode of delivery"
+  },
+  {
+    "id": "nl_006",
+    "q": "What is the consequence of bowling an illegal no ball in twenty20?",
+    "category": "paraphrase",
+    "expected": [
+      "21.18",
+      "21.18.1"
+    ],
+    "retrieved_top5": [
+      "APP_D:2.6.2",
+      "APP_A:9.7",
+      "APP_D:3.3.5",
+      "21.2",
+      "APP_D:2.1.3"
+    ],
+    "notes": "Paraphrase of consequence of no-ball"
+  },
+  {
+    "id": "syn_002",
+    "q": "beamer above waist dangerous bowling penalty",
+    "category": "synonyms",
+    "expected": [
+      "21.5"
+    ],
+    "retrieved_top5": [
+      "41.7.1",
+      "36.1.3",
+      "41.6.2",
+      "36.1.2",
+      "41.6.2"
+    ],
+    "notes": "Slang beamer mapped to high full-pitched delivery"
+  },
+  {
+    "id": "syn_003",
+    "q": "freebie delivery extra runs illegal ball",
+    "category": "synonyms",
+    "expected": [
+      "21.18",
+      "21.18.1"
+    ],
+    "retrieved_top5": [
+      "21.2",
+      "41.17.3",
+      "41.17.3",
+      "18.10.3",
+      "18.10.3"
+    ],
+    "notes": "Slang freebie mapped to free hit"
+  },
+  {
+    "id": "syn_004",
+    "q": "batter shuffling across stumps wide guideline",
+    "category": "synonyms",
+    "expected": [
+      "22.1.2"
+    ],
+    "retrieved_top5": [
+      "22.9",
+      "22",
+      "22.9",
+      "22",
+      "7.5"
+    ],
+    "notes": "Batter shuffling mapped to moving to make contact"
+  },
+  {
+    "id": "interp_001",
+    "q": "Can a ball be called both a wide and a no ball?",
+    "category": "rules_interpretation",
+    "expected": [
+      "22.1.1"
+    ],
+    "retrieved_top5": [
+      "21.12",
+      "21.12",
+      "22.3.2",
+      "21.18.2",
+      "42.1.4"
+    ],
+    "notes": "22.1.1 states not being a No ball"
+  },
+  {
+    "id": "interp_002",
+    "q": "If a ball is wide but also a front-foot no ball which call takes precedence?",
+    "category": "rules_interpretation",
+    "expected": [
+      "22.1.1",
+      "21"
+    ],
+    "retrieved_top5": [
+      "41.8",
+      "41.8",
+      "21.5.2",
+      "41.8",
+      "21.5.2"
+    ],
+    "notes": "No ball takes precedence over Wide"
+  },
+  {
+    "id": "interp_003",
+    "q": "What if the ball passes over the batter's head?",
+    "category": "rules_interpretation",
+    "expected": [
+      "22.1",
+      "21.5"
+    ],
+    "retrieved_top5": [
+      "22.1.3",
+      "22.1.3",
+      "22.1.3",
+      "41.6.2",
+      "41.6.2"
+    ],
+    "notes": "Wide vs high full pitch"
+  },
+  {
+    "id": "interp_004",
+    "q": "Does a ball hitting the batter's bat or person count as a wide?",
+    "category": "rules_interpretation",
+    "expected": [
+      "22.1",
+      "22.1.1"
+    ],
+    "retrieved_top5": [
+      "22.8",
+      "22",
+      "22.8",
+      "22",
+      "22.4.2"
+    ],
+    "notes": "Contact negates Wide"
+  },
+  {
+    "id": "interp_005",
+    "q": "When does the umpire consider the ball not to have passed wide?",
+    "category": "rules_interpretation",
+    "expected": [
+      "22.1.2"
+    ],
+    "retrieved_top5": [
+      "22.1.3",
+      "22.2",
+      "22.2",
+      "22.1.1",
+      "22.1.3"
+    ],
+    "notes": "Clause 22.1.2 batter movement"
+  },
+  {
+    "id": "interp_006",
+    "q": "Is a bouncer passing wide called a wide or a no-ball?",
+    "category": "rules_interpretation",
+    "expected": [
+      "22.1",
+      "21"
+    ],
+    "retrieved_top5": [
+      "21.12",
+      "21.12",
+      "22.3.2",
+      "42.1.4",
+      "22.3.2"
+    ],
+    "notes": "Short pitched delivery over head"
+  },
+  {
+    "id": "isolation_001",
+    "q": "Does a bowler bowling a no-ball award a free hit in a Test match?",
+    "category": "format_isolation",
+    "expected": [
+      "21.1"
+    ],
+    "retrieved_top5": [
+      "21.17",
+      "34.5",
+      "37.6",
+      "40.2",
+      "41.8"
+    ],
+    "notes": "Test match Playing Conditions do not contain Free Hit Clause 21.18"
+  },
+  {
+    "id": "isolation_003",
+    "q": "Test match no-ball dismissals",
+    "category": "format_isolation",
+    "expected": [
+      "21.1"
+    ],
+    "retrieved_top5": [
+      "21.17",
+      "18.10.1",
+      "27.3.2",
+      "21.14",
+      "21.14"
+    ],
+    "notes": "Zero leakage of T20I clauses into Test"
+  },
+  {
+    "id": "isolation_004",
+    "q": "T20I specific rules for no balls",
+    "category": "format_isolation",
+    "expected": [
+      "21.18"
+    ],
+    "retrieved_top5": [
+      "2.1",
+      "6.3.3",
+      "4.6",
+      "4.6",
+      "APP_A:1.3"
+    ],
+    "notes": "Must return T20I document"
+  },
+  {
+    "id": "isolation_005",
+    "q": "Test cricket bowler hand notification",
+    "category": "format_isolation",
+    "expected": [
+      "21.1"
+    ],
+    "retrieved_top5": [
+      "6.6",
+      "APP_A:12.3",
+      "14.2",
+      "14.2",
+      "15.3"
+    ],
+    "notes": "Isolation verification"
+  },
+  {
+    "id": "trans_003",
+    "q": "Series started on 2026-09-28 and match on 2026-10-03",
+    "category": "transition_boundary",
+    "expected": [
+      "21.18"
+    ],
+    "retrieved_top5": [
+      "APP_C:10.2",
+      "APP_C:11.3.1",
+      "APP_C:12.8",
+      "APP_C:11.8.4",
+      "APP_C:14.3"
+    ],
+    "notes": "Ongoing series continuing under predecessor regulations"
+  },
+  {
+    "id": "trans_004",
+    "q": "Series started on 2026-10-02 post transition",
+    "category": "transition_boundary",
+    "expected": [
+      "21.18"
+    ],
+    "retrieved_top5": [
+      "10",
+      "10",
+      "1",
+      "19.2.4",
+      "19.2.2.2"
+    ],
+    "notes": "Post transition series"
+  },
+  {
+    "id": "trans_005",
+    "q": "Series boundary day starting 2026-10-01",
+    "category": "transition_boundary",
+    "expected": [
+      "21.18"
+    ],
+    "retrieved_top5": [
+      "10",
+      "10",
+      "1",
+      "9.2.1.1",
+      "11.3.1"
+    ],
+    "notes": "Series starting on boundary day gets 2026 edition"
+  },
+  {
+    "id": "punct_001",
+    "q": "What happens if the bowler bowls a no-ball?",
+    "category": "spelling_and_punctuation",
+    "expected": [
+      "21.18",
+      "21.17"
+    ],
+    "retrieved_top5": [
+      "41.8",
+      "41.8",
+      "32.1.1",
+      "41.6.1.10",
+      "41.8"
+    ],
+    "notes": "Hyphenated no-ball with question mark"
+  },
+  {
+    "id": "punct_004",
+    "q": "is wide-ball judged if batter moves?",
+    "category": "spelling_and_punctuation",
+    "expected": [
+      "22.1.2"
+    ],
+    "retrieved_top5": [
+      "21.12",
+      "22",
+      "21.12",
+      "22",
+      "22.3.2"
+    ],
+    "notes": "Hyphenated wide-ball lowercase"
+  },
+  {
+    "id": "mcc_law_001",
+    "q": "How much time does a new batter have to take guard before being timed out under MCC Laws?",
+    "category": "mcc_laws",
+    "expected": [
+      "31.1",
+      "31"
+    ],
+    "retrieved_top5": [
+      "31.4",
+      "25.3.2.1",
+      "16.3.3",
+      "31.3",
+      "20.3"
+    ],
+    "notes": "MCC Law 31 sets a 3 minute limit from the fall of a wicket."
+  },
+  {
+    "id": "mcc_law_002",
+    "q": "Can a bowler run out the non-striker before releasing the delivery under current cricket laws?",
+    "category": "mcc_laws",
+    "expected": [
+      "38.3",
+      "38.1"
+    ],
+    "retrieved_top5": [
+      "38.3.1.1",
+      "38.3.1.1",
+      "20.4.2.10",
+      "38.3.1",
+      "38.3.1"
+    ],
+    "notes": "Law 38.3 permits bowler to run out non-striker leaving ground early."
+  },
+  {
+    "id": "mcc_law_004",
+    "q": "When does a ball become dead automatically according to the Laws of Cricket?",
+    "category": "mcc_laws",
+    "expected": [
+      "20.1",
+      "20"
+    ],
+    "retrieved_top5": [
+      "21.13",
+      "22.5",
+      "17.4",
+      "20.1.1",
+      "18.9"
+    ],
+    "notes": "Law 20.1 governs ball settling in keeper or bowler hands, boundary, or dismissal."
+  },
+  {
+    "id": "mcc_law_005",
+    "q": "Can a fielder catch the ball while touching the ground outside the boundary rope?",
+    "category": "mcc_laws",
+    "expected": [
+      "19.5",
+      "19"
+    ],
+    "retrieved_top5": [
+      "19.4.2",
+      "33.2.1",
+      "33",
+      "19.5.2.1",
+      "18.11.1.7"
+    ],
+    "notes": "Law 19.5 requires first contact after airborne jump to originate inside boundary."
+  },
+  {
+    "id": "mcc_law_006",
+    "q": "What penalty is awarded if a batter deliberately runs a short run?",
+    "category": "mcc_laws",
+    "expected": [
+      "18.5",
+      "18"
+    ],
+    "retrieved_top5": [
+      "18.5.1",
+      "18.5.1",
+      "18.5.2",
+      "18.5.1.1",
+      "18.5.1.1"
+    ],
+    "notes": "Law 18.5 awards 5 penalty runs to the fielding side for deliberate short run."
+  },
+  {
+    "id": "test_pc_002",
+    "q": "When can the fielding captain take a new ball in a Men's Test match?",
+    "category": "test_regulations",
+    "expected": [
+      "4.3",
+      "4"
+    ],
+    "retrieved_top5": [
+      "2.8.3",
+      "4.4",
+      "1.3.3",
+      "4.5",
+      "4.4"
+    ],
+    "notes": "Clause 4.3 permits new ball after 80 overs."
+  },
+  {
+    "id": "test_pc_004",
+    "q": "Does bowling a front-foot no ball give a free hit in Test cricket?",
+    "category": "test_regulations",
+    "expected": [
+      "21.1"
+    ],
+    "retrieved_top5": [
+      "41.8",
+      "41.8",
+      "21.5.2",
+      "41.8",
+      "21.5.2"
+    ],
+    "notes": "Test match PC do not contain Free Hit Clause 21.18."
+  },
+  {
+    "id": "odi_pc_001",
+    "q": "What is the maximum number of overs a bowler can bowl in an uninterrupted Men's ODI?",
+    "category": "odi_regulations",
+    "expected": [
+      "13.9",
+      "13"
+    ],
+    "retrieved_top5": [
+      "13.9.1",
+      "13.9.5",
+      "17.8",
+      "13.9.3",
+      "12.6"
+    ],
+    "notes": "Clause 13.9 limits bowlers to 10 overs (20% of 50 overs)."
+  },
+  {
+    "id": "odi_pc_002",
+    "q": "How many fielders are allowed outside the 30-yard circle in the first 10 overs of an ODI?",
+    "category": "odi_regulations",
+    "expected": [
+      "28.7",
+      "28"
+    ],
+    "retrieved_top5": [
+      "30",
+      "30",
+      "10",
+      "10",
+      "28.7.2.2"
+    ],
+    "notes": "Powerplay 1 (overs 1-10) permits maximum 2 fielders outside circle."
+  },
+  {
+    "id": "t20i_pc_001",
+    "q": "What is the maximum number of overs a bowler can bowl in an uninterrupted Men's T20I match?",
+    "category": "t20i_regulations",
+    "expected": [
+      "13.9",
+      "13"
+    ],
+    "retrieved_top5": [
+      "13.9.2",
+      "13.9.1",
+      "13.9.5",
+      "APP_E:4.2",
+      "17.8"
+    ],
+    "notes": "Clause 13.9 limits bowlers to 4 overs (20% of 20 overs)."
+  },
+  {
+    "id": "t20i_pc_002",
+    "q": "How long is the mandatory powerplay at the start of a Twenty20 International innings?",
+    "category": "t20i_regulations",
+    "expected": [
+      "28.7",
+      "28"
+    ],
+    "retrieved_top5": [
+      "31.4",
+      "APP_E:4.2",
+      "28.7.4",
+      "APP_D:41.18",
+      "12.8.2"
+    ],
+    "notes": "Powerplay is 6 overs in uninterrupted 20-over innings."
+  },
+  {
+    "id": "t20i_pc_003",
+    "q": "How is a tied match resolved in a Twenty20 International?",
+    "category": "t20i_regulations",
+    "expected": [
+      "16.5",
+      "16"
+    ],
+    "retrieved_top5": [
+      "31.4",
+      "APP_A:1.2",
+      "5.8.2",
+      "APP_A:1.15",
+      "APP_B:4.4"
+    ],
+    "notes": "Clause 16.5 prescribes a Super Over procedure."
+  },
+  {
+    "id": "women_pc_001",
+    "q": "What is the official weight and circumference of the ball used in Women's International cricket?",
+    "category": "gender_category",
+    "expected": [
+      "4.2",
+      "4"
+    ],
+    "retrieved_top5": [
+      "4.6.1",
+      "4.6.2",
+      "8.27",
+      "APP_B:4.4",
+      "4.1"
+    ],
+    "notes": "Clause 4.2 in Women's PC modifies Law 4.2: ball weighs 4.94 to 5.31 oz."
+  },
+  {
+    "id": "women_pc_002",
+    "q": "What are the boundary distance limits in Women's Twenty20 International matches?",
+    "category": "gender_category",
+    "expected": [
+      "19.1",
+      "19"
+    ],
+    "retrieved_top5": [
+      "APP_A:9.7",
+      "28.6.3.4",
+      "27.4.2.4",
+      "APP_B:4.4",
+      "13.6.3"
+    ],
+    "notes": "Clause 19.1 sets Women's boundary limits between 55 and 65 yards."
+  },
+  {
+    "id": "hist_trans_001",
+    "q": "Which playing conditions govern a bilateral series that began on 25 September 2026 with a match on 3 October 2026?",
+    "category": "temporal_applicability",
+    "expected": [
+      "21.18"
+    ],
+    "retrieved_top5": [
+      "APP_C:25.3.2",
+      "APP_C:9.3.2",
+      "APP_C:25.3",
+      "APP_C:14.3",
+      "APP_C:16.2"
+    ],
+    "notes": "Series started before 1 October 2026; predecessor regulations apply."
+  },
+  {
+    "id": "hist_trans_002",
+    "q": "Which rules apply to a match played on 5 October 2026 in a series that started on 2 October 2026?",
+    "category": "temporal_applicability",
+    "expected": [
+      "21.18"
+    ],
+    "retrieved_top5": [
+      "1",
+      "26.4.1.1",
+      "15.2",
+      "14.3",
+      "9.2.1.3"
+    ],
+    "notes": "Series started after 1 October 2026; October 2026 regulations apply."
+  },
+  {
+    "id": "out_of_scope_001",
+    "q": "How does the Impact Player substitution rule work in the Indian Premier League?",
+    "reason": "non_success_status",
+    "expected": []
+  },
+  {
+    "id": "out_of_scope_002",
+    "q": "What is the Power Surge rule in the Big Bash League?",
+    "reason": "non_success_status",
+    "expected": []
+  },
+  {
+    "id": "out_of_scope_003",
+    "q": "Can a player be substituted under PSL local tournament conditions?",
+    "reason": "non_success_status",
+    "expected": []
+  },
+  {
+    "id": "ambiguous_001",
+    "q": "How many overs are played in a match?",
+    "category": "requires_clarification",
+    "expected": [],
+    "retrieved_top5": [
+      "31.4",
+      "22.7",
+      "12.10",
+      "12.6",
+      "12.7"
+    ],
+    "notes": "Cannot determine whether Test (unlimited/90 per day), ODI (50), or T20I (20)."
+  }
+]

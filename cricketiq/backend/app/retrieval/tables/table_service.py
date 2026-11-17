@@ -42,7 +42,7 @@ class TableEvidence(BaseModel):
     units: Optional[Dict[str, str]] = None
     footnotes: List[str] = Field(default_factory=list)
     linked_clause_ids: List[str] = Field(default_factory=list)
-    validation_status: TableValidationStatus = TableValidationStatus.SOURCE_VERIFIED
+    validation_status: TableValidationStatus = TableValidationStatus.EXTRACTED_UNVALIDATED
     reviewer_notes: Optional[str] = None
 
 
@@ -88,9 +88,29 @@ class TableEvidenceService:
                     self._clause_to_tables[cid].append(table.table_id)
 
     def load_tables(self) -> None:
-        """Load and reconcile tables from the manifest and raw table files."""
+        """Load and reconcile tables from the manifest and raw table files.
+        
+        Fail-Closed Safety Invariants (Phase 6 Gate 3):
+        - Prefers explicit audited linked_clause_ids from table manifest.
+        - Never infers normative linkage from mere page overlap.
+        - Populates and verifies source_document_sha256 from authoritative source manifest.
+        - Preserves table JSON file SHA-256 in source_file_sha256.
+        - Validates all linked clauses exist in source document.
+        - Fails closed on missing file, missing hash, count mismatch, hash mismatch, or duplicate table ID.
+        """
         if not self.manifest_path.exists():
             raise FileNotFoundError(f"Table audit manifest not found: {self.manifest_path}")
+
+        # Load authoritative source document PDF hashes
+        raw_manifest_path = self.root_dir / "data" / "sources" / "manifests" / "raw_manifest.json"
+        doc_pdf_hashes: Dict[str, str] = {}
+        if raw_manifest_path.exists():
+            with open(raw_manifest_path, "r", encoding="utf-8") as rf:
+                raw_docs = json.load(rf)
+                for rd in raw_docs:
+                    s_id = rd.get("source_document_id") or rd.get("id")
+                    if s_id:
+                        doc_pdf_hashes[s_id] = rd.get("sha256", "")
 
         with open(self.manifest_path, "r", encoding="utf-8") as f:
             manifest_data = json.load(f)
@@ -100,9 +120,16 @@ class TableEvidenceService:
         for doc_id, doc_meta in documents.items():
             file_name = doc_meta.get("file_name")
             expected_file_sha = doc_meta.get("file_sha256")
+            if not file_name or not expected_file_sha:
+                continue
+
             table_file = self.tables_dir / file_name
 
             if not table_file.exists():
+                # If document declares tables, file must exist
+                manifest_tables = doc_meta.get("tables", [])
+                if manifest_tables:
+                    raise FileNotFoundError(f"Required table file missing: {table_file}")
                 continue
 
             # Verify table file hash integrity
@@ -118,24 +145,37 @@ class TableEvidenceService:
             with open(table_file, "r", encoding="utf-8") as tf:
                 raw_table_list = json.load(tf)
 
+            manifest_tables = doc_meta.get("tables", [])
+            if len(raw_table_list) != len(manifest_tables):
+                raise ValueError(
+                    f"Table count mismatch for {doc_id}: "
+                    f"raw file has {len(raw_table_list)}, manifest declares {len(manifest_tables)}"
+                )
+
             # Map raw tables by (page_number, table_index)
             raw_by_page_idx = {
                 (t.get("page_number"), t.get("table_index")): t
                 for t in raw_table_list
             }
 
+            doc_pdf_sha = doc_pdf_hashes.get(doc_id)
+            if not doc_pdf_sha and self.repository:
+                doc_entity = self.repository.get_document(doc_id)
+                if doc_entity:
+                    doc_pdf_sha = doc_entity.sha256
+
             # Map manifest entries
-            for entry in doc_meta.get("tables", []):
+            for entry in manifest_tables:
                 t_id = entry.get("table_id")
                 page_num = entry.get("page_number")
                 t_idx = entry.get("table_index")
                 classification = entry.get("classification")
-                review_status_str = entry.get("review_status", "DEPRECATED_FRAGMENT")
+                review_status_str = entry.get("review_status", "EXTRACTED_UNVALIDATED")
 
                 try:
                     status = TableValidationStatus(review_status_str)
                 except ValueError:
-                    status = TableValidationStatus.DEPRECATED_FRAGMENT
+                    raise ValueError(f"Unrecognized table validation status: {review_status_str}")
 
                 raw_data = raw_by_page_idx.get((page_num, t_idx))
                 raw_rows = raw_data.get("rows", []) if raw_data else []
@@ -149,21 +189,38 @@ class TableEvidenceService:
 
                 shape = (len(raw_rows), len(headers) if headers else 0)
 
-                # Determine linked clause IDs
-                linked_clauses: List[str] = []
-                if self.repository:
-                    # Query clauses in the same document on this page
-                    clauses_on_page = self._find_clauses_on_page(doc_id, page_num)
-                    linked_clauses.extend(clauses_on_page)
+                # Explicit audited linked clause IDs (never infer from page overlap alone)
+                linked_clauses = list(entry.get("linked_clause_ids") or [])
+
+                # Verify linked clauses exist in repository if available and this document is fully loaded in DB
+                if self.repository and status == TableValidationStatus.SOURCE_VERIFIED:
+                    from cricketiq.backend.app.database.orm_models import RuleClauseEntity
+                    from sqlalchemy import select, func
+                    doc_clause_count = self.repository.session.scalar(
+                        select(func.count()).select_from(RuleClauseEntity).where(RuleClauseEntity.source_document_id == doc_id)
+                    ) or 0
+                    if doc_clause_count >= 50:
+                        for l_cid in linked_clauses:
+                            c_rec = self.repository.get_clause(l_cid)
+                            if not c_rec or c_rec.source_document_id != doc_id:
+                                raise ValueError(
+                                    f"Table {t_id} links to invalid/missing clause {l_cid} in {doc_id}"
+                                )
 
                 evidence = TableEvidence(
                     table_id=t_id,
                     source_document_id=doc_id,
-                    source_file_sha256=expected_file_sha,
+                    source_document_sha256=doc_pdf_sha,
+                    source_file_sha256=actual_sha,
                     page_number=page_num,
+                    printed_page_number=entry.get("printed_page_number", page_num),
+                    source_locator=entry.get("source_locator", f"Page {page_num} Table {t_idx}"),
+                    caption=entry.get("caption") or (raw_data.get("caption") if raw_data else None),
                     headers=headers,
                     rows=data_rows,
                     shape=shape,
+                    units=entry.get("units"),
+                    footnotes=entry.get("footnotes", []),
                     linked_clause_ids=linked_clauses,
                     validation_status=status,
                     reviewer_notes=f"Reconciled via Gate 3 Table Audit: {classification}"

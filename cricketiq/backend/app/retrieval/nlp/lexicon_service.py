@@ -92,7 +92,15 @@ class LexiconValidator:
             return ["Lexicon must contain non-empty 'terms' list"]
 
         seen_ids: Set[str] = set()
+        seen_prefs: Dict[str, str] = {}
+        phrase_to_owner: Dict[str, Tuple[str, str]] = {}
+
+        # Pass 1: Required non-empty fields, ID uniqueness, and valid review status
         for idx, t in enumerate(terms):
+            if not isinstance(t, dict):
+                errors.append(f"Term at index {idx} must be a dictionary")
+                continue
+
             tid = t.get("term_id")
             if not tid or not isinstance(tid, str) or not tid.strip():
                 errors.append(f"Term at index {idx} has invalid or missing 'term_id'")
@@ -102,8 +110,22 @@ class LexiconValidator:
             seen_ids.add(tid)
 
             pref = t.get("preferred_term")
-            if not pref or not isinstance(pref, str):
-                errors.append(f"Term '{tid}' missing 'preferred_term'")
+            if not pref or not isinstance(pref, str) or not pref.strip():
+                errors.append(f"Term '{tid}' missing or empty 'preferred_term'")
+            else:
+                seen_prefs[pref.lower().strip()] = tid
+
+            defn = t.get("definition")
+            if not defn or not isinstance(defn, str) or not defn.strip():
+                errors.append(f"Term '{tid}' missing or empty 'definition'")
+
+            ttype = t.get("term_type")
+            if not ttype or not isinstance(ttype, str) or not ttype.strip():
+                errors.append(f"Term '{tid}' missing or empty 'term_type'")
+
+            refs = t.get("source_refs")
+            if not refs or not isinstance(refs, list) or len(refs) == 0:
+                errors.append(f"Term '{tid}' missing or empty 'source_refs'")
 
             status = t.get("review_status")
             if status not in [s.value for s in LexiconReviewStatus]:
@@ -112,6 +134,40 @@ class LexiconValidator:
             distinct = t.get("distinct_from")
             if status == LexiconReviewStatus.APPROVED.value and (not distinct or not isinstance(distinct, list)):
                 errors.append(f"Approved term '{tid}' must have non-empty 'distinct_from' list")
+
+        # Pass 2: Surface form conflict detection and self-referential distinct_from
+        for t in terms:
+            tid = t.get("term_id")
+            if not tid or tid not in seen_ids:
+                continue
+
+            pref_clean = (t.get("preferred_term") or "").lower().strip()
+
+            # Self-referential distinct_from
+            distinct_list = t.get("distinct_from") or []
+            for d in distinct_list:
+                d_str = str(d).lower().strip()
+                if d_str == pref_clean or d == tid:
+                    errors.append(f"Term '{tid}' contains self-referential 'distinct_from' link to '{d}'")
+
+            # Conflicting surface forms across terms
+            for field_name in ["surface_forms", "spelling_variants", "colloquial_query_forms"]:
+                for phrase in t.get(field_name) or []:
+                    p_clean = str(phrase).lower().strip()
+                    if not p_clean:
+                        continue
+                    # Deliberate single-owner exception: mankad/mankading routes exclusively to CRIC_NON_STRIKER_RUN_OUT
+                    if p_clean in ["mankad", "mankading"]:
+                        continue
+                    if p_clean in phrase_to_owner:
+                        owner_tid, owner_field = phrase_to_owner[p_clean]
+                        if owner_tid != tid:
+                            errors.append(
+                                f"Conflicting surface phrase '{p_clean}' found in '{tid}' ({field_name}) "
+                                f"and '{owner_tid}' ({owner_field})"
+                            )
+                    else:
+                        phrase_to_owner[p_clean] = (tid, field_name)
 
         return errors
 
@@ -187,14 +243,21 @@ class LexiconExpansionService:
     ) -> NormalizedQueryView:
         """Derive controlled query expansions preserving raw query immutability.
         
-        Hard Semantic Invariants:
-        - Never expand across distinct_from boundaries.
-        - Suppress cross-expansion when contrastive intent is detected.
+        Hard Semantic Invariants (Phase 6 Gate 3):
+        - Enforces strict hard caps: max_matched_terms <= 3, max_phrases_per_term <= 2.
+        - Preserves exact raw_query string unaltered in NormalizedQueryView.raw_query.
+        - Never expands across distinct_from boundaries.
+        - Suppresses cross-expansion when contrastive intent or distinct_from pairs are detected.
+        - Gating: 'free hit' expansion requires ODI or T20I in candidate_document_ids.
         - Gating: 'beamer' is narrower than 'no ball'; generic 'no ball' never injects 'beamer'.
-        - Gating: 'mankad' maps exclusively to Law 38.3 (CRIC_NON_STRIKER_RUN_OUT).
+        - Gating: 'mankad' maps exclusively to Law/Clause 38.3 (CRIC_NON_STRIKER_RUN_OUT).
         - Gating: 'retired hurt' never expands to 'retired out'.
         - Isolated ambiguous abbreviations ('b', 'st', 'nb', 'wd', 'ro') are rejected.
         """
+        # Hard caps enforcement regardless of caller arguments
+        eff_max_matched = min(max(max_matched_terms, 1), 3)
+        eff_max_phrases = min(max(max_phrases_per_term, 1), 2)
+
         raw_clean = raw_query.strip()
         query_lower = raw_clean.lower()
 
@@ -213,12 +276,13 @@ class LexiconExpansionService:
         # 4. Longest-phrase candidate matching
         matched_traces: List[LexiconExpansionTrace] = []
         matched_term_ids: Set[str] = set()
+        matched_records: Dict[str, LexiconTermRecord] = {}
 
         # Sort candidate phrases by length descending
         sorted_phrases = sorted(self.phrase_to_term.keys(), key=lambda p: len(p), reverse=True)
 
         for phrase in sorted_phrases:
-            if len(matched_term_ids) >= max_matched_terms:
+            if len(matched_term_ids) >= eff_max_matched:
                 break
 
             # Exact word-boundary match
@@ -237,50 +301,84 @@ class LexiconExpansionService:
                     continue
 
                 term_rec = self.terms[tid]
+                matched_records[tid] = term_rec
+                matched_term_ids.add(tid)
 
-                # Determine expansion phrases (K <= 2)
-                # Primary: preferred term
-                candidate_expansions: List[str] = []
-                if term_rec.preferred_term.lower() != phrase:
-                    candidate_expansions.append(term_rec.preferred_term)
+        # Generic distinct_from contrast check across matched terms
+        for tid1, rec1 in matched_records.items():
+            for tid2, rec2 in matched_records.items():
+                if tid1 != tid2:
+                    pref2_low = rec2.preferred_term.lower()
+                    if any(d.lower() == pref2_low for d in rec1.distinct_from):
+                        is_contrastive = True
 
-                # Secondary: statutory or official canonical synonym
-                for sf in term_rec.surface_forms:
-                    sf_low = sf.lower()
-                    if sf_low != phrase and sf_low != term_rec.preferred_term.lower():
-                        candidate_expansions.append(sf)
-                        break
+        for phrase in sorted_phrases:
+            pattern = r"\b" + re.escape(phrase) + r"\b"
+            if not re.search(pattern, query_lower):
+                continue
+            if phrase in AMBIGUOUS_ABBREVIATIONS:
+                continue
+            if phrase == "wide" and any(k in query_lower for k in ["how wide", "crease wide", "pitch wide", "bat wide"]):
+                continue
 
-                # Enforce Semantic Invariants:
-                # 1. Beamer: only expand to 'high full-pitched delivery' if 'beamer' was explicitly matched
-                if tid == "CRIC_DELIV_NO_BALL":
-                    candidate_expansions = [e for e in candidate_expansions if "beamer" not in e.lower() and "high full" not in e.lower()]
+            tid, field_name = self.phrase_to_term[phrase]
+            if tid not in matched_records or any(t.term_id == tid for t in matched_traces):
+                continue
 
-                # 2. Retired hurt: never include 'retired out'
-                if tid == "CRIC_DISMISS_RETIRED_HURT":
-                    candidate_expansions = [e for e in candidate_expansions if "out" not in e.lower().split()]
+            term_rec = matched_records[tid]
 
-                # 3. Contrastive suppression: if contrastive query, do not expand across mutually compared terms
-                if is_contrastive:
+            # Determine candidate expansions (K <= 2)
+            candidate_expansions: List[str] = []
+            if term_rec.preferred_term.lower() != phrase:
+                candidate_expansions.append(term_rec.preferred_term)
+
+            for sf in term_rec.surface_forms:
+                sf_low = sf.lower()
+                if sf_low != phrase and sf_low != term_rec.preferred_term.lower():
+                    candidate_expansions.append(sf)
+                    break
+
+            # Enforce Semantic Invariants & Context Gating:
+            # 1. Free Hit applicability gating: only eligible for Limited Overs formats (ODI / T20I)
+            if tid == "CRIC_DELIV_FREE_HIT" and candidate_document_ids:
+                has_free_hit = any("ODI" in d or "T20I" in d for d in candidate_document_ids)
+                if not has_free_hit:
+                    # Gated out in Test and universal MCC Laws baseline
                     candidate_expansions = []
 
-                trace = LexiconExpansionTrace(
-                    matched_token=phrase,
-                    term_id=tid,
-                    preferred_term=term_rec.preferred_term,
-                    expansion_phrases=candidate_expansions[:max_phrases_per_term],
-                    matched_field=field_name,
-                    distinct_from_suppressed=term_rec.distinct_from
-                )
-                matched_traces.append(trace)
-                matched_term_ids.add(tid)
+            # 2. Beamer: generic 'no ball' never injects 'beamer'
+            if tid == "CRIC_DELIV_NO_BALL":
+                candidate_expansions = [
+                    e for e in candidate_expansions
+                    if "beamer" not in e.lower() and "high full" not in e.lower()
+                ]
+
+            # 3. Retired hurt: never include 'retired out'
+            if tid == "CRIC_DISMISS_RETIRED_HURT":
+                candidate_expansions = [e for e in candidate_expansions if "out" not in e.lower().split()]
+
+            # 4. Contrastive suppression: if contrastive query, suppress expansions across mutually distinct terms
+            if is_contrastive:
+                candidate_expansions = []
+
+            trace = LexiconExpansionTrace(
+                matched_token=phrase,
+                term_id=tid,
+                preferred_term=term_rec.preferred_term,
+                expansion_phrases=candidate_expansions[:eff_max_phrases],
+                matched_field=field_name,
+                distinct_from_suppressed=term_rec.distinct_from
+            )
+            matched_traces.append(trace)
+            if len(matched_traces) >= eff_max_matched:
+                break
 
         # Normalize text view (safe punctuation cleanup, keeping original words)
         normalized_text = re.sub(r"[^\w\s\.\-]", " ", raw_clean)
         normalized_text = re.sub(r"\s+", " ", normalized_text).strip()
 
         return NormalizedQueryView(
-            raw_query=raw_clean,
+            raw_query=raw_query,  # Exact input string immutability preserved
             normalized_text=normalized_text,
             tokens=tokens,
             extracted_clause_identifiers=extracted_clauses,

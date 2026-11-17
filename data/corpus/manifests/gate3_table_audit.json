@@ -22,7 +22,11 @@
             4
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_MEN_2026:28.7.2.3",
+            "ICC_ODI_MEN_2026:28.7.2.4"
+          ]
         },
         {
           "table_id": "ICC_ODI_MEN_2026:TBL_P78_1",
@@ -33,7 +37,8 @@
             4
           ],
           "classification": "empty",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_ODI_MEN_2026:TBL_P84_2",
@@ -44,7 +49,8 @@
             5
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_ODI_MEN_2026:TBL_P84_3",
@@ -55,7 +61,8 @@
             5
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_ODI_MEN_2026:TBL_P88_4",
@@ -66,7 +73,11 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_MEN_2026:APP_D:1.1.6",
+            "ICC_ODI_MEN_2026:APP_D:1.1.7"
+          ]
         },
         {
           "table_id": "ICC_ODI_MEN_2026:TBL_P93_5",
@@ -77,7 +88,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_MEN_2026:APP_D:3.4.4.1"
+          ]
         },
         {
           "table_id": "ICC_ODI_MEN_2026:TBL_P94_6",
@@ -88,7 +102,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_MEN_2026:APP_D:3.4.5.1"
+          ]
         },
         {
           "table_id": "ICC_ODI_MEN_2026:TBL_P95_7",
@@ -99,7 +116,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_MEN_2026:APP_D:3.4.6.2"
+          ]
         },
         {
           "table_id": "ICC_ODI_MEN_2026:TBL_P97_8",
@@ -110,7 +130,11 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_MEN_2026:APP_D:3.8.1.3",
+            "ICC_ODI_MEN_2026:APP_D:3.8.1.4"
+          ]
         }
       ]
     },
@@ -131,7 +155,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_WOMEN_2026:28.7.2.3"
+          ]
         },
         {
           "table_id": "ICC_ODI_WOMEN_2026:TBL_P77_1",
@@ -142,7 +169,8 @@
             4
           ],
           "classification": "empty",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_ODI_WOMEN_2026:TBL_P83_2",
@@ -153,7 +181,8 @@
             5
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_ODI_WOMEN_2026:TBL_P83_3",
@@ -164,7 +193,8 @@
             5
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_ODI_WOMEN_2026:TBL_P87_4",
@@ -175,7 +205,10 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_WOMEN_2026:APP_D:1.1.4"
+          ]
         },
         {
           "table_id": "ICC_ODI_WOMEN_2026:TBL_P92_5",
@@ -186,7 +219,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_WOMEN_2026:APP_D:3.4.4.1"
+          ]
         },
         {
           "table_id": "ICC_ODI_WOMEN_2026:TBL_P93_6",
@@ -197,7 +233,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_WOMEN_2026:APP_D:3.4.5.1"
+          ]
         },
         {
           "table_id": "ICC_ODI_WOMEN_2026:TBL_P94_7",
@@ -208,7 +247,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_WOMEN_2026:APP_D:3.4.6.2"
+          ]
         },
         {
           "table_id": "ICC_ODI_WOMEN_2026:TBL_P96_8",
@@ -219,7 +261,11 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_ODI_WOMEN_2026:APP_D:3.8.1.3",
+            "ICC_ODI_WOMEN_2026:APP_D:3.8.1.4"
+          ]
         }
       ]
     },
@@ -240,7 +286,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_MEN_2026:28.6.3.4"
+          ]
         },
         {
           "table_id": "ICC_T20I_MEN_2026:TBL_P77_1",
@@ -251,7 +300,8 @@
             4
           ],
           "classification": "empty",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_T20I_MEN_2026:TBL_P83_2",
@@ -262,7 +312,8 @@
             5
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_T20I_MEN_2026:TBL_P83_3",
@@ -273,7 +324,8 @@
             5
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_T20I_MEN_2026:TBL_P87_4",
@@ -284,7 +336,11 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_MEN_2026:APP_D:1.1.6",
+            "ICC_T20I_MEN_2026:APP_D:1.1.7"
+          ]
         },
         {
           "table_id": "ICC_T20I_MEN_2026:TBL_P92_5",
@@ -295,7 +351,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_MEN_2026:APP_D:3.4.4.1"
+          ]
         },
         {
           "table_id": "ICC_T20I_MEN_2026:TBL_P93_6",
@@ -306,7 +365,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_MEN_2026:APP_D:3.4.5.1"
+          ]
         },
         {
           "table_id": "ICC_T20I_MEN_2026:TBL_P94_7",
@@ -317,7 +379,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_MEN_2026:APP_D:3.4.6.2"
+          ]
         },
         {
           "table_id": "ICC_T20I_MEN_2026:TBL_P96_8",
@@ -328,7 +393,11 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_MEN_2026:APP_D:3.8.1.3",
+            "ICC_T20I_MEN_2026:APP_D:3.8.1.4"
+          ]
         }
       ]
     },
@@ -358,7 +427,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_WOMEN_2026:28.6.3.4"
+          ]
         },
         {
           "table_id": "ICC_T20I_WOMEN_2026:TBL_P77_1",
@@ -369,7 +441,8 @@
             4
           ],
           "classification": "empty",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_T20I_WOMEN_2026:TBL_P83_2",
@@ -380,7 +453,8 @@
             5
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_T20I_WOMEN_2026:TBL_P83_3",
@@ -391,7 +465,8 @@
             5
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_T20I_WOMEN_2026:TBL_P87_4",
@@ -402,7 +477,10 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_WOMEN_2026:APP_D:1.1.6"
+          ]
         },
         {
           "table_id": "ICC_T20I_WOMEN_2026:TBL_P92_5",
@@ -413,7 +491,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_WOMEN_2026:APP_D:3.4.4.1"
+          ]
         },
         {
           "table_id": "ICC_T20I_WOMEN_2026:TBL_P93_6",
@@ -424,7 +505,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_WOMEN_2026:APP_D:3.4.5.1"
+          ]
         },
         {
           "table_id": "ICC_T20I_WOMEN_2026:TBL_P94_7",
@@ -435,7 +519,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_WOMEN_2026:APP_D:3.4.6.2"
+          ]
         },
         {
           "table_id": "ICC_T20I_WOMEN_2026:TBL_P96_8",
@@ -446,7 +533,11 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_T20I_WOMEN_2026:APP_D:3.8.1.3",
+            "ICC_T20I_WOMEN_2026:APP_D:3.8.1.4"
+          ]
         }
       ]
     },
@@ -467,7 +558,8 @@
             4
           ],
           "classification": "empty",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_TEST_MEN_2026:TBL_P89_1",
@@ -478,7 +570,10 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_MEN_2026:APP_D:1.1.3"
+          ]
         },
         {
           "table_id": "ICC_TEST_MEN_2026:TBL_P94_2",
@@ -489,7 +584,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_MEN_2026:APP_D:3.4.4.1"
+          ]
         },
         {
           "table_id": "ICC_TEST_MEN_2026:TBL_P95_3",
@@ -500,7 +598,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_MEN_2026:APP_D:3.4.5.1"
+          ]
         },
         {
           "table_id": "ICC_TEST_MEN_2026:TBL_P96_4",
@@ -511,7 +612,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_MEN_2026:APP_D:3.4.6.2"
+          ]
         },
         {
           "table_id": "ICC_TEST_MEN_2026:TBL_P98_5",
@@ -522,7 +626,11 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_MEN_2026:APP_D:3.8.1.3",
+            "ICC_TEST_MEN_2026:APP_D:3.8.1.4"
+          ]
         }
       ]
     },
@@ -543,7 +651,8 @@
             4
           ],
           "classification": "empty",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_TEST_WOMEN_2026:TBL_P88_1",
@@ -554,7 +663,10 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_WOMEN_2026:APP_D:1.1.6"
+          ]
         },
         {
           "table_id": "ICC_TEST_WOMEN_2026:TBL_P93_2",
@@ -565,7 +677,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_WOMEN_2026:APP_D:3.4.4.1"
+          ]
         },
         {
           "table_id": "ICC_TEST_WOMEN_2026:TBL_P94_3",
@@ -576,7 +691,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_WOMEN_2026:APP_D:3.4.5.1"
+          ]
         },
         {
           "table_id": "ICC_TEST_WOMEN_2026:TBL_P95_4",
@@ -587,7 +705,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_WOMEN_2026:APP_D:3.4.6.2"
+          ]
         },
         {
           "table_id": "ICC_TEST_WOMEN_2026:TBL_P97_5",
@@ -598,7 +719,11 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_TEST_WOMEN_2026:APP_D:3.8.1.3",
+            "ICC_TEST_WOMEN_2026:APP_D:3.8.1.4"
+          ]
         }
       ]
     },
@@ -619,7 +744,8 @@
             4
           ],
           "classification": "empty",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "ICC_WTC_2025_2027_PC:TBL_P88_1",
@@ -630,7 +756,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_WTC_2025_2027_PC:APP_D:1.1"
+          ]
         },
         {
           "table_id": "ICC_WTC_2025_2027_PC:TBL_P93_2",
@@ -641,7 +770,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_WTC_2025_2027_PC:APP_D:3.4.4.1"
+          ]
         },
         {
           "table_id": "ICC_WTC_2025_2027_PC:TBL_P94_3",
@@ -652,7 +784,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_WTC_2025_2027_PC:APP_D:3.4.5.1"
+          ]
         },
         {
           "table_id": "ICC_WTC_2025_2027_PC:TBL_P95_4",
@@ -663,7 +798,10 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_WTC_2025_2027_PC:APP_D:3.4.6.2"
+          ]
         },
         {
           "table_id": "ICC_WTC_2025_2027_PC:TBL_P97_5",
@@ -674,7 +812,11 @@
             3
           ],
           "classification": "substantive",
-          "review_status": "SOURCE_VERIFIED"
+          "review_status": "SOURCE_VERIFIED",
+          "linked_clause_ids": [
+            "ICC_WTC_2025_2027_PC:APP_D:3.8.1.3",
+            "ICC_WTC_2025_2027_PC:APP_D:3.8.1.4"
+          ]
         }
       ]
     },
@@ -704,7 +846,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P2_1",
@@ -715,7 +858,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P3_2",
@@ -726,7 +870,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P12_3",
@@ -737,7 +882,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P17_4",
@@ -748,7 +894,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P17_5",
@@ -759,7 +906,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P18_6",
@@ -770,7 +918,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P18_7",
@@ -781,7 +930,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P20_8",
@@ -792,7 +942,8 @@
             2
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P20_9",
@@ -803,7 +954,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P20_10",
@@ -814,7 +966,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P21_11",
@@ -825,7 +978,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P21_12",
@@ -836,7 +990,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P21_13",
@@ -847,7 +1002,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P21_14",
@@ -858,7 +1014,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P21_15",
@@ -869,7 +1026,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P21_16",
@@ -880,7 +1038,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P22_17",
@@ -891,7 +1050,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P22_18",
@@ -902,7 +1062,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P23_19",
@@ -913,7 +1074,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P23_20",
@@ -924,7 +1086,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P23_21",
@@ -935,7 +1098,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P23_22",
@@ -946,7 +1110,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P24_23",
@@ -957,7 +1122,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P24_24",
@@ -968,7 +1134,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P24_25",
@@ -979,7 +1146,8 @@
             2
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P25_26",
@@ -990,7 +1158,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P25_27",
@@ -1001,7 +1170,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P26_28",
@@ -1012,7 +1182,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P26_29",
@@ -1023,7 +1194,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P26_30",
@@ -1034,7 +1206,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P27_31",
@@ -1045,7 +1218,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P27_32",
@@ -1056,7 +1230,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P27_33",
@@ -1067,7 +1242,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P27_34",
@@ -1078,7 +1254,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P28_35",
@@ -1089,7 +1266,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P28_36",
@@ -1100,7 +1278,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P29_37",
@@ -1111,7 +1290,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P30_38",
@@ -1122,7 +1302,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P30_39",
@@ -1133,7 +1314,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P31_40",
@@ -1144,7 +1326,8 @@
             2
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P32_41",
@@ -1155,7 +1338,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P32_42",
@@ -1166,7 +1350,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P32_43",
@@ -1177,7 +1362,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P32_44",
@@ -1188,7 +1374,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P33_45",
@@ -1199,7 +1386,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P33_46",
@@ -1210,7 +1398,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P34_47",
@@ -1221,7 +1410,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P35_48",
@@ -1232,7 +1422,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P35_49",
@@ -1243,7 +1434,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P35_50",
@@ -1254,7 +1446,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P36_51",
@@ -1265,7 +1458,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P37_52",
@@ -1276,7 +1470,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P37_53",
@@ -1287,7 +1482,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P38_54",
@@ -1298,7 +1494,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P38_55",
@@ -1309,7 +1506,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P39_56",
@@ -1320,7 +1518,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P39_57",
@@ -1331,7 +1530,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P39_58",
@@ -1342,7 +1542,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P40_59",
@@ -1353,7 +1554,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P40_60",
@@ -1364,7 +1566,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P41_61",
@@ -1375,7 +1578,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P41_62",
@@ -1386,7 +1590,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P41_63",
@@ -1397,7 +1602,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P41_64",
@@ -1408,7 +1614,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P42_65",
@@ -1419,7 +1626,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P42_66",
@@ -1430,7 +1638,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P42_67",
@@ -1441,7 +1650,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P43_68",
@@ -1452,7 +1662,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P43_69",
@@ -1463,7 +1674,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P43_70",
@@ -1474,7 +1686,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P44_71",
@@ -1485,7 +1698,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P45_72",
@@ -1496,7 +1710,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P45_73",
@@ -1507,7 +1722,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P46_74",
@@ -1518,7 +1734,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P46_75",
@@ -1529,7 +1746,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P46_76",
@@ -1540,7 +1758,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P47_77",
@@ -1551,7 +1770,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P47_78",
@@ -1562,7 +1782,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P47_79",
@@ -1573,7 +1794,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P48_80",
@@ -1584,7 +1806,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P48_81",
@@ -1595,7 +1818,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P48_82",
@@ -1606,7 +1830,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P48_83",
@@ -1617,7 +1842,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P48_84",
@@ -1628,7 +1854,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P49_85",
@@ -1639,7 +1866,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P50_86",
@@ -1650,7 +1878,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P50_87",
@@ -1661,7 +1890,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P50_88",
@@ -1672,7 +1902,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P50_89",
@@ -1683,7 +1914,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P50_90",
@@ -1694,7 +1926,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P55_91",
@@ -1705,7 +1938,8 @@
             2
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P55_92",
@@ -1716,7 +1950,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P55_93",
@@ -1727,7 +1962,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P56_94",
@@ -1738,7 +1974,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P56_95",
@@ -1749,7 +1986,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P57_96",
@@ -1760,7 +1998,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P57_97",
@@ -1771,7 +2010,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P58_98",
@@ -1782,7 +2022,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P58_99",
@@ -1793,7 +2034,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P58_100",
@@ -1804,7 +2046,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P59_101",
@@ -1815,7 +2058,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P59_102",
@@ -1826,7 +2070,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P59_103",
@@ -1837,7 +2082,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P60_104",
@@ -1848,7 +2094,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P61_105",
@@ -1859,7 +2106,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P61_106",
@@ -1870,7 +2118,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P61_107",
@@ -1881,7 +2130,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P62_108",
@@ -1892,7 +2142,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P62_109",
@@ -1903,7 +2154,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P62_110",
@@ -1914,7 +2166,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P63_111",
@@ -1925,7 +2178,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P63_112",
@@ -1936,7 +2190,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P63_113",
@@ -1947,7 +2202,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P63_114",
@@ -1958,7 +2214,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P63_115",
@@ -1969,7 +2226,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P64_116",
@@ -1980,7 +2238,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P64_117",
@@ -1991,7 +2250,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P64_118",
@@ -2002,7 +2262,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P64_119",
@@ -2013,7 +2274,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P64_120",
@@ -2024,7 +2286,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P65_121",
@@ -2035,7 +2298,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P65_122",
@@ -2046,7 +2310,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P65_123",
@@ -2057,7 +2322,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P65_124",
@@ -2068,7 +2334,8 @@
             2
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P65_125",
@@ -2079,7 +2346,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P65_126",
@@ -2090,7 +2358,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P66_127",
@@ -2101,7 +2370,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P66_128",
@@ -2112,7 +2382,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P66_129",
@@ -2123,7 +2394,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P66_130",
@@ -2134,7 +2406,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P67_131",
@@ -2145,7 +2418,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P67_132",
@@ -2156,7 +2430,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P67_133",
@@ -2167,7 +2442,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P67_134",
@@ -2178,7 +2454,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P68_135",
@@ -2189,7 +2466,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P68_136",
@@ -2200,7 +2478,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P68_137",
@@ -2211,7 +2490,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P68_138",
@@ -2222,7 +2502,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P69_139",
@@ -2233,7 +2514,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P69_140",
@@ -2244,7 +2526,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P69_141",
@@ -2255,7 +2538,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P70_142",
@@ -2266,7 +2550,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P70_143",
@@ -2277,7 +2562,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P70_144",
@@ -2288,7 +2574,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P70_145",
@@ -2299,7 +2586,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P70_146",
@@ -2310,7 +2598,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P71_147",
@@ -2321,7 +2610,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P71_148",
@@ -2332,7 +2622,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P71_149",
@@ -2343,7 +2634,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P71_150",
@@ -2354,7 +2646,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P71_151",
@@ -2365,7 +2658,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P71_152",
@@ -2376,7 +2670,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P84_153",
@@ -2387,7 +2682,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P84_154",
@@ -2398,7 +2694,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P84_155",
@@ -2409,7 +2706,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P84_156",
@@ -2420,7 +2718,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P85_157",
@@ -2431,7 +2730,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P85_158",
@@ -2442,7 +2742,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P85_159",
@@ -2453,7 +2754,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P86_160",
@@ -2464,7 +2766,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P86_161",
@@ -2475,7 +2778,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P87_162",
@@ -2486,7 +2790,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P87_163",
@@ -2497,7 +2802,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P87_164",
@@ -2508,7 +2814,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P87_165",
@@ -2519,7 +2826,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P87_166",
@@ -2530,7 +2838,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P88_167",
@@ -2541,7 +2850,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P88_168",
@@ -2552,7 +2862,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P88_169",
@@ -2563,7 +2874,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P88_170",
@@ -2574,7 +2886,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P112_171",
@@ -2585,7 +2898,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P113_172",
@@ -2596,7 +2910,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P114_173",
@@ -2607,7 +2922,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P114_174",
@@ -2618,7 +2934,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P114_175",
@@ -2629,7 +2946,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P114_176",
@@ -2640,7 +2958,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P114_177",
@@ -2651,7 +2970,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P114_178",
@@ -2662,7 +2982,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P115_179",
@@ -2673,7 +2994,8 @@
             2
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P115_180",
@@ -2684,7 +3006,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P115_181",
@@ -2695,7 +3018,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P115_182",
@@ -2706,7 +3030,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P116_183",
@@ -2717,7 +3042,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P116_184",
@@ -2728,7 +3054,8 @@
             1
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P116_185",
@@ -2739,7 +3066,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P116_186",
@@ -2750,7 +3078,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P216_187",
@@ -2761,7 +3090,8 @@
             2
           ],
           "classification": "fragmentary",
-          "review_status": "DEPRECATED_FRAGMENT"
+          "review_status": "DEPRECATED_FRAGMENT",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P216_188",
@@ -2772,7 +3102,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P216_189",
@@ -2783,7 +3114,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P216_190",
@@ -2794,7 +3126,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         },
         {
           "table_id": "MCC_LAWS_2022:TBL_P216_191",
@@ -2805,7 +3138,8 @@
             1
           ],
           "classification": "substantive",
-          "review_status": "EXTRACTED_UNVALIDATED"
+          "review_status": "EXTRACTED_UNVALIDATED",
+          "linked_clause_ids": []
         }
       ]
     },

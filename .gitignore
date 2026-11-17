@@ -47,6 +47,9 @@ htmlcov/
 *.sqlite3
 *.db
 cricketiq/data/temp/
+data/backups/
+data/corpus/clauses_staging/
+scratch/
 
 # Derived large corpus assets (reproducible via scripts/)
 data/sources/raw/

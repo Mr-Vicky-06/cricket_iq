@@ -1,0 +1,17 @@
+{
+  "promotion_timestamp": "2026-11-17T08:19:33Z",
+  "status": "COMPLETED",
+  "clauses_promoted": 10388,
+  "id_digest": "8c85beb895d40d4379ecdc3d9829b924c176cdebc59289b33f2c408ef4968904",
+  "depth_distribution": {
+    "1": 720,
+    "2": 5191,
+    "3": 3166,
+    "4": 1311
+  },
+  "db_backup_path": "D:\\Cricket_Rules_NLP_Chatbot\\data\\backups\\cricketiq_pre_hierarchy_promotion_20261117_134933.db",
+  "clauses_backup_dir": "D:\\Cricket_Rules_NLP_Chatbot\\data\\backups\\clauses_pre_hierarchy_promotion_20261117_134933",
+  "integrity_check": "ok",
+  "foreign_key_check": "ok",
+  "parity_verified": true
+}

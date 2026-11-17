@@ -163,3 +163,117 @@ def test_expansion_bounding(lexicon_service: LexiconExpansionService):
     fts_q = lexicon_service.build_fts_query(view)
     assert fts_q.startswith("(")
     assert "OR" in fts_q
+
+
+def test_lexicon_hard_caps_internal_enforcement(lexicon_service: LexiconExpansionService):
+    """Caller passing high values must be hard-capped inside service to <= 3 terms and <= 2 phrases."""
+    view = lexicon_service.expand_query(
+        "bowled caught lbw run out stumped free hit",
+        max_matched_terms=20,
+        max_phrases_per_term=20
+    )
+    assert len(view.expansions) <= 3
+    for exp in view.expansions:
+        assert len(exp.expansion_phrases) <= 2
+
+
+def test_raw_query_immutability_with_whitespace_and_newlines(lexicon_service: LexiconExpansionService):
+    """Preserve exact raw input string including leading/trailing whitespace, tabs, and newlines."""
+    complex_raw = "\t  \nWhat happens after a no ball?  \r\n  "
+    view = lexicon_service.expand_query(complex_raw)
+    assert view.raw_query == complex_raw
+    assert view.normalized_text == "What happens after a no ball"
+
+
+def test_lexicon_validator_fail_closed_checks():
+    """Verify validator rejects missing definition, term_type, source_refs, self-distinct, and conflict."""
+    # 1. Missing definition
+    bad1 = {"terms": [{
+        "term_id": "T1", "preferred_term": "T1", "term_type": "TYPE",
+        "source_refs": ["ref"], "review_status": "APPROVED", "distinct_from": ["T2"]
+    }]}
+    assert any("definition" in e for e in LexiconValidator.validate(bad1))
+
+    # 2. Missing term_type
+    bad2 = {"terms": [{
+        "term_id": "T1", "preferred_term": "T1", "definition": "def",
+        "source_refs": ["ref"], "review_status": "APPROVED", "distinct_from": ["T2"]
+    }]}
+    assert any("term_type" in e for e in LexiconValidator.validate(bad2))
+
+    # 3. Missing source_refs
+    bad3 = {"terms": [{
+        "term_id": "T1", "preferred_term": "T1", "definition": "def",
+        "term_type": "TYPE", "review_status": "APPROVED", "distinct_from": ["T2"]
+    }]}
+    assert any("source_refs" in e for e in LexiconValidator.validate(bad3))
+
+    # 4. Self-referential distinct_from
+    bad4 = {"terms": [{
+        "term_id": "T1", "preferred_term": "Term One", "definition": "def",
+        "term_type": "TYPE", "source_refs": ["ref"], "review_status": "APPROVED", "distinct_from": ["Term One"]
+    }]}
+    assert any("self-referential" in e for e in LexiconValidator.validate(bad4))
+
+    # 5. Conflicting surface form across term IDs
+    bad5 = {"terms": [
+        {
+            "term_id": "T1", "preferred_term": "Term One", "definition": "def1",
+            "term_type": "TYPE", "source_refs": ["ref"], "review_status": "APPROVED",
+            "distinct_from": ["T2"], "surface_forms": ["duplicate_phrase"]
+        },
+        {
+            "term_id": "T2", "preferred_term": "Term Two", "definition": "def2",
+            "term_type": "TYPE", "source_refs": ["ref"], "review_status": "APPROVED",
+            "distinct_from": ["T1"], "surface_forms": ["duplicate_phrase"]
+        }
+    ]}
+    assert any("Conflicting surface phrase" in e for e in LexiconValidator.validate(bad5))
+
+
+def test_lexicon_applicability_aware_gating(lexicon_service: LexiconExpansionService):
+    """Test format-aware gating: Free hit eligible in ODI/T20I, suppressed in Test/MCC."""
+    query = "What occurs on a free hit?"
+    
+    # In ODI: Free hit expansion permitted
+    view_odi = lexicon_service.expand_query(query, candidate_document_ids=["ICC_ODI_MEN_2026"])
+    fh_exp_odi = [e for e in view_odi.expansions if e.term_id == "CRIC_DELIV_FREE_HIT"]
+    assert len(fh_exp_odi) == 1
+    assert len(fh_exp_odi[0].expansion_phrases) > 0
+
+    # In T20I: Free hit expansion permitted
+    view_t20 = lexicon_service.expand_query(query, candidate_document_ids=["ICC_T20I_MEN_2026"])
+    fh_exp_t20 = [e for e in view_t20.expansions if e.term_id == "CRIC_DELIV_FREE_HIT"]
+    assert len(fh_exp_t20) == 1
+    assert len(fh_exp_t20[0].expansion_phrases) > 0
+
+    # In Test match: Free hit expansion suppressed
+    view_test = lexicon_service.expand_query(query, candidate_document_ids=["ICC_TEST_MEN_2026"])
+    fh_exp_test = [e for e in view_test.expansions if e.term_id == "CRIC_DELIV_FREE_HIT"]
+    assert len(fh_exp_test) == 1
+    assert fh_exp_test[0].expansion_phrases == []
+
+    # In MCC universal Laws baseline: Free hit expansion suppressed
+    view_mcc = lexicon_service.expand_query(query, candidate_document_ids=["MCC_LAWS_2026"])
+    fh_exp_mcc = [e for e in view_mcc.expansions if e.term_id == "CRIC_DELIV_FREE_HIT"]
+    assert len(fh_exp_mcc) == 1
+    assert fh_exp_mcc[0].expansion_phrases == []
+
+
+def test_contrastive_queries_suppress_expansions(lexicon_service: LexiconExpansionService):
+    """Verify that contrastive queries suppress cross-expansion across distinct terms."""
+    # 1. wide versus no ball
+    v1 = lexicon_service.expand_query("What is the difference between a wide versus no ball?")
+    assert v1.is_contrastive is True
+    assert all(len(e.expansion_phrases) == 0 for e in v1.expansions)
+
+    # 2. retired hurt not retired out
+    v2 = lexicon_service.expand_query("Is a batter retired hurt not retired out?")
+    assert v2.is_contrastive is True
+    assert all(len(e.expansion_phrases) == 0 for e in v2.expansions)
+
+    # 3. run out versus stumped
+    v3 = lexicon_service.expand_query("Explain run out versus stumped dismissal.")
+    assert v3.is_contrastive is True
+    assert all(len(e.expansion_phrases) == 0 for e in v3.expansions)
+

@@ -22,6 +22,7 @@ class EvidenceRole(str, Enum):
     RELATED_SUPPORT = "RELATED_SUPPORT"
     DEFINITION = "DEFINITION"
     TABLE_SPECIFICATION = "TABLE_SPECIFICATION"
+    STRUCTURAL_CONTEXT = "STRUCTURAL_CONTEXT"
 
 
 class RetrievalStatus(str, Enum):
@@ -65,13 +66,19 @@ class RetrievalHit(BaseModel):
 
 
 class RetrievalObservabilityTrace(BaseModel):
-    """Internal diagnostic trace for Gate 3 retrieval observability."""
+    """Internal diagnostic trace for Gate 3 retrieval observability.
+    
+    Privacy & Correctness Guardrails (Phase 6 Gate 3):
+    - Raw query is omitted by default from traces and persisted logs to preserve privacy.
+    - Deterministic normalized query hash and correlation ID provide auditability.
+    - Aggregate token usage is reported as token_estimate based on conservative tokenization.
+    """
     correlation_id: str
     normalized_query_hash: str
     lexicon_version: Optional[str] = None
     lexicon_hash: Optional[str] = None
     candidate_source_bundle: List[str] = Field(default_factory=list)
-    original_sparse_query: str
+    original_sparse_query: Optional[str] = None  # Redacted by default; populated only under dev opt-in
     expansion_variants: List[str] = Field(default_factory=list)
     exact_hit_count: int = 0
     original_sparse_hit_count: int = 0
@@ -82,10 +89,16 @@ class RetrievalObservabilityTrace(BaseModel):
     unresolved_cross_references: List[str] = Field(default_factory=list)
     table_ids_hydrated: List[str] = Field(default_factory=list)
     table_ids_excluded: List[str] = Field(default_factory=list)
+    included_evidence_ids: List[str] = Field(default_factory=list)
+    pruned_evidence_ids: List[str] = Field(default_factory=list)
+    blocked_evidence_ids: List[str] = Field(default_factory=list)
+    unresolved_evidence_ids: List[str] = Field(default_factory=list)
+    over_budget_evidence_ids: List[str] = Field(default_factory=list)
     stage_latencies_ms: Dict[str, float] = Field(default_factory=dict)
     total_latency_ms: float = 0.0
     feature_flags: Dict[str, bool] = Field(default_factory=dict)
     token_budget: int = 1200
+    token_estimate: int = 0
     budget_overflow: bool = False
 
 

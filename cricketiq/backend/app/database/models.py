@@ -190,6 +190,26 @@ class RuleClause(BaseModel):
     extracted_tables: Optional[List[Dict[str, Any]]] = Field(default=None)
 
 
+class ClauseStructureNode(BaseModel):
+    """Non-citable structural hierarchy node (e.g. unnumbered chapter heading).
+
+    Requirements (Phase 6 Gate 3):
+    - Structural nodes are not RuleClause legal text.
+    - They receive no fabricated clause number, citation identity, FTS row, vector, or independent answer claim.
+    - Child clauses may refer to the structural node as their parent for navigation/context.
+    - The node retains document ID, heading title, source locator/page and source provenance.
+    - Retrieval labels it as structural context, not direct legal evidence.
+    """
+    id: str = Field(..., description="Unique structural ID, e.g. ICC_ODI_MEN_2026:STRUCT_LAW_1")
+    source_document_id: str = Field(..., description="Foreign key to SourceDocument.id")
+    heading_title: str = Field(..., description="Official structural heading title from source")
+    source_locator: str = Field(default="", description="Source locator e.g. 'Law 1 Heading'")
+    page_start: int = Field(..., description="Page locator where heading appears")
+    page_end: int = Field(..., description="Ending page locator")
+    source_provenance: str = Field(default="ICC Playing Conditions Structural Heading", description="Audit provenance")
+
+
+
 class DocumentRelationship(BaseModel):
     """Explicit relationship between documents or clauses."""
     id: str

@@ -230,3 +230,49 @@ def test_table_evidence_auto_load_from_corpus(memory_repo):
     # Check that exactly 39 active Playing Conditions tables are SOURCE_VERIFIED
     assert len(live_service._tables_by_id) == 39
     assert all(t.validation_status == TableValidationStatus.SOURCE_VERIFIED for t in live_service._tables_by_id.values())
+
+
+def test_unrelated_clauses_same_page_do_not_share_table():
+    """Verify that sharing a page number does not grant table linkage without explicit audit."""
+    service = TableEvidenceService(auto_load=False)
+    # Register a verified table linked ONLY to Clause A on page 48
+    table = TableEvidence(
+        table_id="ICC_ODI_MEN_2026:TBL_P48_0",
+        source_document_id="ICC_ODI_MEN_2026",
+        source_file_sha256="abc123",
+        page_number=48,
+        headers=["Over", "Fielders"],
+        rows=[["1-10", "2"], ["11-40", "4"]],
+        shape=(2, 2),
+        linked_clause_ids=["ICC_ODI_MEN_2026:28.7.2.3"],
+        validation_status=TableValidationStatus.SOURCE_VERIFIED
+    )
+    service.register_table(table)
+
+    # Clause A (explicitly linked) must receive the table
+    results_a = service.get_table_evidence_for_clause("ICC_ODI_MEN_2026:28.7.2.3", ["ICC_ODI_MEN_2026"])
+    assert len(results_a) == 1
+    assert results_a[0].table_id == "ICC_ODI_MEN_2026:TBL_P48_0"
+
+    # Clause B (unrelated clause on page 48, not linked in audit) must NOT receive the table
+    results_b = service.get_table_evidence_for_clause("ICC_ODI_MEN_2026:12.1.1", ["ICC_ODI_MEN_2026"])
+    assert len(results_b) == 0
+
+
+def test_table_evidence_metadata_preservation(memory_repo):
+    """Verify that auto-loaded tables preserve all structural metadata."""
+    service = TableEvidenceService(repository=memory_repo, auto_load=True)
+    table = service.get_table_by_id("ICC_ODI_MEN_2026:TBL_P48_0")
+    assert table is not None
+    assert table.source_document_id == "ICC_ODI_MEN_2026"
+    assert table.page_number == 48
+    assert table.shape == (31, 4)
+    assert table.source_file_sha256 is not None
+    assert len(table.source_file_sha256) == 64
+    assert table.validation_status == TableValidationStatus.SOURCE_VERIFIED
+    assert len(table.linked_clause_ids) >= 1
+    assert "ICC_ODI_MEN_2026:28.7.2.3" in table.linked_clause_ids
+    # Verify exact cell layout
+    assert table.headers == ["Innings duration", "Powerplay 1", "Powerplay 2", "Powerplay 3"]
+    assert table.rows[0] == ["20", "4", "12", "4"]
+

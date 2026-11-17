@@ -142,7 +142,9 @@ def test_retrieval_baseline_mode_flags_disabled(gate3_repo):
     assert trace.get("feature_flags", {}).get("enable_lexicon_expansion") is False
     assert trace.get("feature_flags", {}).get("enable_hierarchy_traversal") is False
     assert trace.get("feature_flags", {}).get("enable_table_evidence") is False
-    assert trace.get("original_sparse_query") == "Free hit dismissals"
+    # Privacy verification: raw query must be absent/None by default in production trace
+    assert trace.get("original_sparse_query") is None
+    assert trace.get("normalized_query_hash") is not None
     assert len(trace.get("expansion_variants", [])) == 0
 
 
@@ -267,3 +269,49 @@ def test_retrieval_all_gate3_features_active(gate3_repo):
     assert trace["feature_flags"]["enable_lexicon_expansion"] is True
     assert trace["feature_flags"]["enable_hierarchy_traversal"] is True
     assert trace["feature_flags"]["enable_table_evidence"] is True
+
+
+def test_retrieval_query_wide_evidence_budget_cap(gate3_repo):
+    """Verify query-wide budget: supporting snippets capped at <= 5 and token_estimate reported."""
+    service = RetrievalService(
+        repository=gate3_repo,
+        enable_hierarchy_traversal=True,
+        enable_table_evidence=True
+    )
+    req = RetrievalRequest(
+        query="no ball call and procedure",
+        match_context=MatchContext(format=CricketFormat.T20I, category=GenderCategory.MENS)
+    )
+    res = service.retrieve(req)
+
+    assert res.status == RetrievalStatus.SUCCESS
+    primary_hits = [h for h in res.hits if h.evidence_role in (EvidenceRole.PRIMARY, EvidenceRole.DIRECT_EVIDENCE)]
+    supporting_hits = [h for h in res.hits if h not in primary_hits]
+
+    # Query-wide supporting evidence cap
+    assert len(supporting_hits) <= 5
+
+    trace = res.query_diagnostics.get("observability_trace", {})
+    assert "token_estimate" in trace
+    assert trace["token_estimate"] > 0
+    assert "included_evidence_ids" in trace
+    assert len(trace["included_evidence_ids"]) == len(res.hits)
+
+
+def test_retrieval_dev_opt_in_privacy(gate3_repo):
+    """Verify development-only opt-in populates original_sparse_query, while default omits it."""
+    ctx = MatchContext(format=CricketFormat.T20I, category=GenderCategory.MENS)
+    # Default: omitted
+    s_default = RetrievalService(repository=gate3_repo)
+    res_def = s_default.retrieve(RetrievalRequest(query="dead ball rule", match_context=ctx))
+    assert res_def.status == RetrievalStatus.SUCCESS
+    trace_def = res_def.query_diagnostics.get("observability_trace", {})
+    assert trace_def.get("original_sparse_query") is None
+
+    # Opt-in: present
+    s_opt_in = RetrievalService(repository=gate3_repo, include_raw_query_in_diagnostics=True)
+    res_opt = s_opt_in.retrieve(RetrievalRequest(query="dead ball rule", match_context=ctx))
+    assert res_opt.status == RetrievalStatus.SUCCESS
+    trace_opt = res_opt.query_diagnostics.get("observability_trace", {})
+    assert trace_opt.get("original_sparse_query") == "dead ball rule"
+
